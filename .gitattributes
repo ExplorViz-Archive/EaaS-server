@@ -6,3 +6,7 @@
 
 # text files that will always have LF EOLs
 *.sh text eol=lf
+
+# text files that will always have CRLF EOLs
+*.bat text eol=crlf
+*.cmd text eol=crlf
