@@ -17,6 +17,16 @@ hs_err_pid*
 /target/
 !/.mvn/wrapper/maven-wrapper.jar
 
+# Vaadin
+node
+node_modules
+target
+.settings
+.classpath
+.project
+webpack.generated.js
+/bin/
+
 # Windows
 Thumbs.db
 ehthumbs.db
