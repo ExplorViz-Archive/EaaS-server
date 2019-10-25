@@ -31,8 +31,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <vaadin.version>14.0.10</vaadin.version>
-        <!-- TODO: Update to Node 12 LTS -->
-        <node.version>v10.17.0</node.version>
+        <node.version>v12.13.0</node.version>
 
         <drivers.dir>${project.basedir}/drivers</drivers.dir>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
@@ -172,6 +171,7 @@
     <profiles>
         <profile>
             <!-- Do not install node and npm locally, instead use the version installed the system -->
+            <!-- TODO: Maybe make this the default? -->
             <id>system-node</id>
 
             <build>

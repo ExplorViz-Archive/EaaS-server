@@ -10,7 +10,8 @@ jobs:
         java: [ '11.x', '13.x' ]
     name: Build (JDK ${{ matrix.java }})
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout
+      uses: actions/checkout@v1
     - name: Setup JDK
       uses: actions/setup-java@v1
       with:
@@ -19,6 +20,6 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v1
       with:
-        node-version: 10.x
+        node-version: 12.x
     - name: Build with Maven
-      run: mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -P system-node verify
+      run: mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -P system-node,production verify
