@@ -7,14 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '11', '13' ]
-
+        java: [ '11.x', '13.x' ]
+    name: Build (JDK ${{ matrix.java }})
     steps:
     - uses: actions/checkout@v1
-    - name: Set up JDK
+    - name: Setup JDK
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.java }}
         architecture: x64
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10.x
     - name: Build with Maven
-      run: mvn -B package
+      run: mvn -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -P system-node verify
