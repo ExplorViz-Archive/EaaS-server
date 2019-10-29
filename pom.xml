@@ -154,7 +154,7 @@
 
         <plugins>
             <!-- Remove Lombok annotations and generate pure Java code from it -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
                 <version>${lombok.version}.0</version>
@@ -167,7 +167,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
 
             <!-- Plugin to download and install Node and npm locally -->
             <plugin>
@@ -237,7 +237,7 @@
             </plugin>
 
             <!-- Checkstyle inspection -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
 
@@ -259,15 +259,14 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
 
             <!-- PMD + CPD inspection -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
 
                 <configuration>
-                    <!-- Minimum equal sucessive tokens for triggering a code duplication warning (CPD) -->
                     <minimumTokens>25</minimumTokens>
 
                     <printFailingErrors>true</printFailingErrors>
@@ -275,7 +274,6 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
 
-                <!-- PMD cannot properly do type checks without classpath, hence test phase -->
                 <executions>
                     <execution>
                         <id>test</id>
@@ -286,10 +284,10 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
 
             <!-- SpotBugs inspection -->
-            <plugin>
+            <!-- <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
 
@@ -301,7 +299,6 @@
                     <failOnError>false</failOnError>
                 </configuration>
 
-                <!-- SpotBugs wants compiled files, hence run it in test phase -->
                 <executions>
                     <execution>
                         <id>test</id>
@@ -311,7 +308,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
 
         <pluginManagement>
