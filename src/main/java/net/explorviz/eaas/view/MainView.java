@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @Route
 public class MainView extends VerticalLayout {
+    private static final long serialVersionUID = -4417018497155730464L;
+
     public MainView(@Autowired ProjectRepository projectRepo) {
         add(new H1("ExplorViz as a Service"));
         add(new ProjectList(projectRepo));

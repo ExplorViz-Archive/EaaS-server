@@ -10,6 +10,8 @@ import net.explorviz.eaas.model.Project;
 import java.util.function.Consumer;
 
 public class ProjectListEntry extends VerticalLayout {
+    private static final long serialVersionUID = 1589947241429733513L;
+
     @Getter
     private final Project project;
 

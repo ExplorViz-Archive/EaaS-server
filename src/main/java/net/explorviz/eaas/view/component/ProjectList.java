@@ -12,6 +12,8 @@ import net.explorviz.eaas.repository.ProjectRepository;
 import org.apache.commons.lang3.StringUtils;
 
 public class ProjectList extends VerticalLayout {
+    private static final long serialVersionUID = 8287505649008791683L;
+
     private final TextField projectName;
     private final ProjectRepository projectRepo;
 

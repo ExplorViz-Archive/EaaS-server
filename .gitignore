@@ -18,8 +18,8 @@ hs_err_pid*
 !/.mvn/wrapper/maven-wrapper.jar
 
 # Vaadin
-node
-node_modules
+/node/
+node_modules/
 webpack.generated.js
 /bin/
 # Browser drivers for local integration tests

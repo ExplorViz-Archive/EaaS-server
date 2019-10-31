@@ -261,7 +261,7 @@
             </plugin> -->
 
             <!-- PMD + CPD inspection -->
-            <!-- <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
 
@@ -275,7 +275,6 @@
 
                 <executions>
                     <execution>
-                        <id>test</id>
                         <phase>test</phase>
                         <goals>
                             <goal>check</goal>
@@ -283,10 +282,10 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> -->
+            </plugin>
 
             <!-- SpotBugs inspection -->
-            <!-- <plugin>
+            <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
 
@@ -300,14 +299,13 @@
 
                 <executions>
                     <execution>
-                        <id>test</id>
                         <phase>test</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
-            </plugin> -->
+            </plugin>
         </plugins>
 
         <pluginManagement>
