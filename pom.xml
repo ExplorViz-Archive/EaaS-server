@@ -153,22 +153,6 @@
         <defaultGoal>clean verify</defaultGoal>
 
         <plugins>
-            <!-- Remove Lombok annotations and generate pure Java code from it -->
-            <!-- <plugin>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>${lombok.version}.0</version>
-
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin> -->
-
             <!-- Plugin to download and install Node and npm locally -->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -228,6 +212,7 @@
                 <configuration>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
+                        <arg>-Xlint:-processing</arg>
                     </compilerArgs>
 
                     <showWarnings>true</showWarnings>
@@ -266,7 +251,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
 
                 <configuration>
-                    <minimumTokens>25</minimumTokens>
+                    <minimumTokens>30</minimumTokens>
 
                     <printFailingErrors>true</printFailingErrors>
                     <failOnViolation>false</failOnViolation>
