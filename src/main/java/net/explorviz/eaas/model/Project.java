@@ -17,6 +17,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(indexes = @Index(columnList = "name", unique = true))
 public class Project implements Serializable {
     private static final long serialVersionUID = -1864944572450590914L;
 

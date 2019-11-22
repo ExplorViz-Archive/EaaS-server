@@ -15,8 +15,12 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(indexes = {
+    @Index(columnList = "project_id,name"),
+    @Index(columnList = "imageID", unique = true)
+})
 public class Build implements Serializable {
-    private static final long serialVersionUID = 6487170222760228978L;
+    private static final long serialVersionUID = 8960003619026674513L;
 
     @Id
     @GeneratedValue
@@ -32,14 +36,19 @@ public class Build implements Serializable {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    @NotEmpty
+    @Column(nullable = false, unique = true)
+    @Size(min = 1)
+    private String imageID;
+
     @CreatedDate
     @CreationTimestamp
-    @NotNull
     @Column(nullable = false, updatable = false)
     private Instant createdDate;
 
-    public Build(@NotEmpty String name, @NotNull Project project) {
+    public Build(@NotEmpty String name, @NotNull Project project, @NotEmpty String imageID) {
         this.name = name;
         this.project = project;
+        this.imageID = imageID;
     }
 }

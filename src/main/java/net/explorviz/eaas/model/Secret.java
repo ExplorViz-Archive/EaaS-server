@@ -15,6 +15,10 @@ import java.time.Instant;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(indexes = {
+    @Index(columnList = "name", unique = true),
+    @Index(columnList = "secret")
+})
 public class Secret implements Serializable {
     private static final long serialVersionUID = -5164775067113669305L;
 
@@ -29,6 +33,7 @@ public class Secret implements Serializable {
 
     @NotEmpty
     @Column(nullable = false)
+    @Size(min = 1, max = 255)
     private String secret;
 
     @NotNull
@@ -38,7 +43,6 @@ public class Secret implements Serializable {
 
     @CreatedDate
     @CreationTimestamp
-    @NotNull
     @Column(nullable = false, updatable = false)
     private Instant createdDate;
 
