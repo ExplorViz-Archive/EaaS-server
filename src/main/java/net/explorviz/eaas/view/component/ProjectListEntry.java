@@ -22,9 +22,7 @@ public class ProjectListEntry extends VerticalLayout {
         add(new Paragraph("Created on " + project.getCreatedDate()));
 
         Button deleteButton = new Button("Delete");
-        deleteButton.addClickListener(click -> {
-            deleteListener.accept(this);
-        });
+        deleteButton.addClickListener(click -> deleteListener.accept(this));
         add(deleteButton);
     }
 }

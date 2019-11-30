@@ -1,6 +1,5 @@
 package net.explorviz.eaas.view.component;
 
-import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
@@ -28,14 +27,14 @@ public class ProjectList extends VerticalLayout {
         projectName.setPlaceholder("Project name");
 
         Button createProject = new Button("Create new project");
-        createProject.addClickListener(this::doCreateProject);
+        createProject.addClickListener(click -> this.doCreateProject());
 
         add(new HorizontalLayout(projectName, createProject));
 
         projectRepo.findAll().forEach(project -> add(new ProjectListEntry(project, this::doDeleteProject)));
     }
 
-    private void doCreateProject(ClickEvent<Button> click) {
+    private void doCreateProject() {
         String name = StringUtils.trim(projectName.getValue());
         if (StringUtils.isBlank(name)) {
             projectName.setInvalid(true);

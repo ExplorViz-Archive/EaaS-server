@@ -21,13 +21,16 @@ import java.util.*;
 public class User implements UserDetails {
     private static final long serialVersionUID = -2609179636815086264L;
 
+    public static final int USERNAME_MIN_LENGTH = 2;
+    public static final int USERNAME_MAX_LENGTH = 64;
+
     @Id
     @GeneratedValue
     private Long id;
 
     @NotEmpty
-    @Column(unique = true, nullable = false, length = 64)
-    @Size(min = 2, max = 64)
+    @Column(unique = true, nullable = false, length = USERNAME_MAX_LENGTH)
+    @Size(min = USERNAME_MIN_LENGTH, max = USERNAME_MAX_LENGTH)
     private String username;
 
     @NotEmpty

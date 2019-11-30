@@ -7,7 +7,7 @@ import net.explorviz.eaas.view.LoginView;
 import org.springframework.stereotype.Component;
 
 /**
- * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security#_secure_router_navigation">Setting
+ * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security">Setting
  * up Spring Security for Vaadin applications</a>
  */
 @Component
@@ -16,9 +16,8 @@ public class ConfigureUIServiceInitListener implements VaadinServiceInitListener
 
     @Override
     public void serviceInit(ServiceInitEvent event) {
-        event.getSource().addUIInitListener(uiEvent -> {
-            uiEvent.getUI().addBeforeEnterListener(ConfigureUIServiceInitListener::beforeEnter);
-        });
+        event.getSource().addUIInitListener(uiEvent ->
+            uiEvent.getUI().addBeforeEnterListener(ConfigureUIServiceInitListener::beforeEnter));
     }
 
     /**

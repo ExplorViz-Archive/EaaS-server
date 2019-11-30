@@ -22,13 +22,16 @@ import java.time.Instant;
 public class Secret implements Serializable {
     private static final long serialVersionUID = -5164775067113669305L;
 
+    public static final int NAME_MIN_LENGTH = 2;
+    public static final int NAME_MAX_LENGTH = 64;
+
     @Id
     @GeneratedValue
     private Long id;
 
     @NotEmpty
-    @Column(unique = true, nullable = false, length = 64)
-    @Size(min = 2, max = 64)
+    @Column(unique = true, nullable = false, length = NAME_MAX_LENGTH)
+    @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
     private String name;
 
     @NotEmpty

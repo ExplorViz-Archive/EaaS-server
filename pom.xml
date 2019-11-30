@@ -35,19 +35,20 @@
         <drivers.dir>${project.basedir}/drivers</drivers.dir>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
 
-        <!-- Dependencies -->
-        <vaadin.version>14.0.12</vaadin.version>
+        <!-- Actual dependencies -->
+        <vaadin.version>14.0.14</vaadin.version>
         <h2.version>1.4.200</h2.version>
 
         <!-- Build tools -->
         <lombok.version>1.18.10</lombok.version>
-        <node.version>v12.13.0</node.version>
+        <frontend-plugin.version>1.8.0</frontend-plugin.version>
+        <node.version>v12.13.1</node.version>
 
         <!-- Inspection tools -->
         <checkstyle-plugin.version>3.1.0</checkstyle-plugin.version>
-        <checkstyle.version>8.26</checkstyle.version>
+        <checkstyle.version>8.27</checkstyle.version>
         <pmd-plugin.version>3.12.0</pmd-plugin.version>
-        <pmd.version>6.18.0</pmd.version>
+        <pmd.version>6.20.0</pmd.version>
         <spotbugs-plugin.version>3.1.12.2</spotbugs-plugin.version>
         <spotbugs.version>3.1.12</spotbugs.version>
     </properties>
@@ -161,7 +162,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.8.0</version>
+                <version>${frontend-plugin.version}</version>
 
                 <configuration>
                     <nodeVersion>${node.version}</nodeVersion>
@@ -226,7 +227,7 @@
             </plugin>
 
             <!-- Checkstyle inspection -->
-            <!-- <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
 
@@ -248,7 +249,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> -->
+            </plugin>
 
             <!-- PMD + CPD inspection -->
             <plugin>
@@ -371,7 +372,7 @@
                     <plugin>
                         <groupId>com.github.eirslett</groupId>
                         <artifactId>frontend-maven-plugin</artifactId>
-                        <version>1.8.0</version>
+
                         <executions>
                             <execution>
                                 <id>install-node-and-npm</id>
@@ -403,6 +404,7 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
+
                         <configuration>
                             <jvmArguments>-Dvaadin.productionMode=true</jvmArguments>
                         </configuration>
@@ -410,6 +412,7 @@
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
+
                         <executions>
                             <execution>
                                 <goals>

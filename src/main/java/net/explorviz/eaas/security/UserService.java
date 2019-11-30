@@ -19,7 +19,7 @@ public class UserService implements UserDetailsService, UserDetailsPasswordServi
 
     @Override
     public UserDetails updatePassword(UserDetails userDetails, String newPassword) {
-        User user = ((User) loadUserByUsername(userDetails.getUsername()));
+        User user = (User) loadUserByUsername(userDetails.getUsername());
         user.setPassword(newPassword);
         return userRepository.save(user);
     }

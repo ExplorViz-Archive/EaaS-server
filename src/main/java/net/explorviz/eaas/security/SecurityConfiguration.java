@@ -1,7 +1,5 @@
 package net.explorviz.eaas.security;
 
-import com.vaadin.flow.server.ServletHelper;
-import com.vaadin.flow.shared.ApplicationConstants;
 import net.explorviz.eaas.view.LoginView;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,11 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
-import javax.servlet.ServletRequest;
-import java.util.stream.Stream;
-
 /**
- * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security#_secure_router_navigation">Setting
+ * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security">Setting
  * up Spring Security for Vaadin applications</a>
  */
 @Configuration
