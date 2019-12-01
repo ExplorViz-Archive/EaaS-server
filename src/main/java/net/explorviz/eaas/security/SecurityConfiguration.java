@@ -37,8 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             // Configure the login page
             .and().formLogin().loginPage(LOGIN_URL).permitAll()
             .loginProcessingUrl(LOGIN_URL).failureUrl(LOGIN_URL + "?error")
-            // Configure logout
-            .and().logout().logoutSuccessUrl("/");
+            // Configure logout, TODO: Change to main view not requiring login
+            .and().logout().logoutSuccessUrl(LOGIN_URL);
     }
 
     @Override
