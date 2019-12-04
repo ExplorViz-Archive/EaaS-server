@@ -13,3 +13,6 @@ end_of_line = crlf
 
 [*.{yml,yaml}]
 indent_size = 2
+
+[banner.txt]
+trim_trailing_whitespace = false
