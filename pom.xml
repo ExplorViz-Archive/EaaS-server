@@ -38,6 +38,7 @@
         <!-- Actual dependencies -->
         <vaadin.version>14.1.1</vaadin.version>
         <h2.version>1.4.200</h2.version>
+        <docker-java.version>3.2.0-rc2</docker-java.version>
 
         <!-- Build tools -->
         <lombok.version>1.18.10</lombok.version>
@@ -108,8 +109,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Spring + Vaadin -->
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
@@ -151,6 +150,11 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java</artifactId>
+            <version>${docker-java.version}</version>
         </dependency>
     </dependencies>
 
