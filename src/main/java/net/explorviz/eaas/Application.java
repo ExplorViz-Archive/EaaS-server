@@ -18,16 +18,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class Application implements CommandLineRunner {
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    private static final String DEFAULT_USER_NAME = "admin";
+    private static final String DEFAULT_USERNAME = "admin";
+    private static final String DEFAULT_PASSWORD = "password";
 
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
-    private final KeyGenerator keyGenerator;
 
-    public Application(UserRepository userRepo, PasswordEncoder passwordEncoder, KeyGenerator keyGenerator) {
+    public Application(UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
-        this.keyGenerator = keyGenerator;
     }
 
     public static void main(String[] args) {
@@ -37,13 +36,12 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (userRepo.count() == 0L) {
-            String password = keyGenerator.generatePassword();
-            userRepo.save(new User(DEFAULT_USER_NAME, passwordEncoder.encode(password), true));
+            userRepo.save(new User(DEFAULT_USERNAME, passwordEncoder.encode(DEFAULT_PASSWORD), true));
 
             logger.info("This looks like a fresh installation! Added a user with administrator permissions.\n" +
                     "\n" +
                     "Login as user '{}' with password '{}'\n",
-                DEFAULT_USER_NAME, password);
+                    DEFAULT_USERNAME, DEFAULT_PASSWORD);
         }
     }
 }
