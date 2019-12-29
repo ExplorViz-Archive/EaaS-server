@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:experimental
+
 ###############################################################################
 # Build environment
 ###############################################################################
@@ -21,7 +23,8 @@ COPY package-lock.json .
 COPY webpack.config.js .
 
 # Specifically use goal package here to avoid running static analysis tools
-RUN mvn -B -P system-node,production package
+# Experimental dockerfile feature: caching build dependencies
+RUN --mount=type=cache,uid=1000,gid=1000,target=/opt/build/.m2/repository/ --mount=type=cache,uid=1000,gid=1000,target=/opt/build/node_modules/ mvn -B -P system-node,production package -DskipTests
 
 ###############################################################################
 # Runtime environment
