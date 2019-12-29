@@ -3,7 +3,7 @@
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine AS builder
 
-RUN apk --no-cache add maven nodejs npm
+RUN apk --no-cache add nodejs npm
 
 RUN addgroup -g 1000 -S build \
  && adduser -u 1000 -S -G build -h /opt/build -D build
@@ -21,7 +21,7 @@ COPY package-lock.json .
 COPY webpack.config.js .
 
 # Specifically use goal package here to avoid running static analysis tools
-RUN mvn -B -P system-node,production package
+RUN ./mvnw -B -P system-node,production package
 
 ###############################################################################
 # Runtime environment

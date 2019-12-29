@@ -5,7 +5,7 @@
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine AS builder
 
-RUN apk --no-cache add maven nodejs npm
+RUN apk --no-cache add nodejs npm
 
 RUN addgroup -g 1000 -S build \
  && adduser -u 1000 -S -G build -h /opt/build -D build
@@ -24,7 +24,7 @@ COPY webpack.config.js .
 
 # Specifically use goal package here to avoid running static analysis tools
 # Experimental dockerfile feature: caching build dependencies
-RUN --mount=type=cache,uid=1000,gid=1000,target=/opt/build/.m2/repository/ --mount=type=cache,uid=1000,gid=1000,target=/opt/build/node_modules/ mvn -B -P system-node,production package -DskipTests
+RUN --mount=type=cache,uid=1000,gid=1000,target=/opt/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/opt/build/node_modules/ ./mvnw -B -P system-node,production package -DskipTests
 
 ###############################################################################
 # Runtime environment
