@@ -1,5 +1,6 @@
 package net.explorviz.eaas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.explorviz.eaas.security.Authorities;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.*;
@@ -35,6 +37,7 @@ public class User implements UserDetails {
 
     @NotEmpty
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     private boolean enabled;
@@ -44,9 +47,11 @@ public class User implements UserDetails {
     @CreatedDate
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
+    @PastOrPresent
     private Instant createdDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    @JsonIgnore
     private List<Project> ownedProjects;
 
     public User(@NotEmpty String username, @NotEmpty String password, boolean admin) {
@@ -60,15 +65,12 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new HashSet<>(8);
 
-        authorities.add(Authorities.READ_PUBLIC_AUTHORITY);
-        authorities.add(Authorities.READ_PROJECT_LIST_AUTHORITY);
-        authorities.add(Authorities.READ_OWNED_PROJECTS_AUTHORITY);
-        authorities.add(Authorities.MANAGE_OWNED_PROJECTS_AUTHORITY);
+        authorities.add(Authorities.READ_AUTHORITY);
+        authorities.add(Authorities.RUN_AUTHORITY);
+        authorities.add(Authorities.MANAGE_AUTHORITY);
 
         if (admin) {
-            authorities.add(Authorities.READ_ALL_PROJECTS_AUTHORITY);
-            authorities.add(Authorities.MANAGE_ALL_PROJECTS_AUTHORITY);
-            authorities.add(Authorities.MANAGE_USERS_AUTHORITY);
+            authorities.add(Authorities.ADMINISTER_AUTHORITY);
         }
 
         return authorities;

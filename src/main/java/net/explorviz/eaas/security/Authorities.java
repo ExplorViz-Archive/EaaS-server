@@ -13,41 +13,33 @@ public final class Authorities {
     }
 
     /**
-     * Grants the permission to enter public views, containing no project- or user-specific information.
+     * Grants the permission to read projects owned by themselves, which includes listing builds.
+     * 
+     * TODO: Should be a per-project authority
      */
-    public static final GrantedAuthority READ_PUBLIC_AUTHORITY = create("READ_PUBLIC");
+    public static final GrantedAuthority READ_AUTHORITY = create("USE");
 
     /**
-     * Grants the permission to view the list of projects.
+     * Grants the permission to run builds.
+     * 
+     * TODO: Should be a per-project authority
      */
-    public static final GrantedAuthority READ_PROJECT_LIST_AUTHORITY = create("READ_PROJECT_LIST");
+    public static final GrantedAuthority RUN_AUTHORITY = create("RUN");
 
     /**
-     * Grants the permission to read projects owned by the user in question, which includes listing and running builds.
+     * Grants the permission to manage projects, which includes deleting builds, reading and adding API keys. Depends on
+     * {@link #READ_AUTHORITY}.
+     * 
+     * TODO: Should be a per-project authority
      */
-    public static final GrantedAuthority READ_OWNED_PROJECTS_AUTHORITY = create("READ_OWNED_PROJECTS");
+    public static final GrantedAuthority MANAGE_AUTHORITY = create("MANAGE");
 
     /**
-     * Grants the permission to manage projects owned by the user in question, which includes deleting builds, reading
-     * and adding API keys. Requires {@link #READ_OWNED_PROJECTS_AUTHORITY}.
-     */
-    public static final GrantedAuthority MANAGE_OWNED_PROJECTS_AUTHORITY = create("MANAGE_OWNED_PROJECTS");
-
-    /**
-     * Grants the permission to read all projects.
-     */
-    public static final GrantedAuthority READ_ALL_PROJECTS_AUTHORITY = create("READ_ALL_PROJECTS");
-
-    /**
-     * Grants the permission to manage all projects. Requires {@link #READ_ALL_PROJECTS_AUTHORITY}.
-     */
-    public static final GrantedAuthority MANAGE_ALL_PROJECTS_AUTHORITY = create("MANAGE_ALL_PROJECTS");
-
-    /**
-     * Grants the permission to manage users, including creating new users, deleting users and changing their properties
+     * Grants the permission to read (see {@link #READ_AUTHORITY}) and manage (see {@link #MANAGE_AUTHORITY}) all
+     * projects and to manage users, including creating new users, deleting users and changing their properties
      * (admin flag, password, username).
      */
-    public static final GrantedAuthority MANAGE_USERS_AUTHORITY = create("MANAGE_USERS");
+    public static final GrantedAuthority ADMINISTER_AUTHORITY = create("ADMINISTER");
 
     private static GrantedAuthority create(String authority) {
         return new SimpleGrantedAuthority(authority);

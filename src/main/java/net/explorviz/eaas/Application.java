@@ -2,7 +2,6 @@ package net.explorviz.eaas;
 
 import net.explorviz.eaas.model.User;
 import net.explorviz.eaas.repository.UserRepository;
-import net.explorviz.eaas.security.KeyGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

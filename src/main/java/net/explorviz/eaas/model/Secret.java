@@ -1,5 +1,6 @@
 package net.explorviz.eaas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
@@ -37,18 +39,22 @@ public class Secret implements Serializable {
     @NotEmpty
     @Column(nullable = false)
     @Size(min = 1, max = 255)
+    @JsonIgnore
     private String secret;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
     private Project project;
 
     @CreatedDate
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
+    @PastOrPresent
     private Instant createdDate;
 
+    @PastOrPresent
     private Instant lastUsedDate;
 
     public Secret(@NotEmpty String name, @NotEmpty String secret, @NotNull Project project) {
