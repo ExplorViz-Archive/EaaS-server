@@ -18,8 +18,8 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @Table(indexes = {
-    @Index(columnList = "name", unique = true),
-    @Index(columnList = "secret")
+    @Index(columnList = "project_id,name", unique = true),
+    @Index(columnList = "project_id,secret", unique = true)
 })
 public class Secret implements Serializable {
     private static final long serialVersionUID = -5164775067113669305L;

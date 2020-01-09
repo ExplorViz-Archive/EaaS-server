@@ -41,6 +41,12 @@ public class Project implements Serializable {
     @JsonIgnore
     private User owner;
 
+    /**
+     * Hidden projects are only visible to users who have the
+     * {@link net.explorviz.eaas.security.Authorities#READ_AUTHORITY} for it.
+     */
+    private boolean hidden;
+
     @CreatedDate
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

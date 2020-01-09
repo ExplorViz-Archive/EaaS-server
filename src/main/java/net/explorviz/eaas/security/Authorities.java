@@ -13,15 +13,16 @@ public final class Authorities {
     }
 
     /**
-     * Grants the permission to read projects owned by themselves, which includes listing builds.
-     * 
+     * Grants the permission to see the project in listing and read them, which includes listing builds, even if it
+     * is hidden. Projects that aren't hidden are always visible, including listing their builds.
+     *
      * TODO: Should be a per-project authority
      */
     public static final GrantedAuthority READ_AUTHORITY = create("USE");
 
     /**
-     * Grants the permission to run builds.
-     * 
+     * Grants the permission to run builds. Depends on {@link #READ_AUTHORITY}.
+     *
      * TODO: Should be a per-project authority
      */
     public static final GrantedAuthority RUN_AUTHORITY = create("RUN");
@@ -29,7 +30,7 @@ public final class Authorities {
     /**
      * Grants the permission to manage projects, which includes deleting builds, reading and adding API keys. Depends on
      * {@link #READ_AUTHORITY}.
-     * 
+     *
      * TODO: Should be a per-project authority
      */
     public static final GrantedAuthority MANAGE_AUTHORITY = create("MANAGE");
