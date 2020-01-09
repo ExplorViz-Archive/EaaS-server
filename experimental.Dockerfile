@@ -22,14 +22,16 @@ COPY package.json .
 COPY package-lock.json .
 COPY webpack.config.js .
 
-# Specifically use goal package here to avoid running static analysis tools
-# Experimental dockerfile feature: caching build dependencies
+# Experimental dockerfile feature: caching build dependencies, skip tests (if any) for further speedup
 RUN --mount=type=cache,uid=1000,gid=1000,target=/opt/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/opt/build/node_modules/ ./mvnw -B -P system-node,production package -DskipTests
 
 ###############################################################################
 # Runtime environment
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine-jre
+
+# TODO: Alternative for DockerJavaImplementation: docker-cli package
+RUN apk --no-cache add docker-compose
 
 # Adjust this argument for new versions
 ARG JAR_FILE=explorviz-as-a-service-1.0-SNAPSHOT.jar

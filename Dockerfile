@@ -28,6 +28,9 @@ RUN ./mvnw -B -P system-node,production package
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine-jre
 
+# TODO: Alternative for DockerJavaImplementation: docker-cli package
+RUN apk --no-cache add docker-compose
+
 # Adjust this argument for new versions
 ARG JAR_FILE=explorviz-as-a-service-1.0-SNAPSHOT.jar
 # TODO: Use unpacked jar for faster startup

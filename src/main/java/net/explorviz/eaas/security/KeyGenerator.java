@@ -2,15 +2,20 @@ package net.explorviz.eaas.security;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
 /**
  * Generate strings used for authentication from a secure randomness source.
  */
+@Component
+@Lazy
 public class KeyGenerator {
-    private final int passwordLength;
-    private final int apiKeyBytes;
+    protected final int passwordLength;
+    protected final int apiKeyBytes;
 
     protected final SecureRandom secureRandom;
 
@@ -18,7 +23,8 @@ public class KeyGenerator {
      * @param passwordLength How long (in characters) generated passwords should be. Must be positive and non-zero.
      * @param apiKeyBytes    How many bytes generated API keys should have. Must be positive and non-zero.
      */
-    public KeyGenerator(int passwordLength, int apiKeyBytes) {
+    public KeyGenerator(@Value("${eaas.security.defaultPasswordLength:16}") int passwordLength,
+                        @Value("${eaas.security.apiKeyBytes:16}") int apiKeyBytes) {
         Validate.isTrue(passwordLength > 0, "passwordLength must be positive: %d", passwordLength);
         Validate.isTrue(apiKeyBytes > 0, "apiKeyBytes must be positive: %d", apiKeyBytes);
 

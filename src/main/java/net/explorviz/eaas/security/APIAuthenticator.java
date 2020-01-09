@@ -4,11 +4,11 @@ import net.explorviz.eaas.model.Project;
 import net.explorviz.eaas.model.Secret;
 import net.explorviz.eaas.repository.SecretRepository;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
@@ -17,6 +17,8 @@ import java.util.Optional;
 /**
  * Contains functions that help with authorizing API requests and determining access rights.
  */
+@Component
+@Lazy
 public class APIAuthenticator {
     public static final String SECRET_HEADER_NAME = "X-EaaS-Secret";
 
@@ -43,7 +45,7 @@ public class APIAuthenticator {
      * @param secret   Optionally, a secret the request might contain
      * @param readonly Whether the request only reads information
      */
-    public void authorizeRequest(Project project, @Nullable String secret, boolean readonly) {
+    public void authorizeRequest(@NonNull Project project, @Nullable String secret, boolean readonly) {
         Optional<Secret> optionalSecret = Optional.empty();
 
         if (!StringUtils.isEmpty(secret)) {

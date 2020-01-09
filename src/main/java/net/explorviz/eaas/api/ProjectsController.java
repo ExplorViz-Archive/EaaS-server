@@ -35,7 +35,7 @@ public class ProjectsController {
      */
     @RequestMapping(path = "/api/v1/projects", method = RequestMethod.GET)
     public Map<String, Object> getProjects() {
-        return Collections.singletonMap("projects", projectRepository.findAll());
+        return Collections.singletonMap("projects", projectRepository.findByHidden(false));
     }
 
     @RequestMapping(path = "/api/v1/projects/{project}", method = RequestMethod.GET)
