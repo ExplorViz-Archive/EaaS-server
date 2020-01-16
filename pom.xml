@@ -36,14 +36,14 @@
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
 
         <!-- Actual dependencies -->
-        <vaadin.version>14.1.1</vaadin.version>
+        <vaadin.version>14.1.5</vaadin.version>
         <h2.version>1.4.200</h2.version>
         <docker-java.version>3.2.0-rc2</docker-java.version>
 
         <!-- Build tools -->
         <lombok.version>1.18.10</lombok.version>
-        <frontend-plugin.version>1.8.0</frontend-plugin.version>
-        <node.version>v12.13.1</node.version>
+        <frontend-plugin.version>1.9.1</frontend-plugin.version>
+        <node.version>v12.14.1</node.version>
 
         <!-- Inspection tools -->
         <checkstyle-plugin.version>3.1.0</checkstyle-plugin.version>
