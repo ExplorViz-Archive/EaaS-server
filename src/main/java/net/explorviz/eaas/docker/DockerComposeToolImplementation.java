@@ -1,8 +1,7 @@
 package net.explorviz.eaas.docker;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
@@ -19,9 +18,8 @@ import java.util.concurrent.TimeUnit;
  * This utility expects the presence of environment variables for non-standard configurations,
  * which we do not handle ourselves. The user should pass these environment variables to our process when starting.
  */
+@Slf4j
 class DockerComposeToolImplementation implements DockerComposeAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(DockerComposeToolImplementation.class);
-
     private static final String DOCKER_COMPOSE_COMMAND = "docker-compose";
     private static final int NORMAL_EXIT_CODE = 0;
 
@@ -33,7 +31,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
     DockerComposeToolImplementation(long operationTimeout) throws AdapterException {
         this.operationTimeout = operationTimeout;
 
-        logger.info("Initializing " + DOCKER_COMPOSE_COMMAND);
+        log.info("Initializing " + DOCKER_COMPOSE_COMMAND);
         try {
             // TODO: Print version information
             runComposeCommand(null, "version");
@@ -64,7 +62,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
         // TODO: Properly redirect into logger
         builder.redirectError(ProcessBuilder.Redirect.INHERIT);
 
-        logger.info("Running command: {}", String.join(" ", command));
+        log.info("Running command: {}", String.join(" ", command));
         Process process = builder.start();
 
         if (composeDefinition != null) {
@@ -75,7 +73,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
 
         try {
             if (!process.waitFor(operationTimeout, TimeUnit.MILLISECONDS)) {
-                logger.error("{} operation timed out, forcibly terminating process...", DOCKER_COMPOSE_COMMAND);
+                log.error("{} operation timed out, forcibly terminating process...", DOCKER_COMPOSE_COMMAND);
                 process.destroyForcibly();
                 throw new AdapterException("Operation timed out");
             }
@@ -85,7 +83,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
 
         int exitCode = process.exitValue();
         if (exitCode != NORMAL_EXIT_CODE) {
-            logger.error("{} exited with error {}. See log for more information", DOCKER_COMPOSE_COMMAND, exitCode);
+            log.error("{} exited with error {}. See log for more information", DOCKER_COMPOSE_COMMAND, exitCode);
             throw new AdapterException(DOCKER_COMPOSE_COMMAND + " command failed (error " + exitCode + ")");
         }
     }

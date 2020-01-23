@@ -3,7 +3,7 @@ package net.explorviz.eaas.security;
 import net.explorviz.eaas.model.Project;
 import net.explorviz.eaas.model.Secret;
 import net.explorviz.eaas.repository.SecretRepository;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;

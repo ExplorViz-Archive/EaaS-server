@@ -13,8 +13,6 @@ import org.springframework.lang.NonNull;
  * <pre>docker-compose</pre> command line utility.
  */
 public interface DockerComposeAdapter {
-    // TODO: Make operations non-blocking
-
     /**
      * Run a compose stack instance from the given compose file definition and give it a unique name.
      * <p>

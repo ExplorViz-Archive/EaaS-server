@@ -3,16 +3,19 @@ package net.explorviz.eaas.explorviz;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Scanner;
 
 /**
- * Represents a single instance of ExplorViz that can be accessed on a dedicated port.
+ * Represents a single instance of ExplorViz that can be accessed on a dedicated port, running to visualize a single
+ * build image.
+ * <p>
+ * This object does not hold any resources, but should not be kept around after the instance has been stopped.
  */
 @ToString
 @Getter
@@ -37,15 +40,18 @@ public class ExplorVizInstance {
     private final Instant createdTime;
 
     /**
-     * @param id      An ID for this instance, unique only while this instance is running.
-     *                Used by the {@link ExplorVizManager} to keep track of running instances.
-     * @param version Version of ExplorViz' docker-compose file to use. Expect issues with the <pre>dev</pre>
-     *                version, as it refers to images unknown at the time of building EaaS and the docker-compose
-     *                file we ship might have become incompatible with the current dev images.
-     * @param name    Project name for docker-compose, unique for the build attached
-     * @param image   Docker image tag or ID of the application we want to visualize
+     * @param id           An ID for this instance, unique only while this instance is running.
+     *                     Used by the {@link ExplorVizManager} to keep track of running instances
+     * @param buildId      ID of the {@link net.explorviz.eaas.model.Build} this instance is visualizing
+     * @param version      Version of ExplorViz' docker-compose file to use. Expect issues with the <pre>dev</pre>
+     *                     version, as it refers to images unknown at the time of building EaaS and the docker-compose
+     *                     file we ship might have become incompatible with the current dev images
+     * @param name         Project name for docker-compose, unique for the build attached
+     * @param frontendPort Port number this instance will be exposed on
+     * @param accessURL    URL for end-user to access this instance on
+     * @param image        Docker image tag or ID of the application we want to visualize
      */
-    ExplorVizInstance(int id, long buildId, @NonNull String version, String name, int frontendPort,
+    ExplorVizInstance(int id, long buildId, @NonNull String version, @NonNull String name, int frontendPort,
                       @NonNull String accessURL, @NonNull String image) {
         this.id = id;
         this.buildId = buildId;
@@ -67,9 +73,9 @@ public class ExplorVizInstance {
         this.createdTime = Instant.now();
     }
 
-    private static String readResourceFile(String filename) {
-        try {
-            return IOUtils.toString(new ClassPathResource(filename).getInputStream(), StandardCharsets.UTF_8);
+    private static String readResourceFile(@NonNull String filename) {
+        try (Scanner scanner = new Scanner(new ClassPathResource(filename).getInputStream(), StandardCharsets.UTF_8)) {
+            return scanner.useDelimiter("\\A").next();
         } catch (IOException e) {
             throw new RuntimeException("Required file " + filename + " is not in class path. This is a bug.", e);
         }

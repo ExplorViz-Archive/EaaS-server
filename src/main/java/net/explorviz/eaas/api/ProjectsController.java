@@ -1,5 +1,8 @@
 package net.explorviz.eaas.api;
 
+import lombok.extern.slf4j.Slf4j;
+import net.explorviz.eaas.docker.AdapterException;
+import net.explorviz.eaas.docker.DockerAdapter;
 import net.explorviz.eaas.model.Build;
 import net.explorviz.eaas.model.Project;
 import net.explorviz.eaas.repository.BuildRepository;
@@ -7,26 +10,30 @@ import net.explorviz.eaas.repository.ProjectRepository;
 import net.explorviz.eaas.security.APIAuthenticator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 
 import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER_NAME;
 
 @RestController
+@Slf4j
 public class ProjectsController {
-
-
     private final ProjectRepository projectRepository;
     private final BuildRepository buildRepository;
     private final APIAuthenticator apiAuthenticator;
+    private final DockerAdapter dockerAdapter;
 
     public ProjectsController(ProjectRepository projectRepository, BuildRepository buildRepository,
-                              APIAuthenticator apiAuthenticator) {
+                              APIAuthenticator apiAuthenticator, DockerAdapter dockerAdapter) {
         this.projectRepository = projectRepository;
         this.buildRepository = buildRepository;
         this.apiAuthenticator = apiAuthenticator;
+        this.dockerAdapter = dockerAdapter;
     }
 
     /**
@@ -76,7 +83,9 @@ public class ProjectsController {
     @RequestMapping(path = "/api/v1/projects/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
     public String postProjectBuild(@RequestHeader(SECRET_HEADER_NAME) String secret,
                                    @PathVariable("project") long projectId,
-                                   @RequestParam("name") String name) {
+                                   @RequestParam("name") String name,
+                                   @RequestParam("imageID") String imageID,
+                                   @RequestParam("image") MultipartFile image) {
         Project project = findProjectById(projectId);
         apiAuthenticator.authorizeRequest(project, secret, false);
 
@@ -85,9 +94,25 @@ public class ProjectsController {
                 Build.NAME_MIN_LENGTH + " and " + Build.NAME_MAX_LENGTH + " characters long!");
         }
 
-        // TODO: Upload image
+        log.info("Receiving new build for project #{} ('{}') with name '{}'", projectId, project.getName(), name);
+        log.debug("Image has size {} B, original filename '{}'", image.getSize(), image.getOriginalFilename());
 
-        Build build = buildRepository.save(new Build(name, project, "abcdef"));
+        try (InputStream stream = image.getInputStream()) {
+            dockerAdapter.loadImage(stream);
+        } catch (AdapterException e) {
+            log.error("Loading image of new build in docker failed", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Docker couldn't load image");
+        } catch (IOException e) {
+            log.error("Reading image of new build from client failed", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "I/O Error while receiving the image");
+        }
+
+        /*
+         * TODO: docker-java doesn't tell us the ID of the image we just loaded, so right now we have to trust the
+         *       client. This shouldn't be a problem since he could upload anything he wanted anyway. Leaking 'secret'
+         *       images present in the host system also seems unlikely.
+         */
+        Build build = buildRepository.save(new Build(name, project, imageID));
         return "/projects/" + project.getId() + "/builds/" + build.getId();
     }
 

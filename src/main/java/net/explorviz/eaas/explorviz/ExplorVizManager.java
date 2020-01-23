@@ -1,11 +1,10 @@
 package net.explorviz.eaas.explorviz;
 
+import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.docker.AdapterException;
 import net.explorviz.eaas.docker.DockerComposeAdapter;
 import net.explorviz.eaas.model.Build;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
@@ -19,9 +18,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @Lazy
-public class ExplorVizManager {
-    private static final Logger logger = LoggerFactory.getLogger(ExplorVizManager.class);
-
+@Slf4j
+public final class ExplorVizManager {
     private static final int PORT_MAX = 65535;
 
     private final DockerComposeAdapter dockerCompose;
@@ -51,7 +49,7 @@ public class ExplorVizManager {
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
         Validate.notBlank(accessUrlTemplate, "accessUrlTemplate may not be empty");
 
-        logger.info("Given port range {}-{} for ExplorViz instances (max {} instances)", frontendPortOffset,
+        log.info("Given port range {}-{} for ExplorViz instances (max {} instances)", frontendPortOffset,
             frontendPortOffset + maxInstances, maxInstances);
 
         this.dockerCompose = dockerCompose;
@@ -66,6 +64,9 @@ public class ExplorVizManager {
             throw new NoMoreSlotsException("Won't start another ExplorViz instance, " + instances.size() + "/"
                 + maxInstances + " instances are running");
         }
+
+        log.info("Requested ExplorViz instance for build #{} '{}' of project #{} '{}'", build.getId(), build.getName(),
+            build.getProject().getId(), build.getProject().getName());
 
         int id = nextInstance;
         /*
@@ -83,6 +84,9 @@ public class ExplorVizManager {
         ExplorVizInstance instance = new ExplorVizInstance(id, build.getId(), version, buildInstanceName(id, build),
             frontendPort, accessUrl, build.getImageID());
 
+        log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
+            instance.getFrontendPort());
+
         dockerCompose.up(instance.getName(), instance.getComposeDefinition());
 
         instances.add(id, instance);
@@ -95,7 +99,7 @@ public class ExplorVizManager {
     }
 
     public void stopInstance(@NonNull ExplorVizInstance instance) throws AdapterException {
-        logger.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
+        log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
             instance.getFrontendPort());
 
         dockerCompose.down(instance.getName(), instance.getComposeDefinition());
@@ -110,12 +114,12 @@ public class ExplorVizManager {
      * @param instanceID Internal id for the instance, only unique while it is running
      * @param build      The build this instance is for
      */
-    private static String buildInstanceName(int instanceID, Build build) {
+    private static String buildInstanceName(int instanceID, @NonNull Build build) {
         return "eaas-" + instanceID + "-p" + build.getProject().getId() + "-b" + build.getId();
     }
 
     public void stopAllInstances() throws AdapterException {
-        logger.info("Requested stop of all running instances");
+        log.info("Requested stop of all running instances");
 
         for (ExplorVizInstance instance : instances) {
             stopInstance(instance);
