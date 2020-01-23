@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
+        <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -47,7 +47,7 @@
 
         <!-- Inspection tools -->
         <checkstyle-plugin.version>3.1.0</checkstyle-plugin.version>
-        <checkstyle.version>8.27</checkstyle.version>
+        <checkstyle.version>8.28</checkstyle.version>
         <pmd-plugin.version>3.12.0</pmd-plugin.version>
         <pmd.version>6.20.0</pmd.version>
         <spotbugs-plugin.version>3.1.12.2</spotbugs-plugin.version>
@@ -156,6 +156,14 @@
             <artifactId>docker-java</artifactId>
             <version>${docker-java.version}</version>
         </dependency>
+
+        <!-- Useless dependencies -->
+        <!-- We do not use javax.annotation directly, but javac warns about them missing -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -236,7 +244,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
 
                 <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
+                    <configLocation>${project.basedir}/src/analysis/checkstyle.xml</configLocation>
 
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>false</failsOnError>
@@ -286,6 +294,8 @@
                 <configuration>
                     <threshold>Low</threshold>
                     <effort>Max</effort>
+
+                    <excludeFilterFile>${project.basedir}/src/analysis/spotbugs-excludeFilter.xml</excludeFilterFile>
 
                     <xmlOutput>true</xmlOutput>
                     <failOnError>false</failOnError>

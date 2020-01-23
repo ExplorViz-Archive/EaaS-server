@@ -20,7 +20,7 @@ import java.util.Optional;
 @Component
 @Lazy
 public class APIAuthenticator {
-    public static final String SECRET_HEADER_NAME = "X-EaaS-Secret";
+    public static final String SECRET_HEADER = "X-EaaS-Secret";
 
     private final SecretRepository secretRepository;
 

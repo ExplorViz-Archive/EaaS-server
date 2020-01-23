@@ -18,7 +18,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 
-import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER_NAME;
+import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER;
 
 @RestController
 @Slf4j
@@ -46,7 +46,7 @@ public class ProjectsController {
     }
 
     @RequestMapping(path = "/api/v1/projects/{project}", method = RequestMethod.GET)
-    public Map<String, Object> getProject(@RequestHeader(value = SECRET_HEADER_NAME, required = false) String secret,
+    public Map<String, Object> getProject(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                           @PathVariable("project") long projectId) {
         Project project = findProjectById(projectId);
         apiAuthenticator.authorizeRequest(project, secret, true);
@@ -55,7 +55,7 @@ public class ProjectsController {
     }
 
     @RequestMapping(path = "/api/v1/projects/{project}/builds", method = RequestMethod.GET)
-    public Map<String, Object> getProjectBuilds(@RequestHeader(value = SECRET_HEADER_NAME, required = false) String secret,
+    public Map<String, Object> getProjectBuilds(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                 @PathVariable("project") long projectId) {
         Project project = findProjectById(projectId);
         apiAuthenticator.authorizeRequest(project, secret, true);
@@ -64,7 +64,7 @@ public class ProjectsController {
     }
 
     @RequestMapping(path = "/api/v1/projects/{project}/builds/{build}", method = RequestMethod.GET)
-    public Map<String, Object> getProjectBuild(@RequestHeader(value = SECRET_HEADER_NAME, required = false) String secret,
+    public Map<String, Object> getProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                @PathVariable("project") long projectId,
                                                @PathVariable("build") long buildId) {
         Project project = findProjectById(projectId);
@@ -81,7 +81,7 @@ public class ProjectsController {
      * resulting path as plain text.
      */
     @RequestMapping(path = "/api/v1/projects/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
-    public String postProjectBuild(@RequestHeader(SECRET_HEADER_NAME) String secret,
+    public String postProjectBuild(@RequestHeader(SECRET_HEADER) String secret,
                                    @PathVariable("project") long projectId,
                                    @RequestParam("name") String name,
                                    @RequestParam("imageID") String imageID,

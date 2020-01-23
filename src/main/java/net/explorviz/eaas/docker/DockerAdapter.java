@@ -13,7 +13,7 @@ import java.io.InputStream;
  */
 public interface DockerAdapter {
     /**
-     * Load an image from a streamed tar archive into the doc
+     * Load an image from a streamed tar archive into the docker daemon.
      *
      * @param input Stream to read the image from
      */

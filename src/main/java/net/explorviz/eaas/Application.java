@@ -38,7 +38,7 @@ public class Application implements CommandLineRunner {
             log.info("This looks like a fresh installation! Added a user with administrator permissions.\n" +
                     "\n" +
                     "Login as user '{}' with password '{}'\n",
-                    DEFAULT_USERNAME, DEFAULT_PASSWORD);
+                DEFAULT_USERNAME, DEFAULT_PASSWORD);
         }
     }
 }
