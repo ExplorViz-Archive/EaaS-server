@@ -7,9 +7,9 @@
 
 # Modified for ExplorViz as a Service:
 # - Removed discovery service because it is not useful for us
-# - Only publish the ports necessary for us
+# - Only publish the ports we need, in order to avoid any conflicts on the host
 # - Remove all volumes because we don't want persistent data
-# - Placeholders for analysis port, frontend port and frontend URL
+# - Add placeholder variables
 
 version: "3.3"
 services:
@@ -102,8 +102,11 @@ services:
   analysis-service:
     image: explorviz/explorviz-backend-analysis-service:1.5.0
     container_name: explorviz-backend-analysis-service
-    ports:
-      - "%EXPLORVIZ_ANALYSIS_PORT%:10133"
+# EaaS: Changed from ports to expose
+#    ports:
+#      - "10133:10133"
+    expose:
+      - "10133"
 
 # EaaS: Remove discovery-service
 #  discovery-service:
@@ -122,10 +125,10 @@ services:
     image: explorviz/explorviz-frontend:1.5.0
     container_name: explorviz-frontend
     ports:
-      - "%EXPLORVIZ_FRONTEND_PORT%:80"
+      - "%FRONTEND_PORT%:80"
     environment:
       - API_ROOT=http://traefik:8080
-      - FRONTEND_IP=%EXPLORVIZ_ADDRESS%
+      - FRONTEND_IP=%ACCESS_URL%
       # Change localhost to your host ip adress, if you want to connect
       # from remote devices
     depends_on:
@@ -206,6 +209,10 @@ services:
 #    volumes:
 #      - explorviz-settings-mongo-data:/data/db
 #      - explorviz-settings-mongo-configdb:/data/configdb
+
+# EaaS: Add the application we want to test
+  application:
+    image: %BUILD_IMAGE%
 
 # EaaS: No persistent volumes
 #volumes:

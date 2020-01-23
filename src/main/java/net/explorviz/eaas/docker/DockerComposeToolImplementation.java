@@ -108,7 +108,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
         Validate.notBlank(composeDefinition, "composeDefinition may not be empty");
 
         try {
-            runComposeCommand(composeDefinition, "-p", name, "down");
+            runComposeCommand(composeDefinition, "-p", name, "down", "-v");
         } catch (IOException e) {
             throw new AdapterException("Running " + DOCKER_COMPOSE_COMMAND + " failed", e);
         }
