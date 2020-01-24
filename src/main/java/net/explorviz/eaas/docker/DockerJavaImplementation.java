@@ -25,7 +25,7 @@ class DockerJavaImplementation implements DockerAdapter {
     // TODO: We're not getting checked exceptions from docker-java. We should actually throw AdapterExceptions.
 
     DockerJavaImplementation() throws AdapterException {
-        // Settings are read from environment variables as well as system properties
+        // Settings are read from environment variables (see docker/docker-compose.yml)
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
         docker = DockerClientBuilder.getInstance(builder.build()).build();
 
@@ -36,7 +36,7 @@ class DockerJavaImplementation implements DockerAdapter {
 
     @Override
     public void loadImage(InputStream input) {
-        log.debug("Loading new image");
+        log.info("Loading new image");
 
         try (LoadImageCmd cmd = docker.loadImageCmd(input)) {
             cmd.exec();
@@ -45,7 +45,7 @@ class DockerJavaImplementation implements DockerAdapter {
 
     @Override
     public void deleteImage(String image) {
-        log.debug("Deleting image '{}'", image);
+        log.info("Deleting image '{}'", image);
 
         try (RemoveImageCmd cmd = docker.removeImageCmd(image)) {
             cmd.exec();

@@ -31,7 +31,6 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
     DockerComposeToolImplementation(long operationTimeout) throws AdapterException {
         this.operationTimeout = operationTimeout;
 
-        log.info("Initializing " + DOCKER_COMPOSE_COMMAND);
         try {
             // TODO: Print version information
             runComposeCommand(null, "version");

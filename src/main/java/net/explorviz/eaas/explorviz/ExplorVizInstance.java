@@ -35,31 +35,32 @@ public class ExplorVizInstance {
     private final String name;
     private final int frontendPort;
     private final String accessURL;
-    private final String image;
+    private final String applicationImage;
 
     private final Instant createdTime;
 
     /**
-     * @param id           An ID for this instance, unique only while this instance is running.
-     *                     Used by the {@link ExplorVizManager} to keep track of running instances
-     * @param buildId      ID of the {@link net.explorviz.eaas.model.Build} this instance is visualizing
-     * @param version      Version of ExplorViz' docker-compose file to use. Expect issues with the <pre>dev</pre>
-     *                     version, as it refers to images unknown at the time of building EaaS and the docker-compose
-     *                     file we ship might have become incompatible with the current dev images
-     * @param name         Project name for docker-compose, unique for the build attached
-     * @param frontendPort Port number this instance will be exposed on
-     * @param accessURL    URL for end-user to access this instance on
-     * @param image        Docker image tag or ID of the application we want to visualize
+     * @param id               An ID for this instance, unique only while this instance is running.
+     *                         Used by the {@link ExplorVizManager} to keep track of running instances
+     * @param buildId          ID of the {@link net.explorviz.eaas.model.Build} this instance is visualizing
+     * @param version          Version of ExplorViz' docker-compose file to use. Expect issues with the <pre>dev</pre>
+     *                         version, as it refers to images unknown at the time of building EaaS and the
+     *                         docker-compose
+     *                         file we ship might have become incompatible with the current dev images
+     * @param name             Project name for docker-compose, unique for the build attached
+     * @param frontendPort     Port number this instance will be exposed on
+     * @param accessURL        URL for end-user to access this instance on
+     * @param applicationImage Docker image tag or ID of the application we want to visualize
      */
     ExplorVizInstance(int id, long buildId, @NonNull String version, @NonNull String name, int frontendPort,
-                      @NonNull String accessURL, @NonNull String image) {
+                      @NonNull String accessURL, @NonNull String applicationImage) {
         this.id = id;
         this.buildId = buildId;
         this.version = version;
         this.name = name;
         this.frontendPort = frontendPort;
         this.accessURL = accessURL;
-        this.image = image;
+        this.applicationImage = applicationImage;
 
         String composeTemplate = readResourceFile(COMPOSE_FILE_PREFIX + version + COMPOSE_FILE_SUFFIX);
         this.composeDefinition = composeTemplate
@@ -68,7 +69,7 @@ public class ExplorVizInstance {
             .replace("%INSTANCE_NAME%", name)
             .replace("%FRONTEND_PORT%", Integer.toString(frontendPort))
             .replace("%ACCESS_URL%", accessURL)
-            .replace("%BUILD_IMAGE%", image);
+            .replace("%APPLICATION_IMAGE%", applicationImage);
 
         this.createdTime = Instant.now();
     }

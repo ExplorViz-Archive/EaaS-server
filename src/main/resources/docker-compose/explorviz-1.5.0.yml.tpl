@@ -10,6 +10,9 @@
 # - Only publish the ports we need, in order to avoid any conflicts on the host
 # - Remove all volumes because we don't want persistent data
 # - Add placeholder variables
+# - Removed fixed container_names
+
+# TODO: Fix broken traefik reverse proxy with multiple instances
 
 version: "3.3"
 services:
@@ -18,7 +21,6 @@ services:
 
   user-service:
     image: explorviz/explorviz-backend-user-service:1.5.0
-    container_name: explorviz-backend-user-service
     expose:
       - "8082"
     depends_on:
@@ -35,7 +37,6 @@ services:
 
   settings-service:
     image: explorviz/explorviz-backend-settings-service:1.5.0
-    container_name: explorviz-backend-settings-service
     expose:
       - "8087"
     depends_on:
@@ -52,7 +53,6 @@ services:
 
   landscape-service:
     image: explorviz/explorviz-backend-landscape-service:1.5.0
-    container_name: explorviz-backend-landscape-service
 # EaaS: Disable publishing of port
 #    ports:
 #      - "10135:10135"
@@ -66,7 +66,6 @@ services:
 
   broadcast-service:
     image: explorviz/explorviz-backend-broadcast-service:1.5.0
-    container_name: explorviz-backend-broadcast-service
     expose:
       - "8081"
     depends_on:
@@ -83,7 +82,6 @@ services:
 
   history-service:
     image: explorviz/explorviz-backend-history-service:1.5.0
-    container_name: explorviz-backend-history-service
     expose:
       - "8086"
     depends_on:
@@ -101,7 +99,6 @@ services:
 
   analysis-service:
     image: explorviz/explorviz-backend-analysis-service:1.5.0
-    container_name: explorviz-backend-analysis-service
 # EaaS: Changed from ports to expose
 #    ports:
 #      - "10133:10133"
@@ -111,7 +108,6 @@ services:
 # EaaS: Remove discovery-service
 #  discovery-service:
 #    image: explorviz/explorviz-backend-discovery-service:1.5.0
-#    container_name: explorviz-backend-discovery-service
 #    ports:
 #      - "8083:8083"
 #    depends_on:
@@ -123,7 +119,6 @@ services:
 
   frontend:
     image: explorviz/explorviz-frontend:1.5.0
-    container_name: explorviz-frontend
     ports:
       - "%FRONTEND_PORT%:80"
     environment:
@@ -144,7 +139,6 @@ services:
 
   traefik:
     image: "traefik:v2.0.1"
-    container_name: "explorviz-reverse-proxy"
     command:
       - "--entrypoints.web.address=:8080"
       - "--providers.docker=true"
@@ -158,13 +152,11 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   zookeeper:
-    container_name: zookeeper
     image: wurstmeister/zookeeper
     expose:
       - "2181"
 
   kafka:
-    container_name: kafka
     image: wurstmeister/kafka
     depends_on:
       - zookeeper
@@ -176,7 +168,6 @@ services:
 
   mongo-user:
     image: mongo
-    container_name: explorviz-backend-user-mongo
     command: mongod --port 27017
 # EaaS: No persistent volumes
 #    volumes:
@@ -187,7 +178,6 @@ services:
 
   mongo-history:
     image: mongo
-    container_name: explorviz-landscape-mongo
     command: mongod --port 27018
 # EaaS: No persistent volumes
 #    volumes:
@@ -198,7 +188,6 @@ services:
 
   mongo-settings:
     image: mongo
-    container_name: explorviz-settings-mongo
     command: mongod --port 27019
 # EaaS: Changed from ports to expose
 #    ports:
@@ -212,7 +201,7 @@ services:
 
 # EaaS: Add the application we want to test
   application:
-    image: %BUILD_IMAGE%
+    image: %APPLICATION_IMAGE%
 
 # EaaS: No persistent volumes
 #volumes:

@@ -8,8 +8,9 @@ import java.io.InputStream;
 /**
  * Provides programmatic access to the Docker API.
  * <p>
- * The standard implementation for this is {@link DockerJavaImplementation} which uses the
- * <pre>docker-java</pre> library.
+ * The standard implementation for this is {@link DockerJavaImplementation} which uses the <b>docker-java</b>
+ * library. This library isn't maintained very well and at some point we might want to consider switching to the
+ * <b>docker-cli</b> utility instead, operating in the same way as {@link DockerComposeToolImplementation}.
  */
 public interface DockerAdapter {
     /**

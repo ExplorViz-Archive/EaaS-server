@@ -10,11 +10,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 @Lazy
@@ -32,7 +30,7 @@ public final class ExplorVizManager {
      * well as one start running concurrently. The only scenario not allowed is two instances starting at the same time,
      * because our port selection logic in #startInstance() cannot handle that.
      */
-    private final List<ExplorVizInstance> instances = new CopyOnWriteArrayList<>();
+    private final ConcurrentMap<Integer, ExplorVizInstance> instances = new ConcurrentHashMap<>();
     private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId = new ConcurrentHashMap<>();
     /**
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
@@ -89,7 +87,7 @@ public final class ExplorVizManager {
 
         dockerCompose.up(instance.getName(), instance.getComposeDefinition());
 
-        instances.add(id, instance);
+        instances.put(id, instance);
         instancesByBuildId.put(instance.getBuildId(), instance);
         return instance;
     }
@@ -121,8 +119,16 @@ public final class ExplorVizManager {
     public void stopAllInstances() throws AdapterException {
         log.info("Requested stop of all running instances");
 
-        for (ExplorVizInstance instance : instances) {
+        for (ExplorVizInstance instance : instances.values()) {
             stopInstance(instance);
         }
+    }
+
+    /**
+     * @return A read-only representation of all instances currently running. Updates to the instances after this method
+     * was called are not reflected in the returned list.
+     */
+    public Collection<ExplorVizInstance> getAllInstances() {
+        return Collections.unmodifiableCollection(instances.values());
     }
 }

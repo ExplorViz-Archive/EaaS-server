@@ -10,13 +10,13 @@ import org.springframework.lang.NonNull;
  * crash.
  * <p>
  * The standard implementation for this is {@link DockerComposeToolImplementation} which uses the
- * <pre>docker-compose</pre> command line utility.
+ * <b>docker-compose</b> command line utility.
  */
 public interface DockerComposeAdapter {
     /**
      * Run a compose stack instance from the given compose file definition and give it a unique name.
      * <p>
-     * This is equivalent to running <pre>docker-compose -p name -f composeFile.yml up -d</pre>.
+     * This is equivalent to running <pre>docker-compose -p name -f composeFile.yml up -d</pre>
      *
      * @param name              A unique project name for this compose stack instance. May not be empty.
      * @param composeDefinition File contents of the docker-compose.yml file to run from
@@ -27,7 +27,7 @@ public interface DockerComposeAdapter {
      * Stops a previously started compose stack instance. Make sure to pass exactly the same parameters as when
      * starting.
      * <p>
-     * This is equivalent to running <pre>docker-compose -p name -f composeFile.yml down</pre>.
+     * This is equivalent to running <pre>docker-compose -p name -f composeFile.yml down</pre>
      *
      * @param name              A unique project name for this compose stack instance. May not be empty.
      * @param composeDefinition File contents of the docker-compose.yml file to run from
