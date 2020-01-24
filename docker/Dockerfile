@@ -3,19 +3,25 @@
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine AS builder
 
-RUN apk --no-cache add nodejs npm
+RUN apk --no-cache add \
+    nodejs npm \
+ && adduser -D build \
+ && mkdir /home/build/eaas \
+ && chown build:build /home/build/eaas
 
-RUN addgroup -g 1000 -S build \
- && adduser -u 1000 -S -G build -h /opt/build -D build
 USER build:build
-WORKDIR /opt/build
+WORKDIR /home/build/eaas
 
 # Do not copy . to avoid copying node and node_modules
 COPY mvnw .
 COPY .mvn .mvn
+COPY pom.xml .
+
+# Download dependencies before copying source files for best layer caching
+RUN ./mvnw -B -P system-node,production dependency:go-offline
+
 COPY src src
 COPY frontend frontend
-COPY pom.xml .
 COPY package.json .
 COPY package-lock.json .
 COPY webpack.config.js .
@@ -28,21 +34,21 @@ RUN ./mvnw -B -P system-node,production package
 ###############################################################################
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-# TODO: Alternative for DockerJavaImplementation: docker-cli package
-RUN apk --no-cache add docker-compose
+RUN apk --no-cache add \
+    su-exec docker-compose \
+ && adduser -D -h /var/opt/eaas eaas
 
+COPY docker/entrypoint.sh /
 # Adjust this argument for new versions
 ARG JAR_FILE=explorviz-as-a-service-1.0-SNAPSHOT.jar
 # TODO: Use unpacked jar for faster startup
-COPY --from=builder /opt/build/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
-
-RUN addgroup -S eaas \
- && adduser -S -G eaas -h /var/opt/eaas -D eaas
-USER eaas:eaas
-WORKDIR /opt/eaas/
+COPY --from=builder /home/build/eaas/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
 
 EXPOSE 8080
 VOLUME /var/opt/eaas/
 
+WORKDIR /opt/eaas/
+
+ENTRYPOINT ["/entrypoint.sh"]
 # TODO: Add -spring.config.location= and generate production-mode configuration from environment variables
 CMD ["java", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]

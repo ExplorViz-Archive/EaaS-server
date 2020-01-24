@@ -1,0 +1,7 @@
+.git
+.gitignore
+.gitattributes
+node
+node_modules
+.m2
+target

@@ -30,4 +30,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Docker Build
-      run: docker build .
+      run: docker build -f docker/Dockerfile .
