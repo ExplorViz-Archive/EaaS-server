@@ -16,4 +16,4 @@ fi
 
 unset GROUP_ID_DOCKER
 
-su-exec eaas "$@"
+exec su-exec eaas "$@"
