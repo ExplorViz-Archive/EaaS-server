@@ -11,10 +11,6 @@ services:
       - /var/opt/eaas/
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      # The entrypoint script will add the EaaS user into this group.
-      # Can be used to allow EaaS to access docker on the host without running as root.
-      # Adjust so it is equal to the group ID of the docker group on the host
-      GROUP_ID_DOCKER: 999
       # See https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
       DOCKER_HOST: "unix:///var/run/docker.sock"
       #DOCKER_API_VERSION:

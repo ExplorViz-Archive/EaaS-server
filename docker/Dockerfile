@@ -12,7 +12,6 @@ RUN apk --no-cache add \
 USER build:build
 WORKDIR /home/build/eaas
 
-# Do not copy . to avoid copying node and node_modules
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
