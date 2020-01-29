@@ -38,7 +38,7 @@
         <!-- Actual dependencies -->
         <vaadin.version>14.1.5</vaadin.version>
         <h2.version>1.4.200</h2.version>
-        <docker-java.version>3.2.0-rc2</docker-java.version>
+        <docker-java.version>3.2.0-rc3</docker-java.version>
 
         <!-- Build tools -->
         <lombok.version>1.18.10</lombok.version>

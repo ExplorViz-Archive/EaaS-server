@@ -1,6 +1,7 @@
 ###############################################################################
 # Build environment
 ###############################################################################
+# Try to switch to alpine-slim once https://github.com/AdoptOpenJDK/openjdk-docker/issues/103 is fixed
 FROM adoptopenjdk/openjdk11:alpine AS builder
 
 RUN apk --no-cache add \
@@ -17,7 +18,9 @@ COPY .mvn .mvn
 COPY pom.xml .
 
 # Download dependencies before copying source files for best layer caching
-RUN ./mvnw -B -P system-node,production dependency:go-offline
+RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+    -P system-node,production \
+    dependency:go-offline
 
 COPY src src
 COPY frontend frontend
@@ -26,7 +29,9 @@ COPY package-lock.json .
 COPY webpack.config.js .
 
 # Specifically use goal package here to avoid running static analysis tools
-RUN ./mvnw -B -P system-node,production package
+RUN ./mvnw -B \
+    -P system-node,production \
+    package
 
 ###############################################################################
 # Runtime environment
@@ -41,7 +46,7 @@ COPY docker/entrypoint.sh /
 # Adjust this argument for new versions
 ARG JAR_FILE=explorviz-as-a-service-1.0-SNAPSHOT.jar
 # TODO: Use unpacked jar for faster startup
-COPY --from=builder /home/build/eaas/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
+COPY --from=builder --chown=root:root /home/build/eaas/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
 
 EXPOSE 8080
 VOLUME /var/opt/eaas/
