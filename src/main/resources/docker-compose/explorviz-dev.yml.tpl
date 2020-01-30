@@ -10,7 +10,6 @@
 # - Only publish the ports we need, in order to avoid any conflicts on the host
 # - Remove all volumes because we don't want persistent data
 # - Add placeholder variables
-# - Removed fixed container_names
 
 version: "3.3"
 services:
@@ -51,7 +50,7 @@ services:
 
   landscape-service:
     image: explorviz/explorviz-backend-landscape-service:dev
-# EaaS: Disable publishing of port
+# EaaS: Changed from ports to expose
 #    ports:
 #      - "10135:10135"
     expose:
@@ -136,7 +135,7 @@ services:
   ### Software Stack ###
 
   traefik:
-    image: "traefik:v2.0.1"
+    image: "traefik:v2.1"
     command:
       - "--entrypoints.web.address=:8080"
       - "--providers.docker=true"
@@ -145,12 +144,12 @@ services:
 #    ports:
 #      - "8080:8080"
     expose:
-        - "8080"
+       - "8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
   zookeeper:
-    image: wurstmeister/zookeeper
+    image: zookeeper:3.5
     expose:
       - "2181"
 
@@ -187,15 +186,12 @@ services:
   mongo-settings:
     image: mongo
     command: mongod --port 27019
-# EaaS: Changed from ports to expose
-#    ports:
-#      - 27019:27019
-    expose:
-       - "27019"
 # EaaS: No persistent volumes
 #    volumes:
 #      - explorviz-settings-mongo-data:/data/db
 #      - explorviz-settings-mongo-configdb:/data/configdb
+    expose:
+      - "27019"
 
 # EaaS: Add the application we want to test
   application:
