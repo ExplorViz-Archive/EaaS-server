@@ -63,7 +63,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(8);
+        Collection<GrantedAuthority> authorities = new HashSet<>(4);
 
         authorities.add(Authorities.READ_AUTHORITY);
         authorities.add(Authorities.RUN_AUTHORITY);

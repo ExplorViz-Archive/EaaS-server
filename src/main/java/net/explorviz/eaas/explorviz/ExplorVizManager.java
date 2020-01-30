@@ -30,8 +30,8 @@ public final class ExplorVizManager {
      * well as one start running concurrently. The only scenario not allowed is two instances starting at the same time,
      * because our port selection logic in #startInstance() cannot handle that.
      */
-    private final ConcurrentMap<Integer, ExplorVizInstance> instances = new ConcurrentHashMap<>();
-    private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Integer, ExplorVizInstance> instances;
+    private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId;
     /**
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
      * but better than always starting from index 0.
@@ -54,8 +54,14 @@ public final class ExplorVizManager {
         this.maxInstances = maxInstances;
         this.frontendPortOffset = frontendPortOffset;
         this.accessUrlTemplate = accessUrlTemplate;
+
+        this.instances = new ConcurrentHashMap<>(maxInstances);
+        this.instancesByBuildId = new ConcurrentHashMap<>(maxInstances);
     }
 
+    /**
+     * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
+     */
     public synchronized ExplorVizInstance startInstance(@NonNull Build build, @NonNull String version)
         throws AdapterException, NoMoreSlotsException {
         if (instances.size() >= maxInstances) {
@@ -85,7 +91,12 @@ public final class ExplorVizManager {
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
             instance.getFrontendPort());
 
-        dockerCompose.up(instance.getName(), instance.getComposeDefinition());
+        try {
+            dockerCompose.up(instance.getName(), instance.getComposeDefinition());
+        } catch(AdapterException e) {
+            log.error("Error starting ExplorViz instance", e);
+            throw e;
+        }
 
         instances.put(id, instance);
         instancesByBuildId.put(instance.getBuildId(), instance);
@@ -96,11 +107,20 @@ public final class ExplorVizManager {
         return Optional.ofNullable(instancesByBuildId.get(build.getId()));
     }
 
+    /**
+     * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
+     */
     public void stopInstance(@NonNull ExplorVizInstance instance) throws AdapterException {
         log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
             instance.getFrontendPort());
 
-        dockerCompose.down(instance.getName(), instance.getComposeDefinition());
+        try {
+            dockerCompose.down(instance.getName(), instance.getComposeDefinition());
+        } catch(AdapterException e) {
+            log.error("Error stopping ExplorViz instance", e);
+            throw e;
+        }
+
         instances.remove(instance.getId());
         instancesByBuildId.remove(instance.getBuildId());
     }
@@ -113,15 +133,29 @@ public final class ExplorVizManager {
      * @param build      The build this instance is for
      */
     private static String buildInstanceName(int instanceID, @NonNull Build build) {
-        return "eaas-" + instanceID + "-p" + build.getProject().getId() + "-b" + build.getId();
+        return "eaas-" + instanceID + "-" + build.getId();
     }
 
-    public void stopAllInstances() throws AdapterException {
+    /**
+     * Stops all currently running instances. Does not prevent new instances from starting at the same time. Such
+     * instances will neither be stopped nor lead to an error. {@link AdapterException} occuring during shutdown are
+     * logged but not rethrown.
+     *
+     * @return {@code true} if all instances that were running when this method was called stopped correctly.
+     */
+    public boolean stopAllInstances() {
         log.info("Requested stop of all running instances");
 
-        for (ExplorVizInstance instance : instances.values()) {
-            stopInstance(instance);
-        }
+        // We use count() instead of anyMatch() to force evaluating all objects in the stream, not stopping after the
+        // first failure
+        return instances.values().parallelStream().map(instance -> {
+            try {
+                stopInstance(instance);
+                return true;
+            } catch (AdapterException e) {
+                return false;
+            }
+        }).filter(v -> !v).count() > 0;
     }
 
     /**

@@ -109,8 +109,8 @@ public class ProjectsController {
 
         /*
          * TODO: docker-java doesn't tell us the ID of the image we just loaded, so right now we have to trust the
-         *       client. This shouldn't be a problem since he could upload anything he wanted anyway. Leaking 'secret'
-         *       images present in the host system also seems unlikely.
+         *       client. This shouldn't be a problem since they could upload anything they wanted anyway. Leaking
+         *       'secret' images present in the host system also seems unlikely.
          */
         Build build = buildRepository.save(new Build(name, project, imageID));
         return "/projects/" + project.getId() + "/builds/" + build.getId();

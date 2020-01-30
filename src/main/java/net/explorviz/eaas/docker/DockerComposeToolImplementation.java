@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Implements an {@link DockerComposeAdapter} by calling the <b>docker-compose</b> command line utility.
+ * Implements a {@link DockerComposeAdapter} by calling the <b>docker-compose</b> command line utility.
  * <p>
  * This utility expects the presence of environment variables for non-standard configurations,
  * which we do not handle ourselves. The user should pass these environment variables to our process when starting.
@@ -82,7 +82,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
 
         int exitCode = process.exitValue();
         if (exitCode != NORMAL_EXIT_CODE) {
-            log.error("{} exited with error {}. See log for more information", DOCKER_COMPOSE_COMMAND, exitCode);
+            log.error("{} exited with error code {}. See log for more information", DOCKER_COMPOSE_COMMAND, exitCode);
             throw new AdapterException(DOCKER_COMPOSE_COMMAND + " command failed (error " + exitCode + ")");
         }
     }
