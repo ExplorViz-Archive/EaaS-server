@@ -1,7 +1,7 @@
 package net.explorviz.eaas.security;
 
-import net.explorviz.eaas.model.User;
-import net.explorviz.eaas.repository.UserRepository;
+import net.explorviz.eaas.model.entity.User;
+import net.explorviz.eaas.model.repository.UserRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;

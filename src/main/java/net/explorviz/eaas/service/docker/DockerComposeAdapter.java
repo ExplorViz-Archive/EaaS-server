@@ -1,4 +1,4 @@
-package net.explorviz.eaas.docker;
+package net.explorviz.eaas.service.docker;
 
 import org.springframework.lang.NonNull;
 

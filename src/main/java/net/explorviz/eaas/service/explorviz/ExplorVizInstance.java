@@ -1,8 +1,9 @@
-package net.explorviz.eaas.explorviz;
+package net.explorviz.eaas.service.explorviz;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
+import net.explorviz.eaas.model.entity.Build;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.lang.NonNull;
 
@@ -42,7 +43,7 @@ public class ExplorVizInstance {
     /**
      * @param id               An ID for this instance, unique only while this instance is running.
      *                         Used by the {@link ExplorVizManager} to keep track of running instances
-     * @param buildId          ID of the {@link net.explorviz.eaas.model.Build} this instance is visualizing
+     * @param buildId          ID of the {@link Build} this instance is visualizing
      * @param version          Version of ExplorViz' docker-compose file to use. Expect issues with the <pre>dev</pre>
      *                         version, as it refers to images unknown at the time of building EaaS and the
      *                         docker-compose

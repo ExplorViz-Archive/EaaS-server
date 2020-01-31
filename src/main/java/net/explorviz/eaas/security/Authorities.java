@@ -1,6 +1,6 @@
 package net.explorviz.eaas.security;
 
-import net.explorviz.eaas.model.User;
+import net.explorviz.eaas.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

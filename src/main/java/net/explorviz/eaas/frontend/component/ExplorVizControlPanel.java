@@ -1,15 +1,15 @@
-package net.explorviz.eaas.view.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import net.explorviz.eaas.docker.AdapterException;
-import net.explorviz.eaas.explorviz.ExplorVizInstance;
-import net.explorviz.eaas.explorviz.ExplorVizManager;
-import net.explorviz.eaas.explorviz.NoMoreSlotsException;
-import net.explorviz.eaas.model.Build;
-import net.explorviz.eaas.model.Project;
+import net.explorviz.eaas.service.docker.AdapterException;
+import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
+import net.explorviz.eaas.service.explorviz.ExplorVizManager;
+import net.explorviz.eaas.service.explorviz.NoMoreSlotsException;
+import net.explorviz.eaas.model.entity.Build;
+import net.explorviz.eaas.model.entity.Project;
 
 import java.util.Random;
 

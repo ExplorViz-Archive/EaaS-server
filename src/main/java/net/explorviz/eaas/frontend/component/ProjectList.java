@@ -1,4 +1,4 @@
-package net.explorviz.eaas.view.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
@@ -6,8 +6,8 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import net.explorviz.eaas.model.Project;
-import net.explorviz.eaas.repository.ProjectRepository;
+import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.repository.ProjectRepository;
 import org.apache.commons.lang3.StringUtils;
 
 public class ProjectList extends VerticalLayout {

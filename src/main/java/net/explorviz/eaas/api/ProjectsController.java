@@ -1,12 +1,12 @@
 package net.explorviz.eaas.api;
 
 import lombok.extern.slf4j.Slf4j;
-import net.explorviz.eaas.docker.AdapterException;
-import net.explorviz.eaas.docker.DockerAdapter;
-import net.explorviz.eaas.model.Build;
-import net.explorviz.eaas.model.Project;
-import net.explorviz.eaas.repository.BuildRepository;
-import net.explorviz.eaas.repository.ProjectRepository;
+import net.explorviz.eaas.service.docker.AdapterException;
+import net.explorviz.eaas.service.docker.DockerAdapter;
+import net.explorviz.eaas.model.entity.Build;
+import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.repository.BuildRepository;
+import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.APIAuthenticator;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

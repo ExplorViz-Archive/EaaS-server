@@ -1,4 +1,4 @@
-package net.explorviz.eaas.model;
+package net.explorviz.eaas.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

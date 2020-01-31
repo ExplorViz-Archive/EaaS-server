@@ -1,9 +1,9 @@
-package net.explorviz.eaas.explorviz;
+package net.explorviz.eaas.service.explorviz;
 
 import lombok.extern.slf4j.Slf4j;
-import net.explorviz.eaas.docker.AdapterException;
-import net.explorviz.eaas.docker.DockerComposeAdapter;
-import net.explorviz.eaas.model.Build;
+import net.explorviz.eaas.service.docker.AdapterException;
+import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.model.entity.Build;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;

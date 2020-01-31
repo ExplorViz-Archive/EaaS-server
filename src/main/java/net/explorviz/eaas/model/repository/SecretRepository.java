@@ -1,7 +1,7 @@
-package net.explorviz.eaas.repository;
+package net.explorviz.eaas.model.repository;
 
-import net.explorviz.eaas.model.Project;
-import net.explorviz.eaas.model.Secret;
+import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.Secret;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;

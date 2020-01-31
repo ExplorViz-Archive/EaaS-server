@@ -3,7 +3,7 @@ package net.explorviz.eaas.security;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.server.ServiceInitEvent;
 import com.vaadin.flow.server.VaadinServiceInitListener;
-import net.explorviz.eaas.view.LoginView;
+import net.explorviz.eaas.frontend.view.LoginView;
 import org.springframework.stereotype.Component;
 
 /**

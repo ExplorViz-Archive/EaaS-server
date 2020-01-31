@@ -1,11 +1,11 @@
-package net.explorviz.eaas.view.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import lombok.Getter;
-import net.explorviz.eaas.model.Project;
+import net.explorviz.eaas.model.entity.Project;
 
 import java.util.function.Consumer;
 

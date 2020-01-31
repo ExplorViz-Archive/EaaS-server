@@ -1,8 +1,8 @@
 package net.explorviz.eaas;
 
 import lombok.extern.slf4j.Slf4j;
-import net.explorviz.eaas.model.User;
-import net.explorviz.eaas.repository.UserRepository;
+import net.explorviz.eaas.model.entity.User;
+import net.explorviz.eaas.model.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

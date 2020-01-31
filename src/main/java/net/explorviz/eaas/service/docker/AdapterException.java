@@ -1,4 +1,4 @@
-package net.explorviz.eaas.docker;
+package net.explorviz.eaas.service.docker;
 
 /**
  * Indicates a problem occurred in a {@link DockerAdapter} or {@link DockerComposeAdapter} when trying to perform

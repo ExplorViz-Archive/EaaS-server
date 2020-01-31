@@ -1,8 +1,8 @@
 package net.explorviz.eaas.security;
 
-import net.explorviz.eaas.model.Project;
-import net.explorviz.eaas.model.Secret;
-import net.explorviz.eaas.repository.SecretRepository;
+import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.Secret;
+import net.explorviz.eaas.model.repository.SecretRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;

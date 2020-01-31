@@ -1,4 +1,4 @@
-package net.explorviz.eaas.explorviz;
+package net.explorviz.eaas.service.explorviz;
 
 /**
  * Thrown by {@link ExplorVizManager} to indicate an {@link ExplorVizInstance} couldn't be started because we've hit

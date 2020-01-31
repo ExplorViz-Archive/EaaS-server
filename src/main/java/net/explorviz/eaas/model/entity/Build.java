@@ -1,4 +1,4 @@
-package net.explorviz.eaas.model;
+package net.explorviz.eaas.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -18,29 +18,26 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @Table(indexes = {
-    @Index(columnList = "project_id,name", unique = true),
-    @Index(columnList = "project_id,secret", unique = true)
+    @Index(columnList = "project_id,name"),
+    @Index(columnList = "imageID", unique = true)
 })
-public class Secret implements Serializable {
-    private static final long serialVersionUID = -5164775067113669305L;
+public class Build implements Serializable {
+    private static final long serialVersionUID = 8960003619026674513L;
 
-    public static final int NAME_MIN_LENGTH = 2;
-    public static final int NAME_MAX_LENGTH = 64;
+    public static final int NAME_MIN_LENGTH = 1;
+    public static final int NAME_MAX_LENGTH = 255;
 
     @Id
     @GeneratedValue
     private Long id;
 
+    /**
+     * Build name, specified by the build upload script. Can be anything
+     */
     @NotEmpty
-    @Column(unique = true, nullable = false, length = NAME_MAX_LENGTH)
+    @Column(nullable = false, length = NAME_MAX_LENGTH)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
     private String name;
-
-    @NotEmpty
-    @Column(nullable = false)
-    @Size(min = 1, max = 255)
-    @JsonIgnore
-    private String secret;
 
     @NotNull
     @ManyToOne
@@ -48,18 +45,20 @@ public class Secret implements Serializable {
     @JsonIgnore
     private Project project;
 
+    @NotEmpty
+    @Column(nullable = false, unique = true)
+    @Size(min = 1)
+    private String imageID;
+
     @CreatedDate
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     @PastOrPresent
     private Instant createdDate;
 
-    @PastOrPresent
-    private Instant lastUsedDate;
-
-    public Secret(@NotEmpty String name, @NotEmpty String secret, @NotNull Project project) {
+    public Build(@NotEmpty String name, @NotNull Project project, @NotEmpty String imageID) {
         this.name = name;
-        this.secret = secret;
         this.project = project;
+        this.imageID = imageID;
     }
 }

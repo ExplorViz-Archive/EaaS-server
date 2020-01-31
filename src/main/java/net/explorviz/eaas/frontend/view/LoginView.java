@@ -1,4 +1,4 @@
-package net.explorviz.eaas.view;
+package net.explorviz.eaas.frontend.view;
 
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.login.LoginForm;

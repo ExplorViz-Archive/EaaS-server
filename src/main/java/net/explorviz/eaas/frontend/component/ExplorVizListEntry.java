@@ -1,4 +1,4 @@
-package net.explorviz.eaas.view.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -7,7 +7,7 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import lombok.Getter;
-import net.explorviz.eaas.explorviz.ExplorVizInstance;
+import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 
 import java.util.function.Consumer;
 
