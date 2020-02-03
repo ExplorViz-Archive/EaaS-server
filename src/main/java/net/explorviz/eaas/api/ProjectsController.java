@@ -21,6 +21,7 @@ import java.util.Map;
 import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER;
 
 @RestController
+@RequestMapping("/api/v1/projects")
 @Slf4j
 public class ProjectsController {
     private final ProjectRepository projectRepository;
@@ -40,12 +41,12 @@ public class ProjectsController {
      * Lists all projects hosted on this instance. Only contains non-hidden projects, even if the request contains a
      * valid secret for a hidden project.
      */
-    @RequestMapping(path = "/api/v1/projects", method = RequestMethod.GET)
+    @RequestMapping(path = "", method = RequestMethod.GET)
     public Map<String, Object> getProjects() {
         return Collections.singletonMap("projects", projectRepository.findByHidden(false));
     }
 
-    @RequestMapping(path = "/api/v1/projects/{project}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{project}", method = RequestMethod.GET)
     public Map<String, Object> getProject(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                           @PathVariable("project") long projectId) {
         Project project = findProjectById(projectId);
@@ -54,7 +55,7 @@ public class ProjectsController {
         return Collections.singletonMap("project", project);
     }
 
-    @RequestMapping(path = "/api/v1/projects/{project}/builds", method = RequestMethod.GET)
+    @RequestMapping(path = "/{project}/builds", method = RequestMethod.GET)
     public Map<String, Object> getProjectBuilds(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                 @PathVariable("project") long projectId) {
         Project project = findProjectById(projectId);
@@ -63,7 +64,7 @@ public class ProjectsController {
         return Collections.singletonMap("builds", project.getBuilds());
     }
 
-    @RequestMapping(path = "/api/v1/projects/{project}/builds/{build}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{project}/builds/{build}", method = RequestMethod.GET)
     public Map<String, Object> getProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                @PathVariable("project") long projectId,
                                                @PathVariable("build") long buildId) {
@@ -80,7 +81,7 @@ public class ProjectsController {
      * To simplify the build upload script this method doesn't use JSON but form data for input and outputs the
      * resulting path as plain text.
      */
-    @RequestMapping(path = "/api/v1/projects/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
+    @RequestMapping(path = "/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
     public String postProjectBuild(@RequestHeader(SECRET_HEADER) String secret,
                                    @PathVariable("project") long projectId,
                                    @RequestParam("name") String name,
@@ -113,7 +114,7 @@ public class ProjectsController {
          *       'secret' images present in the host system also seems unlikely.
          */
         Build build = buildRepository.save(new Build(name, project, imageID));
-        return "/projects/" + project.getId() + "/builds/" + build.getId();
+        return "/build/" + build.getId();
     }
 
     /**

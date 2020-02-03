@@ -93,7 +93,7 @@ public final class ExplorVizManager {
 
         try {
             dockerCompose.up(instance.getName(), instance.getComposeDefinition());
-        } catch(AdapterException e) {
+        } catch (AdapterException e) {
             log.error("Error starting ExplorViz instance", e);
             throw e;
         }
@@ -116,7 +116,7 @@ public final class ExplorVizManager {
 
         try {
             dockerCompose.down(instance.getName(), instance.getComposeDefinition());
-        } catch(AdapterException e) {
+        } catch (AdapterException e) {
             log.error("Error stopping ExplorViz instance", e);
             throw e;
         }
