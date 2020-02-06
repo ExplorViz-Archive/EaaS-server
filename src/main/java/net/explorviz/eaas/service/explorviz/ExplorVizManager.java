@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -143,6 +144,7 @@ public final class ExplorVizManager {
      *
      * @return {@code true} if all instances that were running when this method was called stopped correctly.
      */
+    @PreDestroy
     public boolean stopAllInstances() {
         log.info("Requested stop of all running instances");
 
