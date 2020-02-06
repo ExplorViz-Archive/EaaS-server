@@ -12,4 +12,9 @@
     <Match>
         <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
     </Match>
+
+    <!-- There is not good solution to non-serializable fields in frontend components yet -->
+    <Match>
+        <Bug pattern="SE_BAD_FIELD"/>
+    </Match>
 </FindBugsFilter>
