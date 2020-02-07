@@ -22,7 +22,7 @@ import java.util.*;
  * class decided which tab is marked as selected. Also layouts can be reused by the framework, so the tab entries need
  * to be rebuilt whenever the view changes.
  */
-@CssImport("layout.css")
+@CssImport("./style/layout.css")
 public abstract class BaseLayout extends AppLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 6416207502947013549L;
 

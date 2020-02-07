@@ -1,6 +1,7 @@
 package net.explorviz.eaas.service.docker;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.InfoCmd;
 import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Info;
@@ -31,9 +32,11 @@ class DockerJavaImplementation implements DockerAdapter {
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
         docker = DockerClientBuilder.getInstance(builder.build()).build();
 
-        Info info = docker.infoCmd().exec();
-        log.info("Docker client initialized, server version {}", info.getServerVersion());
-        log.debug("Full docker information: {}", info);
+        try (InfoCmd cmd = docker.infoCmd()) {
+            Info info = cmd.exec();
+            log.info("Docker client initialized, server version {}", info.getServerVersion());
+            log.debug("Full docker information: {}", info);
+        }
     }
 
     @Override

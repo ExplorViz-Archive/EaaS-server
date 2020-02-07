@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import net.explorviz.eaas.Application;
 
-@CssImport("explorviz-banner.css")
+@CssImport("./style/explorviz-banner.css")
 public class ExplorVizBanner extends HorizontalLayout {
     private static final long serialVersionUID = 3269187260966648734L;
 

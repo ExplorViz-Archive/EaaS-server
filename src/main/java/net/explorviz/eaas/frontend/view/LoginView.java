@@ -17,7 +17,7 @@ import java.util.Collections;
 @Tag("sa-login-view")
 @Route(LoginView.ROUTE)
 @PageTitle("Login - " + Application.PAGE_TITLE)
-@CssImport("login.css")
+@CssImport("./style/login.css")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 1010867826588360870L;
 

@@ -37,7 +37,7 @@ public final class ExplorVizManager {
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
      * but better than always starting from index 0.
      */
-    private volatile int nextInstance = 0;
+    private volatile int nextInstance;
 
     public ExplorVizManager(DockerComposeAdapter dockerCompose,
                             @Value("${eaas.explorviz.maxInstances:10}") int maxInstances,
