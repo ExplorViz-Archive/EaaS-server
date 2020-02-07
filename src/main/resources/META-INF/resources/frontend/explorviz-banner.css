@@ -3,14 +3,21 @@
     margin-bottom: 0;
 }
 
-#explorviz-banner h3 {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 0.25em;
+#explorviz-banner img {
+    padding: 0.25em;
+}
 
+.explorviz-banner-small h2 {
+    margin-left: 0.25em;
     font-size: 14pt;
 }
 
-#explorviz-banner img {
-    padding: 0.25em;
+.explorviz-banner-small img {
+    width: 48px;
+    height: 48px;
+}
+
+.explorviz-banner-big img {
+    width: 96px;
+    height: 96px;
 }

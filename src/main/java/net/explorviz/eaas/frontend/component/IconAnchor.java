@@ -13,8 +13,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 public class IconAnchor extends Anchor {
     private static final long serialVersionUID = -6463742407143880609L;
 
-    private static final String ICON_SIZE = "24px";
-
     protected IconAnchor(String href, Component... components) {
         super(href, components);
         addClassName("icon-anchor");
@@ -24,18 +22,13 @@ public class IconAnchor extends Anchor {
      * Create an IconAnchor displaying the given VaadinIcon next to the text.
      */
     public static IconAnchor createFromIcon(String href, VaadinIcon vaadinIcon, String text) {
-        Icon icon = new Icon(vaadinIcon);
-        icon.setSize(ICON_SIZE);
-        return new IconAnchor(href, icon, new Text(text));
+        return new IconAnchor(href, new Icon(vaadinIcon), new Text(text));
     }
 
     /**
      * Create an IconAnchor displaying the given image file next to the text.
      */
     public static IconAnchor createFromImage(String href, String imageSrc, String text) {
-        Image image = new Image(imageSrc, "ExplorViz");
-        image.setWidth(ICON_SIZE);
-        image.setHeight(ICON_SIZE);
-        return new IconAnchor(href, image, new Text(text));
+        return new IconAnchor(href, new Image(imageSrc, text), new Text(text));
     }
 }
