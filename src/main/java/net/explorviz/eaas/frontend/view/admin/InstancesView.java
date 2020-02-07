@@ -20,7 +20,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import java.util.Random;
 
-@PageTitle("Instances | " + Application.PAGE_TITLE)
+@PageTitle("Instances - " + Application.PAGE_TITLE)
 @Route(value = "instances", layout = MainLayout.class)
 @Secured("ADMINISTER")
 public class InstancesView extends DynamicView {
@@ -36,7 +36,7 @@ public class InstancesView extends DynamicView {
 
     @Override
     protected void build() {
-        add(new H2("Instances"));
+        add(new H2("Running Instances"));
 
         Button newInstanceButton = new Button("Start new instance");
         newInstanceButton.addClickListener(click -> this.doNewInstance());

@@ -1,0 +1,32 @@
+#navbar-actions {
+    position: absolute;
+    right: 0;
+    margin-right: 1em;
+}
+
+.icon-anchor img {
+    vertical-align: middle;
+}
+
+.icon-anchor img, .icon-anchor iron-icon {
+    margin-right: 4px;
+}
+
+#navigation-panel {
+    /* Counteract the negative margin from the drawer */
+    padding: 1em 0 0 0;
+}
+
+#navigation-panel vaadin-tabs {
+    margin-top: 0;
+}
+
+#navigation-panel h4 {
+    margin-bottom: 0;
+    margin-left: 0.5em;
+    margin-top: 0.75em;
+}
+
+.navigation-tab iron-icon {
+    margin-right: 0.4em;
+}

@@ -75,7 +75,7 @@ public final class SecurityUtils {
      * <p>
      * Even if the user may generally enter a view, the specific implementation can have additional authority checks
      * before allowing the user to enter, e.g. based on the parameter. Therefore this method can not be used to
-     * authoratively determine the users permission to enter a specific view.
+     * authoritatively determine the users permission to enter a specific view.
      */
     public static boolean mayAccess(@NonNull Class<?> clazz) {
         Secured secured = AnnotationUtils.findAnnotation(clazz, Secured.class);

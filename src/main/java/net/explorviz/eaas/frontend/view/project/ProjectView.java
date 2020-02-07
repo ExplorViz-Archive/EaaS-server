@@ -48,6 +48,6 @@ public abstract class ProjectView extends DynamicView implements HasUrlParameter
 
     @Override
     public String getPageTitle() {
-        return subPageTitle + " | " + project.getName() + " | " + Application.PAGE_TITLE;
+        return subPageTitle + " - " + project.getName() + " - " + Application.PAGE_TITLE;
     }
 }

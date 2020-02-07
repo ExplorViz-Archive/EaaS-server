@@ -19,7 +19,7 @@ public class ProjectListEntry extends VerticalLayout {
     public ProjectListEntry(Project project, Consumer<? super ProjectListEntry> deleteListener) {
         this.project = project;
 
-        add(new RouterLink(project.getName() + "(#" + project.getId() + ")", BuildsView.class, project.getId()));
+        add(new RouterLink(project.getName() + " (#" + project.getId() + ")", BuildsView.class, project.getId()));
         add(new Paragraph("Created on " + project.getCreatedDate()));
 
         Button deleteButton = new Button("Delete");

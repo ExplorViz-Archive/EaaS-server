@@ -1,8 +1,10 @@
 package net.explorviz.eaas.frontend.layout;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.NotFoundException;
+import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.frontend.view.project.SecretsView;
@@ -37,11 +39,13 @@ public class ProjectLayout extends BaseLayout {
 
     @Override
     protected void build() {
-        addNavigationTab("Back", MainView.class);
+        addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A, MainView.class));
 
         startSection(project.getName());
-        addNavigationTab("Builds", BuildsView.class, project.getId());
-        addNavigationTab("Secrets", SecretsView.class, project.getId());
+        addNavigationTab(NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class,
+            project.getId()));
+        addNavigationTab(NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY, SecretsView.class,
+            project.getId()));
     }
 }
 

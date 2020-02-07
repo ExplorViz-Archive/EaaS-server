@@ -1,5 +1,7 @@
 package net.explorviz.eaas.frontend.layout;
 
+import com.vaadin.flow.component.icon.VaadinIcon;
+import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.admin.InstancesView;
 import net.explorviz.eaas.frontend.view.admin.UsersView;
@@ -15,6 +17,7 @@ import java.util.Collection;
  */
 public class MainLayout extends BaseLayout {
     private static final long serialVersionUID = 8689866379276497334L;
+
     private final ProjectRepository projectRepo;
 
     public MainLayout(ProjectRepository projectRepo) {
@@ -23,19 +26,20 @@ public class MainLayout extends BaseLayout {
 
     @Override
     protected void build() {
-        addNavigationTab("Home", MainView.class);
-
-        startSection("Administration");
-        addNavigationTab("Users", UsersView.class);
-        addNavigationTab("ExplorViz Instances", InstancesView.class);
+        addNavigationTab(NavigationTab.create("Home", VaadinIcon.HOME, MainView.class));
 
         // TODO: Also list owned projects
         Collection<Project> projects = projectRepo.findByHidden(false);
         if (!projects.isEmpty()) {
             startSection("Projects");
             for (Project p : projects) {
-                addNavigationTab(p.getName(), BuildsView.class, p.getId());
+                addNavigationTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE, BuildsView.class,
+                    p.getId()));
             }
         }
+
+        startSection("Administration");
+        addNavigationTab(NavigationTab.create("Users", VaadinIcon.USER, UsersView.class));
+        addNavigationTab(NavigationTab.create("Instances", VaadinIcon.ROTATE_RIGHT, InstancesView.class));
     }
 }

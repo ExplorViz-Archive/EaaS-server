@@ -9,7 +9,7 @@ import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.repository.UserRepository;
 import org.springframework.security.access.annotation.Secured;
 
-@PageTitle("Users | " + Application.PAGE_TITLE)
+@PageTitle("Users - " + Application.PAGE_TITLE)
 @Route(value = "users", layout = MainLayout.class)
 @Secured("ADMINISTER")
 public class UsersView extends DynamicView {
