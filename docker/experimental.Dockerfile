@@ -27,7 +27,6 @@ RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=ca
     dependency:go-offline
 
 COPY src src
-COPY frontend frontend
 COPY package.json .
 COPY package-lock.json .
 COPY webpack.config.js .

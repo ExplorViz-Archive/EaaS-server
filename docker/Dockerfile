@@ -23,7 +23,6 @@ RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMa
     dependency:go-offline
 
 COPY src src
-COPY frontend frontend
 COPY package.json .
 COPY package-lock.json .
 COPY webpack.config.js .
