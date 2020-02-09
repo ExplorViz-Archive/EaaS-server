@@ -103,7 +103,7 @@ public final class ExplorVizManager {
         String accessUrl = accessUrlTemplate.replace("%FRONTEND_PORT%", Integer.toString(frontendPort));
 
         ExplorVizInstance instance = new ExplorVizInstance(id, build.getId(), version, buildInstanceName(id, build),
-                frontendPort, accessUrl, build.getImageID());
+                frontendPort, accessUrl, build.getDockerImage());
 
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
                 instance.getFrontendPort());

@@ -2,60 +2,52 @@ package net.explorviz.eaas.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 
-@Entity
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
+@Entity
 @Table(indexes = {
     @Index(columnList = "project_id,name", unique = true),
     @Index(columnList = "project_id,secret", unique = true)
 })
-public class Secret implements Serializable {
+public class Secret extends BaseEntity {
     private static final long serialVersionUID = -5164775067113669305L;
 
     public static final int NAME_MIN_LENGTH = 2;
     public static final int NAME_MAX_LENGTH = 64;
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    public static final int SECRET_MIN_LENGTH = 1;
+    public static final int SECRET_MAX_LENGTH = 255;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
+    @JsonIgnore
+    private Project project;
 
     @NotEmpty
-    @Column(unique = true, nullable = false, length = NAME_MAX_LENGTH)
+    @Column(unique = true, nullable = false)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
     private String name;
 
     @NotEmpty
     @Column(nullable = false)
-    @Size(min = 1, max = 255)
+    @Size(min = SECRET_MIN_LENGTH, max = SECRET_MAX_LENGTH)
     @JsonIgnore
     private String secret;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
-    @JsonIgnore
-    private Project project;
-
-    @CreatedDate
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
     @PastOrPresent
-    private Instant createdDate;
-
-    @PastOrPresent
-    private Instant lastUsedDate;
+    private ZonedDateTime lastUsedDate;
 
     public Secret(@NotEmpty String name, @NotEmpty String secret, @NotNull Project project) {
         this.name = name;

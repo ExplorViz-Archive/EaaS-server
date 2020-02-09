@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -29,9 +30,9 @@ public class APIAuthenticator {
     }
 
     /**
-     * Check if an access attempt to the API for a specific {@link Project} is authorized.
-     * If the access contains a valid secret, its {@link Secret#getLastUsedDate() last used date} is updated to the
-     * current time, even if the secret wasn't necessary to authorize the request.
+     * Check if an access attempt to the API for a specific {@link Project} is authorized. If the access contains a
+     * valid secret, its {@link Secret#getLastUsedDate() last used date} is updated to the current time, even if the
+     * secret wasn't necessary to authorize the request.
      * <p>
      * The following access attempts are allowed:
      * <ul>
@@ -72,7 +73,7 @@ public class APIAuthenticator {
      * @return The modified secret object with the new last used date
      */
     private Secret useSecret(@NonNull Secret secret) {
-        secret.setLastUsedDate(Instant.now());
+        secret.setLastUsedDate(ZonedDateTime.now());
         return secretRepository.save(secret);
     }
 }

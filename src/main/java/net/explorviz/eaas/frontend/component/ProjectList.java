@@ -1,14 +1,20 @@
 package net.explorviz.eaas.frontend.component;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.InternalServerError;
 import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.security.SecurityUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Optional;
 
 public class ProjectList extends VerticalLayout {
     private static final long serialVersionUID = 8287505649008791683L;
@@ -36,17 +42,21 @@ public class ProjectList extends VerticalLayout {
 
     private void doCreateProject() {
         String name = StringUtils.trim(projectName.getValue());
+        Optional<User> user = SecurityUtils.getCurrentUser();
+
         if (StringUtils.isBlank(name)) {
             projectName.setInvalid(true);
             projectName.setErrorMessage("Project name may not be empty");
         } else if (projectRepo.findByName(name).isPresent()) {
             projectName.setInvalid(true);
             projectName.setErrorMessage("A Project with this name already exists!");
+        } else if (user.isEmpty()) {
+            throw new IllegalStateException("Tried to create project from unauthenticated context");
         } else {
             projectName.setInvalid(false);
             projectName.setErrorMessage(null);
 
-            Project project = projectRepo.save(new Project(name, null));
+            Project project = projectRepo.save(new Project(name, user.get()));
             add(new ProjectListEntry(project, this::doDeleteProject));
 
             Notification.show("Created project " + project.getName());

@@ -2,6 +2,7 @@ package net.explorviz.eaas.security;
 
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
+import net.explorviz.eaas.model.entity.User;
 import org.apache.commons.lang3.Validate;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
@@ -9,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.servlet.ServletRequest;
@@ -39,16 +41,42 @@ public final class SecurityUtils {
             && Stream.of(ServletHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
     }
 
+    /**
+     * Returns the current authentication if and only if it is authenticated.
+     *
+     * @see SecurityContext#getAuthentication()
+     * @see Authentication#isAuthenticated()
+     */
     public static Optional<Authentication> getCurrentAuthentication() {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication());
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+            .filter(Authentication::isAuthenticated);
     }
 
     /**
-     * Tests if there is a user currently logged in.
+     * Returns the currently authenticated user, i.e. the principal of the currently active authentication.
+     * <p>
+     * Returns non-empty if and only if the current security context is authenticated and the principal is a User from
+     * our database.
+     */
+    public static Optional<User> getCurrentUser() {
+        /*
+         * We need to check #isUserLoggedIn() beforehand, because even an AnonymousAuthenticationToken is considered
+         * authenticated, and it can even have a principal.
+         */
+        if (!isUserLoggedIn()) {
+            return Optional.empty();
+        }
+
+        return getCurrentAuthentication().map(auth -> (User) auth.getPrincipal());
+    }
+
+    /**
+     * Tests if there is an authenticated security context, that it is not an implicit anonymous one and the principal
+     * is a {@link User} from our database.
      */
     public static boolean isUserLoggedIn() {
         return getCurrentAuthentication().map(auth ->
-            !(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()
+            !(auth instanceof AnonymousAuthenticationToken) && auth.getPrincipal() instanceof User
         ).orElse(false);
     }
 

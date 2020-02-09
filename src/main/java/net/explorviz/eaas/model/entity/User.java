@@ -2,33 +2,29 @@ package net.explorviz.eaas.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.explorviz.eaas.security.Authorities;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
-import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
 @Table(indexes = @Index(columnList = "username", unique = true))
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     private static final long serialVersionUID = -2609179636815086264L;
 
     public static final int USERNAME_MIN_LENGTH = 2;
     public static final int USERNAME_MAX_LENGTH = 64;
-
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @NotEmpty
     @Column(unique = true, nullable = false, length = USERNAME_MAX_LENGTH)
@@ -43,12 +39,6 @@ public class User implements UserDetails {
     private boolean enabled;
 
     private boolean admin;
-
-    @CreatedDate
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    @PastOrPresent
-    private Instant createdDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     @JsonIgnore
