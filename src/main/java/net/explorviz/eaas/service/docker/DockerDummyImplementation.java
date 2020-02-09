@@ -1,5 +1,7 @@
 package net.explorviz.eaas.service.docker;
 
+import org.springframework.lang.NonNull;
+
 import java.io.InputStream;
 
 /**
@@ -8,10 +10,10 @@ import java.io.InputStream;
  */
 class DockerDummyImplementation implements DockerAdapter {
     @Override
-    public void loadImage(InputStream input) {
+    public void loadImage(@NonNull InputStream input) {
     }
 
     @Override
-    public void deleteImage(String image) {
+    public void deleteImage(@NonNull String image) {
     }
 }

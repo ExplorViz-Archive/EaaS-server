@@ -2,6 +2,7 @@ package net.explorviz.eaas.security;
 
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
+import org.apache.commons.lang3.Validate;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.annotation.Secured;
@@ -32,7 +33,7 @@ public final class SecurityUtils {
      * @param request {@link ServletRequest}
      * @return true if is an internal Vaadin request
      */
-    public static boolean isVaadinInternalRequest(ServletRequest request) {
+    public static boolean isVaadinInternalRequest(@NonNull ServletRequest request) {
         final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
         return parameterValue != null
             && Stream.of(ServletHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
@@ -64,6 +65,8 @@ public final class SecurityUtils {
      * Tests if the current security context has the given authority.
      */
     public static boolean hasAuthority(@NonNull String authority) {
+        Validate.notBlank(authority, "authority may not be empty");
+
         return getCurrentAuthentication().map(auth ->
             auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals(authority))
         ).orElse(false);

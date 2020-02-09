@@ -1,5 +1,6 @@
 package net.explorviz.eaas.service.explorviz;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.service.docker.AdapterException;
 import net.explorviz.eaas.service.docker.DockerComposeAdapter;
@@ -19,6 +20,11 @@ import java.util.concurrent.ConcurrentMap;
 @Lazy
 @Slf4j
 public final class ExplorVizManager {
+    /**
+     * For each version, a corresponding docker-compose in resources/ has to be available
+     */
+    public static final List<String> EXPLORVIZ_VERSIONS = List.of("1.5.0", "dev");
+
     private static final int PORT_MAX = 65535;
 
     private final DockerComposeAdapter dockerCompose;
@@ -26,13 +32,17 @@ public final class ExplorVizManager {
     private final int frontendPortOffset;
     private final String accessUrlTemplate;
 
+    @Getter
+    private final String defaultVersion;
+
     /*
-     * Use concurrent collections instead of synchronized on #stopInstance() so we can have any amount of stops as
-     * well as one start running concurrently. The only scenario not allowed is two instances starting at the same time,
-     * because our port selection logic in #startInstance() cannot handle that.
+     * Use concurrent collections instead of synchronizing #stopInstance() so we can have any amount of stops as well as
+     * one start running concurrently. The only scenario not allowed is two instances starting at the same time, because
+     * our port selection logic in #startInstance() cannot handle that.
      */
     private final ConcurrentMap<Integer, ExplorVizInstance> instances;
     private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId;
+
     /**
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
      * but better than always starting from index 0.
@@ -40,21 +50,25 @@ public final class ExplorVizManager {
     private volatile int nextInstance;
 
     public ExplorVizManager(DockerComposeAdapter dockerCompose,
-                            @Value("${eaas.explorviz.maxInstances:10}") int maxInstances,
+                            @Value("${eaas.explorviz.maxInstances:5}") int maxInstances,
                             @Value("${eaas.explorviz.frontendPortOffset:8800}") int frontendPortOffset,
-                            @Value("${eaas.explorviz.accessUrlTemplate:http://localhost:%FRONTEND_PORT%}") String accessUrlTemplate) {
+                            @Value("${eaas.explorviz.accessUrlTemplate:http://localhost:%FRONTEND_PORT%}")
+                                    String accessUrlTemplate,
+                            @Value("${eaas.explorviz.defaultVersion:1.5.0}") String defaultVersion) {
         Validate.inclusiveBetween(1, Integer.MAX_VALUE, maxInstances);
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
         Validate.notBlank(accessUrlTemplate, "accessUrlTemplate may not be empty");
+        Validate.isTrue(EXPLORVIZ_VERSIONS.contains(defaultVersion), "given defaultVersion is unknown");
 
         log.info("Given port range {}-{} for ExplorViz instances (max {} instances)", frontendPortOffset,
-            frontendPortOffset + maxInstances, maxInstances);
+                frontendPortOffset + maxInstances, maxInstances);
 
         this.dockerCompose = dockerCompose;
         this.maxInstances = maxInstances;
         this.frontendPortOffset = frontendPortOffset;
         this.accessUrlTemplate = accessUrlTemplate;
+        this.defaultVersion = defaultVersion;
 
         this.instances = new ConcurrentHashMap<>(maxInstances);
         this.instancesByBuildId = new ConcurrentHashMap<>(maxInstances);
@@ -64,14 +78,16 @@ public final class ExplorVizManager {
      * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
      */
     public synchronized ExplorVizInstance startInstance(@NonNull Build build, @NonNull String version)
-        throws AdapterException, NoMoreSlotsException {
+            throws AdapterException, NoMoreSlotsException {
+        Validate.notBlank(version, "version may not be empty");
+
         if (instances.size() >= maxInstances) {
             throw new NoMoreSlotsException("Won't start another ExplorViz instance, " + instances.size() + "/"
-                + maxInstances + " instances are running");
+                    + maxInstances + " instances are running");
         }
 
         log.info("Requested ExplorViz instance for build #{} '{}' of project #{} '{}'", build.getId(), build.getName(),
-            build.getProject().getId(), build.getProject().getName());
+                build.getProject().getId(), build.getProject().getName());
 
         int id = nextInstance;
         /*
@@ -87,10 +103,10 @@ public final class ExplorVizManager {
         String accessUrl = accessUrlTemplate.replace("%FRONTEND_PORT%", Integer.toString(frontendPort));
 
         ExplorVizInstance instance = new ExplorVizInstance(id, build.getId(), version, buildInstanceName(id, build),
-            frontendPort, accessUrl, build.getImageID());
+                frontendPort, accessUrl, build.getImageID());
 
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
-            instance.getFrontendPort());
+                instance.getFrontendPort());
 
         try {
             dockerCompose.up(instance.getName(), instance.getComposeDefinition());
@@ -113,7 +129,7 @@ public final class ExplorVizManager {
      */
     public void stopInstance(@NonNull ExplorVizInstance instance) throws AdapterException {
         log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
-            instance.getFrontendPort());
+                instance.getFrontendPort());
 
         try {
             dockerCompose.down(instance.getName(), instance.getComposeDefinition());
@@ -127,7 +143,7 @@ public final class ExplorVizManager {
     }
 
     /**
-     * Build a unique name for this instance, so we can keep track of and clenaly separate multiple docker-compose
+     * Build a unique name for this instance, so we can keep track of and cleanly separate multiple docker-compose
      * instances.
      *
      * @param instanceID Internal id for the instance, only unique while it is running

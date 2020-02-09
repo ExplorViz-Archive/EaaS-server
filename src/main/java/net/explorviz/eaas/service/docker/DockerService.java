@@ -2,11 +2,11 @@ package net.explorviz.eaas.service.docker;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 
-@Component
-public class DockerComponent {
+@Configuration
+public class DockerService {
     @Value("${eaas.docker.useDummyImplementation:false}")
     private boolean useDummyImplementation;
 

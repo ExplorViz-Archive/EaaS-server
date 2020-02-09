@@ -23,7 +23,7 @@ public interface DockerAdapter {
     /**
      * Delete an image from the host system.
      *
-     * @param image Image ID or tag to delete
+     * @param image Image ID or tag to delete, may not be empty
      */
     void deleteImage(@NonNull String image) throws AdapterException;
 }

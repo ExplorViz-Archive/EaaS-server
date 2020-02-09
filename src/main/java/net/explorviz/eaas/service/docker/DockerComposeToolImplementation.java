@@ -2,6 +2,7 @@ package net.explorviz.eaas.service.docker;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.io.IOException;
@@ -88,7 +89,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
     }
 
     @Override
-    public void up(String name, String composeDefinition) throws AdapterException {
+    public void up(@NonNull String name, @NonNull String composeDefinition) throws AdapterException {
         Validate.notBlank(name, "name may not be empty");
         Validate.notBlank(composeDefinition, "composeDefinition may not be empty");
 
@@ -100,7 +101,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
     }
 
     @Override
-    public void down(String name, String composeDefinition) throws AdapterException {
+    public void down(@NonNull String name, @NonNull String composeDefinition) throws AdapterException {
         Validate.notBlank(name, "name may not be empty");
         Validate.notBlank(composeDefinition, "composeDefinition may not be empty");
 
