@@ -52,8 +52,8 @@ public class NavigationTab extends Tab {
      * @param parameter        Parameter for the view, which needs to be a {@link HasUrlParameter}
      */
     public static <T, C extends Component & HasUrlParameter<T>>
-    NavigationTab createWithParameter(@NonNull String label, @NonNull VaadinIcon vaadinIcon,
-                                      @NonNull Class<? extends C> navigationTarget, @NonNull T parameter) {
+        NavigationTab createWithParameter(@NonNull String label, @NonNull VaadinIcon vaadinIcon,
+                                          @NonNull Class<? extends C> navigationTarget, @NonNull T parameter) {
         RouterLink link = new RouterLink();
         link.setRoute(navigationTarget, parameter);
         return new NavigationTab(link, label, vaadinIcon, navigationTarget);

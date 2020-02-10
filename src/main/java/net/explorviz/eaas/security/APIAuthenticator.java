@@ -3,12 +3,12 @@ package net.explorviz.eaas.security;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.entity.Secret;
 import net.explorviz.eaas.model.repository.SecretRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
@@ -48,7 +48,7 @@ public class APIAuthenticator {
     public void authorizeRequest(@NonNull Project project, @Nullable String secret, boolean readonly) {
         Optional<Secret> optionalSecret = Optional.empty();
 
-        if (!StringUtils.isEmpty(secret)) {
+        if (StringUtils.hasLength(secret)) {
             // TODO: Secret comparisons are not timing attack resistant
             optionalSecret = secretRepository.findByProjectAndSecret(project, secret);
             optionalSecret.ifPresent(this::useSecret);

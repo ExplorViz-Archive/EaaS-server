@@ -268,7 +268,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
 
                 <configuration>
-                    <minimumTokens>30</minimumTokens>
+                    <minimumTokens>40</minimumTokens>
 
                     <printFailingErrors>true</printFailingErrors>
                     <failOnViolation>false</failOnViolation>

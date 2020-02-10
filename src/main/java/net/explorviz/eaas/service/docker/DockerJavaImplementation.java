@@ -19,9 +19,9 @@ import java.io.InputStream;
  * Implements a {@link DockerAdapter} using the <a href="https://github.com/docker-java/docker-java">docker-java</a>
  * library, specifically using the {@link DockerClient}.
  * <p>
- * This library uses the docker API specified through environment variables or java system properties (defaulting to
- * the local docker socket). We do not handle these ourselves; instead let the user care about it when launching this
- * java application.
+ * This library uses the docker API specified through environment variables or java system properties (defaulting to the
+ * local docker socket). We do not handle these ourselves; instead let the user care about it when launching this java
+ * application.
  */
 @Slf4j
 class DockerJavaImplementation implements DockerAdapter {
@@ -61,8 +61,12 @@ class DockerJavaImplementation implements DockerAdapter {
         }
     }
 
+    /**
+     * Closes the socket to the docker API. Afterwards, this implementation is unfunctional. Should not be called
+     * manually but only from the dependency injection framework.
+     */
     @PreDestroy
-    public void cleanup() {
+    void cleanup() {
         try {
             docker.close();
         } catch (IOException e) {

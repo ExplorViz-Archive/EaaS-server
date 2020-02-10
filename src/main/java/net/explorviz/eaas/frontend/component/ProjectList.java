@@ -10,7 +10,7 @@ import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.SecurityUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -39,10 +39,10 @@ public class ProjectList extends VerticalLayout {
     }
 
     private void doCreateProject() {
-        String name = StringUtils.trim(projectName.getValue());
+        String name = StringUtils.trimWhitespace(projectName.getValue());
         Optional<User> user = SecurityUtils.getCurrentUser();
 
-        if (StringUtils.isBlank(name)) {
+        if (StringUtils.isEmpty(name)) {
             projectName.setInvalid(true);
             projectName.setErrorMessage("Project name may not be empty");
         } else if (projectRepo.findByName(name).isPresent()) {

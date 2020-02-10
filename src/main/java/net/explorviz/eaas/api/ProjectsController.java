@@ -9,6 +9,7 @@ import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.APIAuthenticator;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,8 +53,7 @@ public class ProjectsController {
     @RequestMapping(path = "/{project}", method = RequestMethod.GET)
     public Map<String, Object> getProject(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                           @PathVariable("project") long projectId) {
-        Project project = findProjectById(projectId);
-        apiAuthenticator.authorizeRequest(project, secret, true);
+        Project project = findProjectByIdAndAuthorize(projectId, secret, true);
 
         return Collections.singletonMap("project", project);
     }
@@ -63,8 +63,7 @@ public class ProjectsController {
     @RequestMapping(path = "/{project}/builds", method = RequestMethod.GET)
     public Map<String, Object> getProjectBuilds(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                 @PathVariable("project") long projectId) {
-        Project project = findProjectById(projectId);
-        apiAuthenticator.authorizeRequest(project, secret, true);
+        Project project = findProjectByIdAndAuthorize(projectId, secret, true);
 
         // This forces Hibernate to fetch builds now, not during jackson serialization (when session is closed)
         Build[] builds = project.getBuilds().toArray(EMPTY_BUILD_ARRAY);
@@ -76,8 +75,7 @@ public class ProjectsController {
     public Map<String, Object> getProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                @PathVariable("project") long projectId,
                                                @PathVariable("build") long buildId) {
-        Project project = findProjectById(projectId);
-        apiAuthenticator.authorizeRequest(project, secret, true);
+        Project project = findProjectByIdAndAuthorize(projectId, secret, true);
 
         Build build = buildRepository.findByProjectAndId(project, buildId)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Build not found"));
@@ -95,8 +93,7 @@ public class ProjectsController {
                                    @RequestParam("name") String name,
                                    @RequestParam("imageID") String imageID,
                                    @RequestParam("image") MultipartFile image) {
-        Project project = findProjectById(projectId);
-        apiAuthenticator.authorizeRequest(project, secret, false);
+        Project project = findProjectByIdAndAuthorize(projectId, secret, false);
 
         if (name.length() < Build.NAME_MIN_LENGTH || name.length() > Build.NAME_MAX_LENGTH) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Build name must be between " +
@@ -127,10 +124,13 @@ public class ProjectsController {
 
     /**
      * Fetches the {@link Project} with the given id from the database, or raise a Not Found error to the client if it
-     * doesn't exist.
+     * doesn't exist. Then checks the {@link APIAuthenticator#authorizeRequest(Project, String, boolean)} to verify the
+     * caller has a valid secret (if necessary) to access the project.
      */
-    private Project findProjectById(long projectId) {
-        return projectRepository.findById(projectId).orElseThrow(() ->
+    private Project findProjectByIdAndAuthorize(long projectId, @Nullable String secret, boolean readonly) {
+        Project project = projectRepository.findById(projectId).orElseThrow(() ->
             new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found"));
+        apiAuthenticator.authorizeRequest(project, secret, readonly);
+        return project;
     }
 }

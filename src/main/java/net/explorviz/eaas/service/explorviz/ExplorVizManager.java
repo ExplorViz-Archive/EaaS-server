@@ -53,7 +53,7 @@ public final class ExplorVizManager {
                             @Value("${eaas.explorviz.maxInstances:5}") int maxInstances,
                             @Value("${eaas.explorviz.frontendPortOffset:8800}") int frontendPortOffset,
                             @Value("${eaas.explorviz.accessUrlTemplate:http://localhost:%FRONTEND_PORT%}")
-                                    String accessUrlTemplate,
+                                String accessUrlTemplate,
                             @Value("${eaas.explorviz.defaultVersion:1.5.0}") String defaultVersion) {
         Validate.inclusiveBetween(1, Integer.MAX_VALUE, maxInstances);
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
@@ -62,7 +62,7 @@ public final class ExplorVizManager {
         Validate.isTrue(EXPLORVIZ_VERSIONS.contains(defaultVersion), "given defaultVersion is unknown");
 
         log.info("Given port range {}-{} for ExplorViz instances (max {} instances)", frontendPortOffset,
-                frontendPortOffset + maxInstances, maxInstances);
+            frontendPortOffset + maxInstances, maxInstances);
 
         this.dockerCompose = dockerCompose;
         this.maxInstances = maxInstances;
@@ -78,16 +78,16 @@ public final class ExplorVizManager {
      * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
      */
     public synchronized ExplorVizInstance startInstance(@NonNull Build build, @NonNull String version)
-            throws AdapterException, NoMoreSlotsException {
+        throws AdapterException, NoMoreSlotsException {
         Validate.notBlank(version, "version may not be empty");
 
         if (instances.size() >= maxInstances) {
             throw new NoMoreSlotsException("Won't start another ExplorViz instance, " + instances.size() + "/"
-                    + maxInstances + " instances are running");
+                                               + maxInstances + " instances are running");
         }
 
         log.info("Requested ExplorViz instance for build #{} '{}' of project #{} '{}'", build.getId(), build.getName(),
-                build.getProject().getId(), build.getProject().getName());
+            build.getProject().getId(), build.getProject().getName());
 
         int id = nextInstance;
         /*
@@ -103,10 +103,10 @@ public final class ExplorVizManager {
         String accessUrl = accessUrlTemplate.replace("%FRONTEND_PORT%", Integer.toString(frontendPort));
 
         ExplorVizInstance instance = new ExplorVizInstance(id, build.getId(), version, buildInstanceName(id, build),
-                frontendPort, accessUrl, build.getDockerImage());
+            frontendPort, accessUrl, build.getDockerImage());
 
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
-                instance.getFrontendPort());
+            instance.getFrontendPort());
 
         try {
             dockerCompose.up(instance.getName(), instance.getComposeDefinition());
@@ -129,7 +129,7 @@ public final class ExplorVizManager {
      */
     public void stopInstance(@NonNull ExplorVizInstance instance) throws AdapterException {
         log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
-                instance.getFrontendPort());
+            instance.getFrontendPort());
 
         try {
             dockerCompose.down(instance.getName(), instance.getComposeDefinition());
@@ -157,6 +157,8 @@ public final class ExplorVizManager {
      * Stops all currently running instances. Does not prevent new instances from starting at the same time. Such
      * instances will neither be stopped nor lead to an error. {@link AdapterException} occuring during shutdown are
      * logged but not rethrown.
+     * <p>
+     * This is also automatically called by the dependency injection framework on application shutdown.
      *
      * @return {@code true} if all instances that were running when this method was called stopped correctly.
      */
@@ -177,8 +179,9 @@ public final class ExplorVizManager {
     }
 
     /**
-     * @return A read-only representation of all instances currently running. Updates to the instances after this method
-     * was called are not reflected in the returned list.
+     * Updates to the instances after this method was called are not reflected in the returned list.
+     *
+     * @return A read-only representation of all instances currently running
      */
     public Collection<ExplorVizInstance> getAllInstances() {
         return Collections.unmodifiableCollection(instances.values());
