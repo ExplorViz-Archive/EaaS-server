@@ -11,11 +11,11 @@ import javax.validation.constraints.PastOrPresent;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
-@MappedSuperclass
 @Data
 @NoArgsConstructor
+@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 3255268320796480569L;
 
     @Id

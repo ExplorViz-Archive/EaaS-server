@@ -9,6 +9,7 @@ import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.APIAuthenticator;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -24,6 +25,8 @@ import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER;
 @RequestMapping("/api/v1/projects")
 @Slf4j
 public class ProjectsController {
+    public static final Build[] EMPTY_BUILD_ARRAY = new Build[0];
+
     private final ProjectRepository projectRepository;
     private final BuildRepository buildRepository;
     private final APIAuthenticator apiAuthenticator;
@@ -55,13 +58,18 @@ public class ProjectsController {
         return Collections.singletonMap("project", project);
     }
 
+    // We need Transactional for the lazy fetch in #getBuilds()
+    @Transactional(readOnly = true)
     @RequestMapping(path = "/{project}/builds", method = RequestMethod.GET)
     public Map<String, Object> getProjectBuilds(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                                 @PathVariable("project") long projectId) {
         Project project = findProjectById(projectId);
         apiAuthenticator.authorizeRequest(project, secret, true);
 
-        return Collections.singletonMap("builds", project.getBuilds());
+        // This forces Hibernate to fetch builds now, not during jackson serialization (when session is closed)
+        Build[] builds = project.getBuilds().toArray(EMPTY_BUILD_ARRAY);
+
+        return Collections.singletonMap("builds", builds);
     }
 
     @RequestMapping(path = "/{project}/builds/{build}", method = RequestMethod.GET)

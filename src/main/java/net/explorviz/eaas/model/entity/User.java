@@ -36,6 +36,8 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private boolean createAuthority;
+
     private boolean enabled;
 
     private boolean admin;
@@ -47,17 +49,22 @@ public class User extends BaseEntity implements UserDetails {
     public User(@NotEmpty String username, @NotEmpty String password, boolean admin) {
         this.username = username;
         this.password = password;
+        this.createAuthority = true;
         this.enabled = true;
         this.admin = admin;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(4);
+        Collection<GrantedAuthority> authorities = new HashSet<>(5);
 
-        authorities.add(Authorities.READ_AUTHORITY);
-        authorities.add(Authorities.RUN_AUTHORITY);
-        authorities.add(Authorities.MANAGE_AUTHORITY);
+        if (createAuthority) {
+            authorities.add(Authorities.CREATE_PROJECT_AUTHORITY);
+        }
+
+        authorities.add(Authorities.READ_PROJECT_AUTHORITY);
+        authorities.add(Authorities.RUN_BUILD_AUTHORITY);
+        authorities.add(Authorities.MANAGE_PROJECT_AUTHORITY);
 
         if (admin) {
             authorities.add(Authorities.ADMINISTER_AUTHORITY);

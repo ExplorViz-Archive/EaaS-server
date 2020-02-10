@@ -8,7 +8,7 @@ import net.explorviz.eaas.model.repository.SecretRepository;
 import org.springframework.security.access.annotation.Secured;
 
 @Route(value = "secrets", layout = ProjectLayout.class)
-@Secured("MANAGE")
+@Secured("MANAGE_PROJECT")
 public class SecretsView extends ProjectView {
     private static final long serialVersionUID = -2777916910494366724L;
 

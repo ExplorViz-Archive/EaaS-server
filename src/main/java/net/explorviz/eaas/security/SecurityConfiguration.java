@@ -32,6 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // Allow all flow internal requests
             .requestMatchers(SecurityUtils::isVaadinInternalRequest).permitAll()
+            // Allows requests to the API, it uses secrets for authentications
+            .antMatchers("/api/v1/**").permitAll()
             // Allow all requests by logged in users
             .anyRequest().authenticated()
             // Configure the login page
@@ -43,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+        // Unlike the authorizeRequests matchers above, these completely bypass Spring Security
         web.ignoring().antMatchers(
             // Vaadin Flow static resources
             "/VAADIN/**",

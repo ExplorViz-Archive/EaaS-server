@@ -19,7 +19,7 @@ import java.util.Optional;
  * Components need to be added in the {@link #build()} method only, as the project is only available after {@link
  * #setParameter(BeforeEvent, Long)} has been called.
  */
-@Secured("READ")
+@Secured("READ_PROJECT")
 public abstract class ProjectView extends DynamicView implements HasUrlParameter<Long>, HasDynamicTitle {
     private static final long serialVersionUID = 8034796492440190988L;
 

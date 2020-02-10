@@ -15,26 +15,30 @@ public final class Authorities {
     // TODO: Authorities should be managable per-project
 
     /**
-     * Grants the permission to see the project in listing and read them, which includes listing builds, even if it
-     * is hidden. Projects that aren't hidden are always visible, including listing their builds.
+     * Grants the permission to create new projects.
      */
-    public static final GrantedAuthority READ_AUTHORITY = create("READ");
+    public static final GrantedAuthority CREATE_PROJECT_AUTHORITY = create("CREATE_PROJECT");
 
     /**
-     * Grants the permission to run builds. Depends on {@link #READ_AUTHORITY}.
+     * Grants the permission to see the project in listing and read them, which includes listing builds, even if it is
+     * hidden. Projects that aren't hidden are always visible, including listing their builds.
      */
-    public static final GrantedAuthority RUN_AUTHORITY = create("RUN");
+    public static final GrantedAuthority READ_PROJECT_AUTHORITY = create("READ_PROJECT");
 
     /**
-     * Grants the permission to manage projects, which includes deleting builds, reading and adding API keys. Depends on
-     * {@link #READ_AUTHORITY}.
+     * Grants the permission to run builds. Needs {@link #READ_PROJECT_AUTHORITY} as well.
      */
-    public static final GrantedAuthority MANAGE_AUTHORITY = create("MANAGE");
+    public static final GrantedAuthority RUN_BUILD_AUTHORITY = create("RUN_BUILD");
 
     /**
-     * Grants the permission to read (see {@link #READ_AUTHORITY}) and manage (see {@link #MANAGE_AUTHORITY}) all
-     * projects and to manage users, including creating new users, deleting users and changing their properties
-     * (admin flag, password, username).
+     * Grants the permission to manage projects, which includes deleting builds, reading and adding API keys. Also needs
+     * {@link #READ_PROJECT_AUTHORITY}.
+     */
+    public static final GrantedAuthority MANAGE_PROJECT_AUTHORITY = create("MANAGE_PROJECT");
+
+    /**
+     * Grants the permission globally manage all users and ExplorViz instances, including creating new users, deleting
+     * users and changing their properties (admin flag, password, username).
      */
     public static final GrantedAuthority ADMINISTER_AUTHORITY = create("ADMINISTER");
 
