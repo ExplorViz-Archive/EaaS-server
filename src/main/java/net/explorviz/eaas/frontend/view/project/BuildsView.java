@@ -9,7 +9,6 @@ import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.security.access.annotation.Secured;
 
 @Route(value = "builds", layout = ProjectLayout.class)
-@Secured("READ_PROJECT")
 public class BuildsView extends ProjectView {
     private static final long serialVersionUID = -2777916910494366724L;
 

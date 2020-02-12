@@ -16,10 +16,13 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final String LOGIN_URL = "/" + LoginView.ROUTE;
+    public static final String LOGOUT_URL = "/logout";
+    public static final String HOME_URL = "/";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Vaadin has built-in CSRF
+        // TODO: This also allows to logout via GET requests, this should be fixed
         http.csrf().disable();
 
         // Saves unauthorized access attempts, so the user is redirected after login
@@ -34,13 +37,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .requestMatchers(SecurityUtils::isVaadinInternalRequest).permitAll()
             // Allows requests to the API, it uses secrets for authentications
             .antMatchers("/api/v1/**").permitAll()
-            // Allow all requests by logged in users
-            .anyRequest().authenticated()
+            // Allow all requests, because we're doing fine-grained authentication in Vaadin views on BeforeEnterEvent
+            .anyRequest().permitAll()
             // Configure the login page
             .and().formLogin().loginPage(LOGIN_URL).permitAll()
             .loginProcessingUrl(LOGIN_URL).failureUrl(LOGIN_URL + "?error")
-            // Configure logout, TODO: Change to main view not requiring login
-            .and().logout().logoutSuccessUrl(LOGIN_URL);
+            // Configure logout
+            .and().logout().logoutUrl(LOGOUT_URL).logoutSuccessUrl(HOME_URL);
     }
 
     @Override

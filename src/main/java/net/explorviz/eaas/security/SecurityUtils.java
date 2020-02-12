@@ -2,6 +2,7 @@ package net.explorviz.eaas.security;
 
 import com.vaadin.flow.server.ServletHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
+import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.entity.User;
 import org.apache.commons.lang3.Validate;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -111,5 +112,20 @@ public final class SecurityUtils {
     public static boolean mayAccess(@NonNull Class<?> clazz) {
         Secured secured = AnnotationUtils.findAnnotation(clazz, Secured.class);
         return secured == null || Arrays.stream(secured.value()).anyMatch(SecurityUtils::hasAuthority);
+    }
+
+    /**
+     * Tests if the current security context may access the given project at all, i.e. if this method returns {@code
+     * false} the client must be presented with an access denied error page or asked to log in if they aren't already.
+     * <p>
+     * Access may be forbidden if the project is hidden ({@link Project#isHidden()} and the principal of the current
+     * security context is not the owner ({@link Project#getOwner()}) of the project.
+     */
+    public static boolean mayAccessProject(Project project) {
+        if (!project.isHidden()) {
+            return true;
+        }
+
+        return getCurrentUser().map(user -> user.getId().equals(project.getOwner().getId())).orElse(false);
     }
 }

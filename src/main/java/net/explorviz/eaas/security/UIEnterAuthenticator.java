@@ -11,8 +11,12 @@ import org.springframework.security.access.annotation.Secured;
 /**
  * Checks if the current security context has the necessary permission before entering views.
  * <p>
- * E.g. it reroutes the user to the {@link LoginView} if they're not logged in. Also checks for {@link Secured}
- * annotations on views about to be entered and checks if the current security context has the necessary authority.
+ * Checks for {@link Secured} annotations on views about to be entered and checks if the current security context has
+ * the necessary authority. Otherwise the client is rerouted to the {@link LoginView}. If they're already logged in they
+ * get an access denied error.
+ * <p>
+ * Note: You should not add {@link Secured} annotations to error views (i.e. they implement {@link HasErrorParameter}),
+ * because then users might be asked to log in only to be presented with another error, which is bad UX.
  *
  * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security">Setting
  * up Spring Security for Vaadin applications</a>
@@ -25,22 +29,14 @@ public class UIEnterAuthenticator implements BeforeEnterListener {
     public void beforeEnter(BeforeEnterEvent event) {
         Class<?> target = event.getNavigationTarget();
 
-        log.debug("About to enter view {}", target.getCanonicalName());
-
-        // Error pages can be public
-        if (HasErrorParameter.class.isAssignableFrom(target)) {
-            log.debug("Allow entering view {} because it is an error page", target.getCanonicalName());
-            return;
-        }
-
-        // TODO: Allow a public front page
-        if (!SecurityUtils.isUserLoggedIn() && !LoginView.class.equals(target)) {
-            event.rerouteTo(LoginView.class);
-            return;
-        }
-
         if (!SecurityUtils.mayAccess(target)) {
-            throw new AccessDeniedException("You do not have permission to access this page.");
+            if (SecurityUtils.isUserLoggedIn()) {
+                log.debug("User is not authorized to enter view: {}", target.getCanonicalName());
+                throw new AccessDeniedException("You do not have permission to access this page.");
+            } else {
+                log.debug("Login required to access view: {}", target.getCanonicalName());
+                event.rerouteTo(LoginView.class);
+            }
         }
     }
 }

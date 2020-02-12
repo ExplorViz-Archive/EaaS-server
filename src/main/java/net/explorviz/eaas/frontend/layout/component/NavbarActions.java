@@ -4,6 +4,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import net.explorviz.eaas.frontend.component.IconAnchor;
+import net.explorviz.eaas.security.SecurityConfiguration;
 import net.explorviz.eaas.security.SecurityUtils;
 
 public class NavbarActions extends HorizontalLayout {
@@ -18,9 +19,9 @@ public class NavbarActions extends HorizontalLayout {
         add(homepage);
 
         if (SecurityUtils.isUserLoggedIn()) {
-            add(IconAnchor.createFromIcon("/logout", VaadinIcon.SIGN_OUT, "Logout"));
+            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGOUT_URL, VaadinIcon.SIGN_OUT, "Logout"));
         } else {
-            add(IconAnchor.createFromIcon("/login", VaadinIcon.SIGN_IN, "Login"));
+            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGIN_URL, VaadinIcon.SIGN_IN, "Login"));
         }
     }
 }

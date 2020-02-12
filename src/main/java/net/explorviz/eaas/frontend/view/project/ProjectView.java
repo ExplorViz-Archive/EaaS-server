@@ -6,8 +6,11 @@ import lombok.Getter;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 
 import java.util.Optional;
@@ -19,7 +22,6 @@ import java.util.Optional;
  * Components need to be added in the {@link #build()} method only, as the project is only available after {@link
  * #setParameter(BeforeEvent, Long)} has been called.
  */
-@Secured("READ_PROJECT")
 public abstract class ProjectView extends DynamicView implements HasUrlParameter<Long>, HasDynamicTitle {
     private static final long serialVersionUID = 8034796492440190988L;
 
@@ -37,14 +39,23 @@ public abstract class ProjectView extends DynamicView implements HasUrlParameter
     @Override
     public void setParameter(BeforeEvent event, Long projectId) {
         Optional<Project> optProject = projectRepo.findById(projectId);
+
         if (optProject.isEmpty()) {
             event.rerouteToError(NotFoundException.class, "Project not found");
             return;
         }
+
         project = optProject.get();
     }
 
-    // TODO: Only allow access to non-hidden or owned projects
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        if (!SecurityUtils.mayAccessProject(project)) {
+            throw new AccessDeniedException("You do not have permission to access this page.");
+        }
+
+        super.beforeEnter(event);
+    }
 
     @Override
     public String getPageTitle() {
