@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -15,12 +16,15 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity implements Serializable, Persistable<Long> {
     private static final long serialVersionUID = 3255268320796480569L;
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Transient
+    private boolean isNew = true;
 
     //@CreatedBy
     //@ManyToOne(optional = false)
@@ -43,4 +47,10 @@ public abstract class BaseEntity implements Serializable {
     @Column(nullable = false)
     @PastOrPresent
     private ZonedDateTime lastModifiedDate;
+
+    @PrePersist
+    @PostLoad
+    void markNotNew() {
+        this.isNew = false;
+    }
 }
