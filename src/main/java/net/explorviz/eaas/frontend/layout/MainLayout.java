@@ -2,6 +2,7 @@ package net.explorviz.eaas.frontend.layout;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import net.explorviz.eaas.frontend.layout.component.NavigationTab;
+import net.explorviz.eaas.frontend.view.ExploreView;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.NewProjectView;
 import net.explorviz.eaas.frontend.view.admin.InstancesView;
@@ -31,6 +32,7 @@ public class MainLayout extends BaseLayout {
     @Override
     protected void build() {
         addNavigationTab(NavigationTab.create("Home", VaadinIcon.HOME, MainView.class));
+        addNavigationTab(NavigationTab.create("Explore", VaadinIcon.LIST_UL, ExploreView.class));
         addNavigationTab(NavigationTab.create("New project", VaadinIcon.PLUS, NewProjectView.class));
 
         Optional<User> user = SecurityUtils.getCurrentUser();
@@ -40,6 +42,8 @@ public class MainLayout extends BaseLayout {
             if (!projects.isEmpty()) {
                 startSection("Your projects");
                 for (Project p : projects) {
+                    assert p.getId() != null;
+
                     addNavigationTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE,
                         BuildsView.class, p.getId()));
                 }

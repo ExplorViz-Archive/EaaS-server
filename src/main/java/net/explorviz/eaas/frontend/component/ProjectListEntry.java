@@ -1,22 +1,21 @@
 package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.html.Paragraph;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.RouterLink;
-import lombok.Getter;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.model.entity.Project;
 
-public class ProjectListEntry extends VerticalLayout {
-    private static final long serialVersionUID = 1589947241429733513L;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
-    @Getter
-    private final Project project;
+public class ProjectListEntry extends SimpleListEntry {
+    private static final long serialVersionUID = 8271392331540142853L;
 
     public ProjectListEntry(Project project) {
-        this.project = project;
+        add(new SimpleListLink(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE, project.getName()));
 
-        add(new RouterLink(project.getName() + " (#" + project.getId() + ")", BuildsView.class, project.getId()));
-        add(new Paragraph("Created on " + project.getCreatedDate()));
+        add(new Paragraph("Created " + project.getCreatedDate().format(
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
+        )));
     }
 }

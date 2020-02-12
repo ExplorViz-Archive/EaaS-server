@@ -1,0 +1,16 @@
+.simple-list-link {
+    display: flex;
+    align-items: center;
+
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+}
+
+.simple-list-link iron-icon {
+    margin-right: 0.4em;
+}
+
+.simple-list-link h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}

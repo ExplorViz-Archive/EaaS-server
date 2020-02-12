@@ -9,6 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.*;
+import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.frontend.component.ExplorVizBanner;
 import net.explorviz.eaas.frontend.layout.component.NavbarActions;
 import net.explorviz.eaas.frontend.layout.component.NavigationTab;
@@ -21,6 +22,7 @@ import java.util.*;
  * <b>Note for child classes:</b> All tab entries have to be added in {@link #build()} so they are available when this
  * class decides which tab is marked as selected.
  */
+@Slf4j
 @CssImport("./style/layout.css")
 public abstract class BaseLayout extends AppLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 6416207502947013549L;
@@ -47,8 +49,8 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
      * reused across multiple views (which means {@link #beforeEnter(BeforeEnterEvent)} is called on the same Layout
      * object every time the view changes!) and otherwise existing tabs would be duplicated.
      * <p>
-     * After calling this method, {@link #build()} is called again when {@link #beforeEnter(BeforeEnterEvent)} runs
-     * the next time.
+     * After calling this method, {@link #build()} is called again when {@link #beforeEnter(BeforeEnterEvent)} runs the
+     * next time.
      */
     protected void resetTabs() {
         sections.clear();
@@ -95,6 +97,8 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         if (!built) {
+            log.debug("(Re)building layout {}", this.getClass().getCanonicalName());
+
             startSection(null);
             build();
             built = true;
