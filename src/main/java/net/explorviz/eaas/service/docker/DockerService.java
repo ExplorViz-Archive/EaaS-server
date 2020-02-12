@@ -19,7 +19,7 @@ public class DockerService {
     @Bean
     @Lazy
     public DockerComposeAdapter standardDockerComposeAdapter(
-        @Value("${eaas.docker-compose.timeout:300000}") long operationTimeout) throws AdapterException {
+        @Value("${eaas.dockerCompose.timeout:300000}") long operationTimeout) throws AdapterException {
         return useDummyImplementation ?
             new DockerComposeDummyImplementation() : new DockerComposeToolImplementation(operationTimeout);
     }
