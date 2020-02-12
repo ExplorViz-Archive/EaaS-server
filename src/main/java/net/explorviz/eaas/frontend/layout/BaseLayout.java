@@ -33,6 +33,7 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
 
     private boolean built;
 
+    private String currentLabel;
     private Tabs currentSection;
 
     protected BaseLayout() {
@@ -60,19 +61,18 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
     }
 
     /**
-     * Start a new navigation section in the sidebar, separated by a heading label.
+     * Start a new navigation section in the sidebar, separated by a heading label. Sections are only displayed if they
+     * contain at least one tab.
      *
      * @param label User-visible section header to display or {@code null} to not display a section header
      */
     protected void startSection(@Nullable String label) {
         currentSection = new Tabs();
         currentSection.setOrientation(Tabs.Orientation.VERTICAL);
-        sections.add(currentSection);
 
-        if (label != null) {
-            navigation.add(new H4(label));
-        }
-        navigation.add(currentSection);
+        // The section is added to the sidebar when a navigation tab is added, see below
+
+        currentLabel = label;
     }
 
     /**
@@ -81,7 +81,18 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
      */
     protected void addNavigationTab(NavigationTab tab) {
         Class<? extends Component> target = tab.getNavigationTarget();
+
         if (SecurityUtils.mayAccess(target)) {
+            if (!sections.contains(currentSection)) {
+                // Now that we know we have at least one tab to display we can add the section to the sidebar
+                sections.add(currentSection);
+
+                if (currentLabel != null) {
+                    navigation.add(new H4(currentLabel));
+                }
+                navigation.add(currentSection);
+            }
+
             tabTargets.put(target, tab);
             currentSection.add(tab);
         }
