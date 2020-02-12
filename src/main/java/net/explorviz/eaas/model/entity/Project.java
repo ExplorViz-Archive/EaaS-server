@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedBy;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class Project extends BaseEntity {
     private static final long serialVersionUID = -1864944572450590914L;
 
+    public static final String NAME_PATTERN = "[a-zA-Z0-9-_]+";
     public static final int NAME_MIN_LENGTH = 1;
     public static final int NAME_MAX_LENGTH = 64;
 
@@ -35,6 +37,7 @@ public class Project extends BaseEntity {
     @NotEmpty
     @Column(unique = true, nullable = false)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
+    @Pattern(regexp = NAME_PATTERN)
     private String name;
 
     /**

@@ -11,6 +11,8 @@ import net.explorviz.eaas.frontend.view.project.SecretsView;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 
+import java.util.Optional;
+
 public class ProjectLayout extends BaseLayout {
     private static final long serialVersionUID = 8689866379276497334L;
 
@@ -24,15 +26,8 @@ public class ProjectLayout extends BaseLayout {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        Location param = event.getLocation().getSubLocation().orElseThrow(NotFoundException::new);
-        long projectId;
-        try {
-            projectId = Long.parseLong(param.getFirstSegment());
-        } catch (NumberFormatException e) {
-            throw new NotFoundException();
-        }
-
-        project = projectRepository.findById(projectId).orElseThrow(NotFoundException::new);
+        project = parseProjectParameter(event.getLocation())
+                      .orElseThrow(() -> new NotFoundException("Project not found"));
 
         super.beforeEnter(event);
     }
@@ -42,10 +37,21 @@ public class ProjectLayout extends BaseLayout {
         addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A, MainView.class));
 
         startSection(project.getName());
-        addNavigationTab(NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class,
-            project.getId()));
-        addNavigationTab(NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY, SecretsView.class,
-            project.getId()));
+        addNavigationTab(
+            NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class, project.getId()));
+        addNavigationTab(
+            NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY, SecretsView.class, project.getId()));
+    }
+
+    private Optional<Project> parseProjectParameter(Location location) {
+        try {
+            return location.getSubLocation()
+                       .map(Location::getFirstSegment)
+                       .map(Long::parseLong)
+                       .flatMap(projectRepository::findById);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 }
 

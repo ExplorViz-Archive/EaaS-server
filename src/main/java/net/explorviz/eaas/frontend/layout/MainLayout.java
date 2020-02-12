@@ -3,17 +3,21 @@ package net.explorviz.eaas.frontend.layout;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
+import net.explorviz.eaas.frontend.view.NewProjectView;
 import net.explorviz.eaas.frontend.view.admin.InstancesView;
 import net.explorviz.eaas.frontend.view.admin.UsersView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.security.SecurityUtils;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
- * Layout used for all non-project specific views. Adds administration entries over the {@link BaseLayout} if the
- * current security context has the necessary authority to enter them.
+ * Layout used for all non-project specific views. Links to the home page, lists all projects owned by the principal of
+ * the current security context, and adds administration entries if permitted.
  */
 public class MainLayout extends BaseLayout {
     private static final long serialVersionUID = 8689866379276497334L;
@@ -27,14 +31,18 @@ public class MainLayout extends BaseLayout {
     @Override
     protected void build() {
         addNavigationTab(NavigationTab.create("Home", VaadinIcon.HOME, MainView.class));
+        addNavigationTab(NavigationTab.create("New project", VaadinIcon.PLUS, NewProjectView.class));
 
-        // TODO: Also list owned projects
-        Collection<Project> projects = projectRepo.findByHidden(false);
-        if (!projects.isEmpty()) {
-            startSection("Projects");
-            for (Project p : projects) {
-                addNavigationTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE, BuildsView.class,
-                    p.getId()));
+        Optional<User> user = SecurityUtils.getCurrentUser();
+        if (user.isPresent()) {
+            Collection<Project> projects = projectRepo.findByOwner(user.get());
+
+            if (!projects.isEmpty()) {
+                startSection("Your projects");
+                for (Project p : projects) {
+                    addNavigationTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE,
+                        BuildsView.class, p.getId()));
+                }
             }
         }
 
