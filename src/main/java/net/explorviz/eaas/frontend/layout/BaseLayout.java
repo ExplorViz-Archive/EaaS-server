@@ -19,8 +19,7 @@ import java.util.*;
 
 /**
  * <b>Note for child classes:</b> All tab entries have to be added in {@link #build()} so they are available when this
- * class decided which tab is marked as selected. Also layouts can be reused by the framework, so the tab entries need
- * to be rebuilt whenever the view changes.
+ * class decides which tab is marked as selected.
  */
 @CssImport("./style/layout.css")
 public abstract class BaseLayout extends AppLayout implements BeforeEnterObserver {
@@ -29,6 +28,8 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
     private final Collection<Tabs> sections = new ArrayList<>(3);
     private final VerticalLayout navigation = new VerticalLayout();
     private final Map<Class<? extends Component>, Tab> tabTargets = new HashMap<>(8);
+
+    private boolean built;
 
     private Tabs currentSection;
 
@@ -43,15 +44,17 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
 
     /**
      * Clears all tabs. This is necessary if we want to change the available tabs dynamically, because Layouts are
-     * reused across multiple views (that means {@link #beforeEnter(BeforeEnterEvent)} is called on the same Layout
+     * reused across multiple views (which means {@link #beforeEnter(BeforeEnterEvent)} is called on the same Layout
      * object every time the view changes!) and otherwise existing tabs would be duplicated.
      * <p>
-     * After calling this method {@link #build()} is called again when the next {@link #beforeEnter(BeforeEnterEvent)}
-     * happens.
+     * After calling this method, {@link #build()} is called again when {@link #beforeEnter(BeforeEnterEvent)} runs
+     * the next time.
      */
     protected void resetTabs() {
+        sections.clear();
         navigation.removeAll();
         tabTargets.clear();
+        built = false;
     }
 
     /**
@@ -91,9 +94,10 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
      */
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        if (tabTargets.isEmpty()) {
+        if (!built) {
             startSection(null);
             build();
+            built = true;
         }
 
         // Select the tab for the entered view. Be aware we do not respect parameters here (we don't need it yet)
