@@ -12,7 +12,17 @@ public final class Authorities {
     private Authorities() {
     }
 
-    // TODO: Authorities should be managable per-project
+    /*
+     * TODO: Authorities should be managable per-project.
+     *
+     * Right now everyone can read !hidden projects but only the owner of a project can run builds and manage the
+     * project. This is because the [READ_PROJECT, RUN_BUILD, MANAGE_PROJECT] authorities do not have a project attached
+     * to them yet and only generally allow this action. There are additional checks in the views so users are limited
+     * to interacting with their own projects only.
+     *
+     * Implementing this would require a complex UI for user management within the project settings, a user list and
+     * maybe even profiles. Therefore, it is out of scope for now.
+     */
 
     /**
      * Grants the permission to create new projects.
@@ -37,10 +47,16 @@ public final class Authorities {
     public static final GrantedAuthority MANAGE_PROJECT_AUTHORITY = create("MANAGE_PROJECT");
 
     /**
-     * Grants the permission globally manage all users and ExplorViz instances, including creating new users, deleting
-     * users and changing their properties (admin flag, password, username).
+     * Grants the permission to manage ExplorViz instances, i.e. viewing the active instances, starting test instances
+     * and killing running instances.
      */
-    public static final GrantedAuthority ADMINISTER_AUTHORITY = create("ADMINISTER");
+    public static final GrantedAuthority MANAGE_INSTANCES_AUTHORITY = create("MANAGE_INSTANCES");
+
+    /**
+     * Grants the permission to manage all users, including creating new users, deleting users and changing their
+     * properties (admin flag, password, username).
+     */
+    public static final GrantedAuthority MANAGE_USERS_AUTHORITY = create("MANAGE_USERS");
 
     private static GrantedAuthority create(String authority) {
         return new SimpleGrantedAuthority(authority);

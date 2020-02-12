@@ -36,29 +36,33 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private boolean createAuthority;
+    private boolean createProjectsAllowed;
+
+    private boolean manageInstancesAllowed;
+
+    private boolean manageUsersAllowed;
 
     private boolean enabled;
-
-    private boolean admin;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
     @JsonIgnore
     private List<Project> ownedProjects;
 
-    public User(@NotEmpty String username, @NotEmpty String password, boolean admin) {
+    public User(@NotEmpty String username, @NotEmpty String password, boolean createProjectsAllowed,
+                boolean manageInstancesAllowed, boolean manageUsersAllowed) {
         this.username = username;
         this.password = password;
-        this.createAuthority = true;
+        this.createProjectsAllowed = createProjectsAllowed;
+        this.manageInstancesAllowed = manageInstancesAllowed;
+        this.manageUsersAllowed = manageUsersAllowed;
         this.enabled = true;
-        this.admin = admin;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(5);
+        Collection<GrantedAuthority> authorities = new HashSet<>(6);
 
-        if (createAuthority) {
+        if (createProjectsAllowed) {
             authorities.add(Authorities.CREATE_PROJECT_AUTHORITY);
         }
 
@@ -66,8 +70,12 @@ public class User extends BaseEntity implements UserDetails {
         authorities.add(Authorities.RUN_BUILD_AUTHORITY);
         authorities.add(Authorities.MANAGE_PROJECT_AUTHORITY);
 
-        if (admin) {
-            authorities.add(Authorities.ADMINISTER_AUTHORITY);
+        if (manageInstancesAllowed) {
+            authorities.add(Authorities.MANAGE_INSTANCES_AUTHORITY);
+        }
+
+        if (manageUsersAllowed) {
+            authorities.add(Authorities.MANAGE_USERS_AUTHORITY);
         }
 
         return authorities;

@@ -22,7 +22,7 @@ import java.util.Random;
 
 @PageTitle("Instances - " + Application.PAGE_TITLE)
 @Route(value = "instances", layout = MainLayout.class)
-@Secured("ADMINISTER")
+@Secured("MANAGE_INSTANCES")
 public class InstancesView extends DynamicView {
     private static final long serialVersionUID = 2570920838715737622L;
 

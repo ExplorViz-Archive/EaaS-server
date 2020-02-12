@@ -11,7 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 
 @PageTitle("Users - " + Application.PAGE_TITLE)
 @Route(value = "users", layout = MainLayout.class)
-@Secured("ADMINISTER")
+@Secured("MANAGE_USERS")
 public class UsersView extends DynamicView {
     private static final long serialVersionUID = 4767534558255466871L;
 
