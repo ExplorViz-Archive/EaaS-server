@@ -14,8 +14,6 @@ import org.springframework.lang.NonNull;
 public class NavigationTab extends Tab {
     private static final long serialVersionUID = 188662863223269797L;
 
-    private static final String TAB_ICON_SIZE = "16px";
-
     @Getter
     private final Class<? extends Component> navigationTarget;
 
@@ -25,10 +23,7 @@ public class NavigationTab extends Tab {
 
         addClassName("navigation-tab");
 
-        Icon icon = vaadinIcon.create();
-        icon.setSize(TAB_ICON_SIZE);
-
-        routerLink.add(icon);
+        routerLink.add(vaadinIcon.create());
         routerLink.add(new Text(label));
         add(routerLink);
     }
