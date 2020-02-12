@@ -7,7 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
-import net.explorviz.eaas.frontend.component.ExplorVizListEntry;
+import net.explorviz.eaas.frontend.component.list.ExplorVizListEntry;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.service.docker.AdapterException;

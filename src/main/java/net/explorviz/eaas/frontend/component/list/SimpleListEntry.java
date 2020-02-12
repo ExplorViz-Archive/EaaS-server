@@ -1,4 +1,4 @@
-package net.explorviz.eaas.frontend.component;
+package net.explorviz.eaas.frontend.component.list;
 
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
