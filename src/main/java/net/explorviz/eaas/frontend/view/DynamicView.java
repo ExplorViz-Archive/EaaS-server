@@ -14,6 +14,13 @@ public abstract class DynamicView extends VerticalLayout implements BeforeEnterO
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        rebuild();
+    }
+
+    /**
+     * Immediately rebuild the view by removing all components and running {@link #build()} again.
+     */
+    protected void rebuild() {
         removeAll();
         build();
     }
