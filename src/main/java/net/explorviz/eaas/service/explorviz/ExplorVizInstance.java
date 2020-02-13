@@ -2,6 +2,7 @@ package net.explorviz.eaas.service.explorviz;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import net.explorviz.eaas.model.entity.Build;
 import org.springframework.core.io.ClassPathResource;
@@ -9,7 +10,7 @@ import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Scanner;
 
 /**
@@ -30,6 +31,10 @@ public class ExplorVizInstance {
     @ToString.Exclude
     @Getter(AccessLevel.PACKAGE)
     private final String composeDefinition;
+    @ToString.Exclude
+    @Getter(AccessLevel.PACKAGE)
+    @Setter(AccessLevel.PACKAGE)
+    private boolean running;
 
     private final long buildId;
     private final String version;
@@ -38,7 +43,7 @@ public class ExplorVizInstance {
     private final String accessURL;
     private final String applicationImage;
 
-    private final Instant createdTime;
+    private final ZonedDateTime createdTime;
 
     /**
      * @param id               An ID for this instance, unique only while this instance is running.
@@ -72,7 +77,7 @@ public class ExplorVizInstance {
             .replace("%ACCESS_URL%", accessURL)
             .replace("%APPLICATION_IMAGE%", applicationImage);
 
-        this.createdTime = Instant.now();
+        this.createdTime = ZonedDateTime.now();
     }
 
     private static String readResourceFile(@NonNull String filename) {

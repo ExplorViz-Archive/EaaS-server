@@ -48,9 +48,9 @@ public abstract class BaseEntity implements Serializable, Persistable<Long> {
     @PastOrPresent
     private ZonedDateTime lastModifiedDate;
 
-    @PrePersist
+    @PostPersist
     @PostLoad
-    void markNotNew() {
+    protected void markNotNew() {
         this.isNew = false;
     }
 }

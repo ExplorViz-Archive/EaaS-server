@@ -36,19 +36,16 @@ public class MainView extends DynamicView {
     protected void build() {
         add(new H2("Recently updated projects"));
 
-        Page<RecentlyUpdatedResult> projects = projectRepo.findRecentlyUpdated(false,
+        Page<RecentlyUpdatedResult> recentlyUpdated = projectRepo.findRecentlyUpdated(false,
             SecurityUtils.getCurrentUser().orElse(null), PageRequest.of(0, projectsPerPage));
 
-        if (projects.getTotalElements() == 0) {
+        if (recentlyUpdated.getTotalElements() == 0) {
             add(new Paragraph("No projects have been created yet."));
         } else {
-            add(new SimpleList<>(projects, RecentlyUpdatedProjectListEntry::new));
+            SimpleList<RecentlyUpdatedResult> recentlyUpdatedList =
+                new SimpleList<>(RecentlyUpdatedProjectListEntry::new);
+            recentlyUpdatedList.addEntries(recentlyUpdated);
+            add(recentlyUpdatedList);
         }
     }
-
-    //private void doDeleteProject(RecentlyUpdatedProjectListEntry entry) {
-    //    projectRepo.delete(entry.getProject());
-    //    remove(entry);
-    //    Notification.show("Deleted project " + entry.getProject().getName());
-    //}
 }

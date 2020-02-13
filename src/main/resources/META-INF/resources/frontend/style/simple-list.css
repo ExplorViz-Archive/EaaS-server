@@ -1,9 +1,27 @@
+.simple-list {
+    margin-top: 0;
+    list-style-type: none;
+    padding-left: 0.5em;
+}
+
+.simple-list-entry {
+    border-left: 4px solid var(--lumo-shade-20pct);
+    padding: 0.5em 1em;
+    margin-top: 1.5em;
+}
+
+.simple-list-entry p {
+    margin-bottom: 0;
+}
+
+.simple-list-entry h4, .simple-list-link {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 .simple-list-link {
     display: flex;
     align-items: center;
-
-    margin-top: 0.6em;
-    margin-bottom: 0.2em;
 }
 
 .simple-list-link iron-icon {
@@ -16,4 +34,10 @@
 .simple-list-link h4 {
     margin-top: 0;
     margin-bottom: 0;
+}
+
+.instance-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
 }

@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 public final class ExplorVizManager {
     /**
-     * For each version, a corresponding docker-compose in resources/ has to be available
+     * For each version, a corresponding docker-compose file in resources/ has to be available
      */
     public static final List<String> EXPLORVIZ_VERSIONS = List.of("1.5.0", "dev");
 
@@ -83,11 +83,10 @@ public final class ExplorVizManager {
 
         if (instances.size() >= maxInstances) {
             throw new NoMoreSlotsException("Won't start another ExplorViz instance, " + instances.size() + "/"
-                                               + maxInstances + " instances are running");
+                + maxInstances + " instances are running");
         }
 
-        log.info("Requested ExplorViz instance for build #{} '{}' of project #{} '{}'", build.getId(), build.getName(),
-            build.getProject().getId(), build.getProject().getName());
+        log.debug("Requested ExplorViz instance for build #{} '{}'", build.getId(), build.getName());
 
         int id = nextInstance;
         /*
@@ -115,6 +114,7 @@ public final class ExplorVizManager {
             throw e;
         }
 
+        instance.setRunning(true);
         instances.put(id, instance);
         instancesByBuildId.put(instance.getBuildId(), instance);
         return instance;
@@ -128,18 +128,26 @@ public final class ExplorVizManager {
      * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
      */
     public void stopInstance(@NonNull ExplorVizInstance instance) throws AdapterException {
-        log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
-            instance.getFrontendPort());
+        synchronized (instance) {
+            if (!instance.isRunning()) {
+                log.warn("Tried to stop already stopped instance {}", instance.getName());
+                throw new AdapterException("Instance " + instance.getName() + " is already stopped");
+            }
 
-        try {
-            dockerCompose.down(instance.getName(), instance.getComposeDefinition());
-        } catch (AdapterException e) {
-            log.error("Error stopping ExplorViz instance", e);
-            throw e;
+            log.info("Stopping instance {} (#{}) on port {}", instance.getName(), instance.getId(),
+                instance.getFrontendPort());
+
+            try {
+                dockerCompose.down(instance.getName(), instance.getComposeDefinition());
+            } catch (AdapterException e) {
+                log.error("Error stopping ExplorViz instance", e);
+                throw e;
+            }
+
+            instance.setRunning(false);
+            instances.remove(instance.getId());
+            instancesByBuildId.remove(instance.getBuildId());
         }
-
-        instances.remove(instance.getId());
-        instancesByBuildId.remove(instance.getBuildId());
     }
 
     /**
@@ -166,16 +174,15 @@ public final class ExplorVizManager {
     public boolean stopAllInstances() {
         log.info("Requested stop of all running instances");
 
-        // We use count() instead of anyMatch() to force evaluating all objects in the stream, not stopping after the
-        // first failure
-        return instances.values().parallelStream().map(instance -> {
+        // allMatch() is specified to allow short-circuit evaluation but this shouldn't be possible here
+        return instances.values().parallelStream().allMatch(instance -> {
             try {
                 stopInstance(instance);
                 return true;
             } catch (AdapterException e) {
                 return false;
             }
-        }).filter(v -> !v).count() > 0;
+        });
     }
 
     /**

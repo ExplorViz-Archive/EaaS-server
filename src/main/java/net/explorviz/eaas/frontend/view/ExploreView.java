@@ -38,6 +38,8 @@ public class ExploreView extends DynamicView {
             projects = projectRepo.findByHidden(false);
         }
 
-        add(new SimpleList<>(projects, ProjectListEntry::new));
+        SimpleList<Project> projectList = new SimpleList<>(ProjectListEntry::new);
+        projectList.addEntries(projects);
+        add(projectList);
     }
 }
