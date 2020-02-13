@@ -23,8 +23,8 @@ public class BuildsView extends ProjectView {
 
     @Override
     public void build() {
-        add(new H2("Builds | " + getProject().getName()));
+        add(new H2("Builds"));
 
-        //add(new BuildList(buildRepo, project.getBuilds(), explorVizManager));
+        // TODO: Builds view
     }
 }

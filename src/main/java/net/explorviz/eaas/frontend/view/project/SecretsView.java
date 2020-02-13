@@ -21,8 +21,8 @@ public class SecretsView extends ProjectView {
 
     @Override
     public void build() {
-        add(new H2("Secrets | " + getProject().getName()));
+        add(new H2("Secrets"));
 
-        //add(new SecretList(secretRepo, project.getSecrets()));
+        // TODO: Secrets view
     }
 }

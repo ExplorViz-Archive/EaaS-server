@@ -8,6 +8,7 @@ import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.frontend.view.project.SecretsView;
+import net.explorviz.eaas.frontend.view.project.SettingsView;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 
@@ -41,6 +42,8 @@ public class ProjectLayout extends BaseLayout {
             NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class, project.getId()));
         addNavigationTab(
             NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY, SecretsView.class, project.getId()));
+        addNavigationTab(
+            NavigationTab.createWithParameter("Settings", VaadinIcon.COG, SettingsView.class, project.getId()));
     }
 
     private Optional<Project> parseProjectParameter(Location location) {
