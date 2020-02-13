@@ -4,8 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.icon.IconFactory;
 
 /**
  * A link ({@link Anchor}) with an icon next to its label. Icons always have the same predefined size.
@@ -21,8 +20,8 @@ public class IconAnchor extends Anchor {
     /**
      * Create an IconAnchor displaying the given VaadinIcon next to the text.
      */
-    public static IconAnchor createFromIcon(String href, VaadinIcon vaadinIcon, String text) {
-        return new IconAnchor(href, new Icon(vaadinIcon), new Text(text));
+    public static IconAnchor createFromIcon(String href, IconFactory icon, String text) {
+        return new IconAnchor(href, icon.create(), new Text(text));
     }
 
     /**
