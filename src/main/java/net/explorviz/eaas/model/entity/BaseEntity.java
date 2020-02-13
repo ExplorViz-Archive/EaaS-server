@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
@@ -21,10 +22,8 @@ public abstract class BaseEntity implements Serializable, Persistable<Long> {
 
     @Id
     @GeneratedValue
+    @Nullable
     private Long id;
-
-    @Transient
-    private boolean isNew = true;
 
     //@CreatedBy
     //@ManyToOne(optional = false)
@@ -48,9 +47,9 @@ public abstract class BaseEntity implements Serializable, Persistable<Long> {
     @PastOrPresent
     private ZonedDateTime lastModifiedDate;
 
-    @PostPersist
-    @PostLoad
-    protected void markNotNew() {
-        this.isNew = false;
+    @Transient
+    @Override
+    public boolean isNew() {
+        return id == null;
     }
 }

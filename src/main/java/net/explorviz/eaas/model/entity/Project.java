@@ -49,7 +49,7 @@ public class Project extends BaseEntity {
     @JsonIgnore
     private List<Build> builds;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
     @JsonIgnore
     private List<Secret> secrets;
 
