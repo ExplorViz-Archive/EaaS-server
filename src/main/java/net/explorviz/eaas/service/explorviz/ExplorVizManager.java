@@ -41,7 +41,7 @@ public final class ExplorVizManager {
      * our port selection logic in #startInstance() cannot handle that.
      */
     private final ConcurrentMap<Integer, ExplorVizInstance> instances;
-    private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId;
+    private final ConcurrentMap<Build, ExplorVizInstance> instancesByBuild;
 
     /**
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
@@ -71,7 +71,7 @@ public final class ExplorVizManager {
         this.defaultVersion = defaultVersion;
 
         this.instances = new ConcurrentHashMap<>(maxInstances);
-        this.instancesByBuildId = new ConcurrentHashMap<>(maxInstances);
+        this.instancesByBuild = new ConcurrentHashMap<>(maxInstances);
     }
 
     /**
@@ -101,8 +101,8 @@ public final class ExplorVizManager {
         int frontendPort = frontendPortOffset + id;
         String accessUrl = accessUrlTemplate.replace("%FRONTEND_PORT%", Integer.toString(frontendPort));
 
-        ExplorVizInstance instance = new ExplorVizInstance(id, build.getId(), version, buildInstanceName(id, build),
-            frontendPort, accessUrl, build.getDockerImage());
+        ExplorVizInstance instance = new ExplorVizInstance(id, build, version, buildInstanceName(id, build),
+            frontendPort, accessUrl);
 
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
             instance.getFrontendPort());
@@ -116,12 +116,12 @@ public final class ExplorVizManager {
 
         instance.setRunning(true);
         instances.put(id, instance);
-        instancesByBuildId.put(instance.getBuildId(), instance);
+        instancesByBuild.put(instance.getBuild(), instance);
         return instance;
     }
 
     public Optional<ExplorVizInstance> getInstance(@NonNull Build build) {
-        return Optional.ofNullable(instancesByBuildId.get(build.getId()));
+        return Optional.ofNullable(instancesByBuild.get(build));
     }
 
     /**
@@ -146,7 +146,7 @@ public final class ExplorVizManager {
 
             instance.setRunning(false);
             instances.remove(instance.getId());
-            instancesByBuildId.remove(instance.getBuildId());
+            instancesByBuild.remove(instance.getBuild());
         }
     }
 

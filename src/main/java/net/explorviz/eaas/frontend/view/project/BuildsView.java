@@ -2,11 +2,14 @@ package net.explorviz.eaas.frontend.view.project;
 
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.Route;
+import net.explorviz.eaas.frontend.component.list.BuildListEntry;
+import net.explorviz.eaas.frontend.component.list.SimpleList;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
+import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.data.domain.Pageable;
 
 @Route(value = "builds", layout = ProjectLayout.class)
 public class BuildsView extends ProjectView {
@@ -25,6 +28,8 @@ public class BuildsView extends ProjectView {
     public void build() {
         add(new H2("Builds"));
 
-        // TODO: Builds view
+        SimpleList<Build> buildList = new SimpleList<>(build -> new BuildListEntry(build, explorVizManager));
+        buildList.addEntries(buildRepo.findByProjectOrderByCreatedDateDesc(getProject(), Pageable.unpaged()));
+        add(buildList);
     }
 }

@@ -11,9 +11,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Implements a simple list that can contain unique items of exactly one type {@code T}. A converter {@link Function} is
- * needed to convert the entries of type {@code T} to a {@link SimpleListEntry} that visually represents the entry. Only
- * unique entries can be added.
+ * Implements a simple list that can contain unique items of the type {@code T}. A converter {@link Function} is needed
+ * to convert the entries of type {@code T} to a {@link SimpleListEntry} that visually represents the entry. Only unique
+ * entries can be added. Note that the {@link SimpleListEntry} the converter function creates do not have to be of the
+ * same type.
  * <p>
  * No components should be added through the inherited {@link #add(Component...)} methods.
  */

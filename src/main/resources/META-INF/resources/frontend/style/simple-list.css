@@ -2,6 +2,7 @@
     margin-top: 0;
     list-style-type: none;
     padding-left: 0.5em;
+    width: initial !important;
 }
 
 .simple-list-entry {
@@ -11,33 +12,33 @@
 }
 
 .simple-list-entry p {
-    margin-bottom: 0;
+    margin-bottom: 0.5em;
 }
 
-.simple-list-entry h4, .simple-list-link {
+.simple-list-entry > h4, .simple-list-header {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
 
-.simple-list-link {
+.simple-list-header {
     display: flex;
     align-items: center;
 }
 
-.simple-list-link iron-icon {
+.simple-list-header iron-icon {
     width: 24px;
     height: 24px;
 
     margin-right: 0.4em;
 }
 
-.simple-list-link h4 {
+.simple-list-header h4 {
     margin-top: 0;
     margin-bottom: 0;
 }
 
-.instance-controls {
+.controls-bar {
     display: flex;
-    align-items: center;
-    margin-top: 1em;
+    align-items: baseline;
+    margin-top: 0;
 }
