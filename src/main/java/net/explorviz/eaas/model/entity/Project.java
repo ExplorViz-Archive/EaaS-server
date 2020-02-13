@@ -41,8 +41,7 @@ public class Project extends BaseEntity {
     private String name;
 
     /**
-     * Hidden projects are only visible to users who have the
-     * {@link net.explorviz.eaas.security.Authorities#READ_PROJECT_AUTHORITY} for it.
+     * Hidden projects are only visible to the owner of the project.
      */
     private boolean hidden;
 
