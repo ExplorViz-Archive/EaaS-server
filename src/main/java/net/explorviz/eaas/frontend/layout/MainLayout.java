@@ -37,16 +37,12 @@ public class MainLayout extends BaseLayout {
 
         Optional<User> user = SecurityUtils.getCurrentUser();
         if (user.isPresent()) {
-            Collection<Project> projects = projectRepo.findByOwner(user.get());
+            startSection("Your projects");
+            for (Project p : projectRepo.findByOwner(user.get())) {
+                assert p.getId() != null;
 
-            if (!projects.isEmpty()) {
-                startSection("Your projects");
-                for (Project p : projects) {
-                    assert p.getId() != null;
-
-                    addNavigationTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE,
-                        BuildsView.class, p.getId()));
-                }
+                addNavigationTab(
+                    NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE, BuildsView.class, p.getId()));
             }
         }
 

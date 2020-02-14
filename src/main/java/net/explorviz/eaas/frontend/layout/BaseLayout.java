@@ -76,8 +76,11 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
     }
 
     /**
-     * Add a tab to the current section. If {@link #startSection(String)} wasn't called since the last {@link
-     * #resetTabs()}, a default section without a label will be used.
+     * Add a tab to the current section if the current security context is authorized to access the navigation target
+     * according to {@link SecurityUtils#mayAccess(Class)}.
+     * <p>
+     * If {@link #startSection(String)} wasn't called since the last {@link #resetTabs()}, a default section without a
+     * label will be used.
      */
     protected void addNavigationTab(NavigationTab tab) {
         Class<? extends Component> target = tab.getNavigationTarget();
