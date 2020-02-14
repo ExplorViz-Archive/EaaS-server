@@ -2,6 +2,7 @@ package net.explorviz.eaas.security;
 
 import net.explorviz.eaas.frontend.view.LoginView;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +20,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final String LOGOUT_URL = "/logout";
     public static final String HOME_URL = "/";
 
+    /**
+     * Allow requests to the API, it uses secrets for authentications, not spring security
+     */
+    private static final String[] API_PATTERNS = { "/api/v1/**" };
+    /**
+     * Whitelist pages that *might be* public, we're doing fine-grained auth in Views on BeforeEnterEvent
+     */
+    private static final String[] POTENTIALLY_PUBLIC_PATTERNS = { "/", "/explore", "/explore/", "/builds/**" };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // Vaadin has built-in CSRF
@@ -35,10 +45,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // Allow all flow internal requests
             .requestMatchers(SecurityUtils::isVaadinInternalRequest).permitAll()
-            // Allows requests to the API, it uses secrets for authentications
-            .antMatchers("/api/v1/**").permitAll()
-            // Allow all requests, because we're doing fine-grained authentication in Vaadin views on BeforeEnterEvent
-            .anyRequest().permitAll()
+            .antMatchers(API_PATTERNS).permitAll()
+            .antMatchers(HttpMethod.GET, POTENTIALLY_PUBLIC_PATTERNS).permitAll()
+            /*
+             * All other paths are not known to ever be publicly accessible without login. We wouldn't *need* to
+             * prevent access here, because we also have to verify permission in the Views anyway, but better be safe
+             * than sorry. Note that these restrictions only apply on the first page load; subsequent page loads are
+             * done through Vaadins SPA frontend framework using internal requests (which we allow above).
+             */
+            .anyRequest().authenticated()
             // Configure the login page
             .and().formLogin().loginPage(LOGIN_URL).permitAll()
             .loginProcessingUrl(LOGIN_URL).failureUrl(LOGIN_URL + "?error")
