@@ -1,6 +1,7 @@
 package net.explorviz.eaas.frontend.view;
 
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
@@ -12,6 +13,7 @@ import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.SecurityUtils;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @PageTitle("Explore - " + Application.PAGE_TITLE)
@@ -31,15 +33,19 @@ public class ExploreView extends DynamicView {
 
         // TODO: Paging
         Optional<User> user = SecurityUtils.getCurrentUser();
-        Iterable<Project> projects;
+        Collection<Project> projects;
         if (user.isPresent()) {
             projects = projectRepo.findByHiddenOrOwner(false, user.get());
         } else {
             projects = projectRepo.findByHidden(false);
         }
 
-        SimpleList<Project> projectList = new SimpleList<>(ProjectListEntry::new);
-        projectList.addEntries(projects);
-        add(projectList);
+        if (projects.isEmpty()) {
+            add(new Paragraph("No projects have been created yet."));
+        } else {
+            SimpleList<Project> projectList = new SimpleList<>(ProjectListEntry::new);
+            projectList.addEntries(projects);
+            add(projectList);
+        }
     }
 }

@@ -20,6 +20,8 @@ import java.time.ZonedDateTime;
 public abstract class BaseEntity implements Serializable, Persistable<Long> {
     private static final long serialVersionUID = 3255268320796480569L;
 
+    // TODO: Replace class with org.springframework.data.jpa.domain.AbstractAuditable
+
     @Id
     @GeneratedValue
     @Nullable
