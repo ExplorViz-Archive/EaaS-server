@@ -88,11 +88,12 @@ public class ProjectsController {
      * resulting path as plain text.
      */
     @RequestMapping(path = "/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
-    public String postProjectBuild(@RequestHeader(SECRET_HEADER) String secret,
+    public String postProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
                                    @PathVariable("project") long projectId,
                                    @RequestParam("name") String name,
                                    @RequestParam("imageID") String imageID,
                                    @RequestParam("image") MultipartFile image) {
+        // Note we've put SECRET_HEADER as optional because we generate our own error message in APIAuthenticator
         Project project = findProjectByIdAndAuthorize(projectId, secret, false);
 
         if (name.length() < Build.NAME_MIN_LENGTH || name.length() > Build.NAME_MAX_LENGTH) {

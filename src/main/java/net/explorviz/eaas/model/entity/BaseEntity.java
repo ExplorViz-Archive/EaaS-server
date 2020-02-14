@@ -23,7 +23,7 @@ public abstract class BaseEntity implements Serializable, Persistable<Long> {
     // TODO: Replace class with org.springframework.data.jpa.domain.AbstractAuditable
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Nullable
     private Long id;
 
