@@ -8,11 +8,15 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.model.entity.Project;
+import net.explorviz.eaas.model.entity.Secret;
 import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.model.repository.SecretRepository;
+import net.explorviz.eaas.security.KeyGenerator;
 import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -20,6 +24,7 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
 public class NewProjectView extends VerticalLayout {
@@ -28,11 +33,15 @@ public class NewProjectView extends VerticalLayout {
     private static final Pattern NAME_PATTERN = Pattern.compile(Project.NAME_PATTERN);
 
     private final ProjectRepository projectRepo;
+    private final SecretRepository secretRepo;
+    private final KeyGenerator keyGenerator;
 
     private final TextField projectName;
 
-    public NewProjectView(ProjectRepository projectRepo) {
+    public NewProjectView(ProjectRepository projectRepo, SecretRepository secretRepo, KeyGenerator keyGenerator) {
         this.projectRepo = projectRepo;
+        this.secretRepo = secretRepo;
+        this.keyGenerator = keyGenerator;
 
         add(new H2("New project"));
 
@@ -70,6 +79,10 @@ public class NewProjectView extends VerticalLayout {
 
             Project project = projectRepo.save(new Project(name, user.get()));
             projectName.clear();
+
+            // TODO: Remove dummy secret generation during development
+            Secret secret = secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));
+            log.info("Secret for new project {} is {}", project.getName(), secret.getSecret());
 
             UI.getCurrent().navigate(BuildsView.class, project.getId());
             Notification.show("Created project " + project.getName());

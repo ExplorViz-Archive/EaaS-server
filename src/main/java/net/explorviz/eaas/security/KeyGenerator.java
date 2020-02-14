@@ -1,5 +1,6 @@
 package net.explorviz.eaas.security;
 
+import net.explorviz.eaas.model.entity.Secret;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class KeyGenerator {
     public KeyGenerator(@Value("${eaas.security.defaultPasswordLength:16}") int passwordLength,
                         @Value("${eaas.security.apiKeyBytes:16}") int apiKeyBytes) {
         Validate.isTrue(passwordLength > 0, "passwordLength must be positive: %d", passwordLength);
-        Validate.isTrue(apiKeyBytes > 0, "apiKeyBytes must be positive: %d", apiKeyBytes);
+        Validate.inclusiveBetween(1, Secret.SECRET_MAX_LENGTH / 2, apiKeyBytes);
 
         this.passwordLength = passwordLength;
         this.apiKeyBytes = apiKeyBytes;

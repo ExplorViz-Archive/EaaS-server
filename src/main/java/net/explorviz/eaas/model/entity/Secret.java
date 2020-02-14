@@ -36,7 +36,7 @@ public class Secret extends BaseEntity {
     private Project project;
 
     @NotEmpty
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
     private String name;
 
