@@ -5,6 +5,7 @@ import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.dom.ElementFactory;
 import net.explorviz.eaas.frontend.component.InstanceControls;
 import net.explorviz.eaas.frontend.component.RunBuildControls;
 import net.explorviz.eaas.model.entity.Build;

@@ -41,7 +41,7 @@ public final class ExplorVizManager {
      * our port selection logic in #startInstance() cannot handle that.
      */
     private final ConcurrentMap<Integer, ExplorVizInstance> instances;
-    private final ConcurrentMap<Build, ExplorVizInstance> instancesByBuild;
+    private final ConcurrentMap<Long, ExplorVizInstance> instancesByBuildId;
 
     /**
      * Keep track of which ID to use next in order to use all ports equally. Will decay over time so not as good as LRU
@@ -71,8 +71,10 @@ public final class ExplorVizManager {
         this.defaultVersion = defaultVersion;
 
         this.instances = new ConcurrentHashMap<>(maxInstances);
-        this.instancesByBuild = new ConcurrentHashMap<>(maxInstances);
+        this.instancesByBuildId = new ConcurrentHashMap<>(maxInstances);
     }
+
+    // TODO: Support multiple instances of the same build - requires changes in frontend as well
 
     /**
      * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.
@@ -116,12 +118,12 @@ public final class ExplorVizManager {
 
         instance.setRunning(true);
         instances.put(id, instance);
-        instancesByBuild.put(instance.getBuild(), instance);
+        instancesByBuildId.put(build.getId(), instance);
         return instance;
     }
 
     public Optional<ExplorVizInstance> getInstance(@NonNull Build build) {
-        return Optional.ofNullable(instancesByBuild.get(build));
+        return Optional.ofNullable(instancesByBuildId.get(build.getId()));
     }
 
     /**
@@ -146,7 +148,7 @@ public final class ExplorVizManager {
 
             instance.setRunning(false);
             instances.remove(instance.getId());
-            instancesByBuild.remove(instance.getBuild());
+            instancesByBuildId.remove(instance.getBuild().getId());
         }
     }
 

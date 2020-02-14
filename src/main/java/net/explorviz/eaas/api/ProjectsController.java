@@ -26,7 +26,7 @@ import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER;
 @RequestMapping("/api/v1/projects")
 @Slf4j
 public class ProjectsController {
-    public static final Build[] EMPTY_BUILD_ARRAY = new Build[0];
+    private static final Build[] EMPTY_BUILD_ARRAY = new Build[0];
 
     private final ProjectRepository projectRepository;
     private final BuildRepository buildRepository;
@@ -85,7 +85,7 @@ public class ProjectsController {
 
     /**
      * To simplify the build upload script this method doesn't use JSON but form data for input and outputs the
-     * resulting path as plain text.
+     * created build ID as plain text.
      */
     @RequestMapping(path = "/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
     public String postProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
@@ -101,6 +101,8 @@ public class ProjectsController {
                 Build.NAME_MIN_LENGTH + " and " + Build.NAME_MAX_LENGTH + " characters long!");
         }
 
+        // TODO: Check if name and imageID are unique
+
         log.info("Receiving new build for project #{} ('{}') with name '{}'", projectId, project.getName(), name);
         log.debug("Image has size {} B, original filename '{}'", image.getSize(), image.getOriginalFilename());
 
@@ -108,10 +110,10 @@ public class ProjectsController {
             dockerAdapter.loadImage(stream);
         } catch (AdapterException e) {
             log.error("Loading image of new build in docker failed", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Docker couldn't load image");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't load docker image");
         } catch (IOException e) {
             log.error("Reading image of new build from client failed", e);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "I/O Error while receiving the image");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "I/O Error while reading the image");
         }
 
         /*
@@ -119,8 +121,7 @@ public class ProjectsController {
          *       client. This shouldn't be a problem since they could upload anything they wanted anyway. Leaking
          *       'secret' images present in the host system also seems unlikely.
          */
-        Build build = buildRepository.save(new Build(name, project, imageID));
-        return "/build/" + build.getId();
+        return buildRepository.save(new Build(name, project, imageID)).getId().toString();
     }
 
     /**

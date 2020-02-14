@@ -26,6 +26,7 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project, L
 
     Page<Project> findByHiddenOrOwner(boolean hidden, User owner, Pageable pageable);
 
+    // TODO: Fix projects are not distinct, and why  would they be, it just says it in the query
     @Query("SELECT DISTINCT p AS project, b AS build FROM Project p " +
                "LEFT JOIN p.builds b " +
                "WHERE p.hidden = false " +

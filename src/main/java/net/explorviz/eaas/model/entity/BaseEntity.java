@@ -1,5 +1,6 @@
 package net.explorviz.eaas.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -50,6 +51,7 @@ public abstract class BaseEntity implements Serializable, Persistable<Long> {
     private ZonedDateTime lastModifiedDate;
 
     @Transient
+    @JsonIgnore
     @Override
     public boolean isNew() {
         return id == null;
