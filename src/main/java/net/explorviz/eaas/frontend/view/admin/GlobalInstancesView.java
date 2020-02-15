@@ -24,7 +24,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 @PageTitle("Instances - " + Application.PAGE_TITLE)
 @Route(value = "instances", layout = MainLayout.class)
 @Secured("MANAGE_INSTANCES")
-public class InstancesView extends DynamicView {
+public class GlobalInstancesView extends DynamicView {
     private static final long serialVersionUID = 2570920838715737622L;
 
     private final ExplorVizManager manager;
@@ -34,7 +34,7 @@ public class InstancesView extends DynamicView {
 
     private SimpleList<ExplorVizInstance> instanceList;
 
-    public InstancesView(ExplorVizManager manager) {
+    public GlobalInstancesView(ExplorVizManager manager) {
         this.manager = manager;
 
         controls = new RunBuildControls(new DummyBuild(), manager, this::onStartInstance);

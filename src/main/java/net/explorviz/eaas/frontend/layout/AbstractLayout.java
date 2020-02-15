@@ -29,7 +29,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading4;
  */
 @Slf4j
 @CssImport("./style/layout.css")
-public abstract class BaseLayout extends AppLayout implements BeforeEnterObserver {
+public abstract class AbstractLayout extends AppLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 6416207502947013549L;
 
     private final Collection<Tabs> sections = new ArrayList<>(3);
@@ -41,7 +41,7 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
     private String currentLabel;
     private Tabs currentSection;
 
-    protected BaseLayout() {
+    protected AbstractLayout() {
         addToNavbar(new DrawerToggle());
         addToNavbar(new ExplorVizBanner(false));
         addToNavbar(new NavbarActions());

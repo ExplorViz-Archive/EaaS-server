@@ -23,7 +23,7 @@ import java.util.Optional;
  * Checks if the current security context has the necessary authority to read the project in {@link
  * #beforeEnter(BeforeEnterEvent)}.
  */
-public abstract class ProjectView extends DynamicView implements HasUrlParameter<Long>, HasDynamicTitle {
+public abstract class AbstractProjectView extends DynamicView implements HasUrlParameter<Long>, HasDynamicTitle {
     private static final long serialVersionUID = 8034796492440190988L;
 
     private final ProjectRepository projectRepo;
@@ -32,7 +32,7 @@ public abstract class ProjectView extends DynamicView implements HasUrlParameter
     @Getter(AccessLevel.PROTECTED)
     private Project project;
 
-    protected ProjectView(ProjectRepository projectRepo, @NonNull String subPageTitle) {
+    protected AbstractProjectView(ProjectRepository projectRepo, @NonNull String subPageTitle) {
         this.projectRepo = projectRepo;
         this.subPageTitle = subPageTitle;
     }

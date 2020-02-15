@@ -9,7 +9,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "settings", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
-public class SettingsView extends ProjectView {
+public class SettingsView extends AbstractProjectView {
     private static final long serialVersionUID = -6650300496191931405L;
 
     public SettingsView(ProjectRepository projectRepo) {

@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import static com.vaadin.flow.dom.ElementFactory.createHeading4;
 import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
-public class ExplorVizListEntry extends SimpleListEntry {
+public class ExplorVizListEntry extends AbstractListEntry {
     private static final long serialVersionUID = -1493130701688498902L;
 
     /**

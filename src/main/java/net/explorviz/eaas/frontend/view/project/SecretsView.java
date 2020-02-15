@@ -10,7 +10,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "secrets", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
-public class SecretsView extends ProjectView {
+public class SecretsView extends AbstractProjectView {
     private static final long serialVersionUID = -2777916910494366724L;
 
     private final SecretRepository secretRepo;

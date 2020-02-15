@@ -17,7 +17,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
 @Route(value = "builds", layout = ProjectLayout.class)
-public class BuildsView extends ProjectView {
+public class BuildsView extends AbstractProjectView {
     private static final long serialVersionUID = -2777916910494366724L;
 
     private final BuildRepository buildRepo;

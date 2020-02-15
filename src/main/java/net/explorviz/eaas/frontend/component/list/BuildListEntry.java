@@ -20,7 +20,7 @@ import static com.vaadin.flow.dom.ElementFactory.createParagraph;
  * Represents a single build in a {@link SimpleList}, displaying the appropriate controls whether there is already an
  * {@link ExplorVizInstance} running for this build or not.
  */
-public class BuildListEntry extends SimpleListEntry {
+public class BuildListEntry extends AbstractListEntry {
     private static final long serialVersionUID = -370968210512960640L;
 
     private final Build build;

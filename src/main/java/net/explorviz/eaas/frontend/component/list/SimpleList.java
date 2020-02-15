@@ -12,9 +12,9 @@ import java.util.function.Function;
 
 /**
  * Implements a simple list that can contain unique items of the type {@code T}. A converter {@link Function} is needed
- * to convert the entries of type {@code T} to a {@link SimpleListEntry} that visually represents the entry. Only unique
- * entries can be added. Note that the {@link SimpleListEntry} the converter function creates do not have to be of the
- * same type.
+ * to convert the entries of type {@code T} to a {@link AbstractListEntry} that visually represents the entry. Only
+ * unique entries can be added. Note that the {@link AbstractListEntry} the converter function creates do not have to be
+ * of the same type.
  * <p>
  * No components should be added through the inherited {@link #add(Component...)} methods.
  */
@@ -24,16 +24,16 @@ import java.util.function.Function;
 public class SimpleList<T> extends VerticalLayout {
     private static final long serialVersionUID = 8287505649008791683L;
 
-    private final Function<? super T, ? extends SimpleListEntry> converter;
+    private final Function<? super T, ? extends AbstractListEntry> converter;
 
-    private final Map<T, SimpleListEntry> entries = new HashMap<>();
+    private final Map<T, AbstractListEntry> entries = new HashMap<>();
 
     // TODO: Redesign to support paging (without having to fetch all entries beforehand) or create PagedList<T>
 
     /**
      * @param converter Function used to create components that visually represent the added entries
      */
-    public SimpleList(Function<? super T, ? extends SimpleListEntry> converter) {
+    public SimpleList(Function<? super T, ? extends AbstractListEntry> converter) {
         addClassName("simple-list");
 
         this.converter = converter;
@@ -46,13 +46,13 @@ public class SimpleList<T> extends VerticalLayout {
      */
     public void addEntry(T entry) {
         if (entries.containsKey(entry)) {
-            // If we allowed this we would lose track of the previous SimpleListEntry
+            // If we allowed this we would lose track of the previous AbstractListEntry
             log.warn("Tried to add an entry of type '{}' into a SimpleList twice. This is a bug",
                 entry.getClass().getCanonicalName());
             return;
         }
 
-        SimpleListEntry component = converter.apply(entry);
+        AbstractListEntry component = converter.apply(entry);
         entries.put(entry, component);
         add(component);
     }
@@ -70,7 +70,7 @@ public class SimpleList<T> extends VerticalLayout {
      * Remove a previously added entry from this list. If the entry is not in the list, this method does nothing.
      */
     public void removeEntry(T entry) {
-        SimpleListEntry component = entries.remove(entry);
+        AbstractListEntry component = entries.remove(entry);
         if (component != null) {
             remove(component);
         }

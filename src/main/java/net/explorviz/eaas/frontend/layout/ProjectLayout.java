@@ -14,7 +14,7 @@ import net.explorviz.eaas.model.repository.ProjectRepository;
 
 import java.util.Optional;
 
-public class ProjectLayout extends BaseLayout {
+public class ProjectLayout extends AbstractLayout {
     private static final long serialVersionUID = 8689866379276497334L;
 
     private final ProjectRepository projectRepository;

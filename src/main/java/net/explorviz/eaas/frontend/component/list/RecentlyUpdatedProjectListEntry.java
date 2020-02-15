@@ -11,12 +11,12 @@ import java.time.format.FormatStyle;
 
 import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
-public class RecentlyUpdatedProjectListEntry extends SimpleListEntry {
+public class RecentlyUpdatedProjectListEntry extends AbstractListEntry {
     private static final long serialVersionUID = 1589947241429733513L;
 
     public RecentlyUpdatedProjectListEntry(RecentlyUpdatedResult recentlyUpdatedResult) {
         Project project = recentlyUpdatedResult.getProject();
-        add(new SimpleListLink(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE, project.getName()));
+        add(new RichLinkHeader(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE, project.getName()));
 
         Build build = recentlyUpdatedResult.getBuild();
         if (build != null) {
