@@ -1,11 +1,12 @@
 package net.explorviz.eaas.frontend.view.project;
 
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.model.repository.SecretRepository;
 import org.springframework.security.access.annotation.Secured;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "secrets", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
@@ -21,7 +22,7 @@ public class SecretsView extends ProjectView {
 
     @Override
     public void build() {
-        add(new H2("Secrets"));
+        getElement().appendChild(createHeading2("Secrets"));
 
         // TODO: Secrets view
     }

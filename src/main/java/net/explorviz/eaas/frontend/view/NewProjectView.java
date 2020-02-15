@@ -1,8 +1,6 @@
 package net.explorviz.eaas.frontend.view;
 
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -24,6 +22,8 @@ import org.springframework.util.StringUtils;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+
 @Slf4j
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
@@ -43,7 +43,7 @@ public class NewProjectView extends VerticalLayout {
         this.secretRepo = secretRepo;
         this.keyGenerator = keyGenerator;
 
-        add(new H2("New project"));
+        getElement().appendChild(createHeading2("New project"));
 
         projectName = new TextField();
         projectName.setMinLength(Project.NAME_MIN_LENGTH);
@@ -84,7 +84,7 @@ public class NewProjectView extends VerticalLayout {
             Secret secret = secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));
             log.info("Secret for new project {} is {}", project.getName(), secret.getSecret());
 
-            UI.getCurrent().navigate(BuildsView.class, project.getId());
+            getUI().ifPresent(ui -> ui.navigate(BuildsView.class, project.getId()));
             Notification.show("Created project " + project.getName());
         }
     }

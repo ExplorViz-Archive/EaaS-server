@@ -1,11 +1,12 @@
 package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import net.explorviz.eaas.Application;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @CssImport("./style/explorviz-banner.css")
 public class ExplorVizBanner extends HorizontalLayout {
@@ -19,7 +20,7 @@ public class ExplorVizBanner extends HorizontalLayout {
         addClassName("explorviz-banner-" + (big ? "big" : "small"));
 
         add(new Image("/icons/icon-192x192.png", "ExplorViz"));
-        add(new H2(Application.PAGE_TITLE));
+        getElement().appendChild(createHeading2(Application.PAGE_TITLE));
 
         setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
     }

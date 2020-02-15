@@ -1,7 +1,5 @@
 package net.explorviz.eaas.frontend.view.project;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.component.list.BuildListEntry;
 import net.explorviz.eaas.frontend.component.list.SimpleList;
@@ -14,6 +12,9 @@ import net.explorviz.eaas.security.SecurityUtils;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
 @Route(value = "builds", layout = ProjectLayout.class)
 public class BuildsView extends ProjectView {
@@ -30,7 +31,7 @@ public class BuildsView extends ProjectView {
 
     @Override
     public void build() {
-        add(new H2("Builds"));
+        getElement().appendChild(createHeading2("Builds"));
 
         // TODO: Display currently running builds on top or add a general project page containing live + recent builds
 
@@ -38,10 +39,11 @@ public class BuildsView extends ProjectView {
         Page<Build> builds = buildRepo.findByProjectOrderByCreatedDateDesc(getProject(), Pageable.unpaged());
 
         if (builds.isEmpty()) {
-            add(new Paragraph("No builds have been added yet."));
+            getElement().appendChild(createParagraph("No builds have been added yet."));
 
             if (SecurityUtils.hasAuthority(Authorities.MANAGE_PROJECT_AUTHORITY)) {
-                add(new Paragraph("Go to the Secrets page and create a secret to start adding builds."));
+                getElement().appendChild(
+                    createParagraph("Go to the Secrets page and create a secret to start adding builds."));
             }
         } else {
             SimpleList<Build> buildList = new SimpleList<>(build -> new BuildListEntry(build, explorVizManager));

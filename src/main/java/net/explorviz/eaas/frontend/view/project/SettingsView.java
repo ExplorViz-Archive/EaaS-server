@@ -1,10 +1,11 @@
 package net.explorviz.eaas.frontend.view.project;
 
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import org.springframework.security.access.annotation.Secured;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "settings", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
@@ -17,7 +18,7 @@ public class SettingsView extends ProjectView {
 
     @Override
     protected void build() {
-        add(new H2("Settings"));
+        getElement().appendChild(createHeading2("Settings"));
 
         // TODO: Settings view
     }

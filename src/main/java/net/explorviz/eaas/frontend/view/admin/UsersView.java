@@ -1,6 +1,5 @@
 package net.explorviz.eaas.frontend.view.admin;
 
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
@@ -8,6 +7,8 @@ import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.repository.UserRepository;
 import org.springframework.security.access.annotation.Secured;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @PageTitle("Users - " + Application.PAGE_TITLE)
 @Route(value = "users", layout = MainLayout.class)
@@ -23,7 +24,7 @@ public class UsersView extends DynamicView {
 
     @Override
     protected void build() {
-        add(new H2("Users"));
+        getElement().appendChild(createHeading2("Users"));
 
         //add(new UserList(userRepository));
     }

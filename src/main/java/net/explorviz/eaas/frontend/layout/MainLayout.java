@@ -13,7 +13,6 @@ import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.SecurityUtils;
 
-import java.util.Collection;
 import java.util.Optional;
 
 /**

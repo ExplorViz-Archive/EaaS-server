@@ -17,4 +17,9 @@
     <Match>
         <Bug pattern="SE_BAD_FIELD"/>
     </Match>
+
+    <!-- Useful but too many false positives with Nullables -->
+    <Match>
+        <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+    </Match>
 </FindBugsFilter>

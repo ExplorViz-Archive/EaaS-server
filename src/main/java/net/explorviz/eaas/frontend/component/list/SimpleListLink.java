@@ -1,10 +1,11 @@
 package net.explorviz.eaas.frontend.component.list;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.icon.IconFactory;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.RouterLink;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading4;
 
 /**
  * Can be used as header in {@link SimpleListEntry} presenting a rich link.
@@ -18,6 +19,6 @@ public class SimpleListLink extends RouterLink {
 
         setRoute(navigationTarget, parameter);
         add(icon.create());
-        add(new H4(name));
+        getElement().appendChild(createHeading4(name));
     }
 }

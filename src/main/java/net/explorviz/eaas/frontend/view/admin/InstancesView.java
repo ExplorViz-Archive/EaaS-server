@@ -1,7 +1,6 @@
 package net.explorviz.eaas.frontend.view.admin;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.PageTitle;
@@ -12,13 +11,15 @@ import net.explorviz.eaas.frontend.component.list.ExplorVizListEntry;
 import net.explorviz.eaas.frontend.component.list.SimpleList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
+import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
-import net.explorviz.eaas.model.entity.Build;
 import org.springframework.security.access.annotation.Secured;
 
 import javax.persistence.PrePersist;
 import java.util.Collection;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @PageTitle("Instances - " + Application.PAGE_TITLE)
 @Route(value = "instances", layout = MainLayout.class)
@@ -47,7 +48,7 @@ public class InstancesView extends DynamicView {
 
     @Override
     protected void build() {
-        add(new H2("ExplorViz Instances"));
+        getElement().appendChild(createHeading2("ExplorViz Instances"));
 
         add(controls);
 

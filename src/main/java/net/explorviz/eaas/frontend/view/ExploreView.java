@@ -1,7 +1,5 @@
 package net.explorviz.eaas.frontend.view;
 
-import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
@@ -16,6 +14,9 @@ import net.explorviz.eaas.security.SecurityUtils;
 import java.util.Collection;
 import java.util.Optional;
 
+import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+import static com.vaadin.flow.dom.ElementFactory.createParagraph;
+
 @PageTitle("Explore - " + Application.PAGE_TITLE)
 @Route(value = "explore", layout = MainLayout.class)
 public class ExploreView extends DynamicView {
@@ -29,7 +30,7 @@ public class ExploreView extends DynamicView {
 
     @Override
     protected void build() {
-        add(new H2("All projects"));
+        getElement().appendChild(createHeading2("All projects"));
 
         // TODO: Paging
         Optional<User> user = SecurityUtils.getCurrentUser();
@@ -41,7 +42,7 @@ public class ExploreView extends DynamicView {
         }
 
         if (projects.isEmpty()) {
-            add(new Paragraph("No projects have been created yet."));
+            getElement().appendChild(createParagraph("No projects have been created yet."));
         } else {
             SimpleList<Project> projectList = new SimpleList<>(ProjectListEntry::new);
             projectList.addEntries(projects);

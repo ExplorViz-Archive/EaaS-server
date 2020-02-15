@@ -4,11 +4,11 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.frontend.component.ExplorVizBanner;
 import net.explorviz.eaas.frontend.layout.component.NavbarActions;
@@ -16,7 +16,12 @@ import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.lang.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.vaadin.flow.dom.ElementFactory.createHeading4;
 
 /**
  * <b>Note for child classes:</b> All tab entries have to be added in {@link #build()} so they are available when this
@@ -91,7 +96,7 @@ public abstract class BaseLayout extends AppLayout implements BeforeEnterObserve
                 sections.add(currentSection);
 
                 if (currentLabel != null) {
-                    navigation.add(new H4(currentLabel));
+                    navigation.getElement().appendChild(createHeading4(currentLabel));
                 }
                 navigation.add(currentSection);
             }

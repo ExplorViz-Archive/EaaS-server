@@ -37,6 +37,8 @@ public class ProjectLayout extends BaseLayout {
     protected void build() {
         addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A, MainView.class));
 
+        assert project.getId() != null;
+
         startSection(project.getName());
         addNavigationTab(
             NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class, project.getId()));
