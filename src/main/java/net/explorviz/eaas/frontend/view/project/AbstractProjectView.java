@@ -9,6 +9,7 @@ import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
@@ -30,6 +31,7 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
     private final String subPageTitle;
 
     @Getter(AccessLevel.PROTECTED)
+    @Nullable
     private Project project;
 
     protected AbstractProjectView(ProjectRepository projectRepo, @NonNull String subPageTitle) {
@@ -51,6 +53,8 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
+        assert project != null : "Method should not have been called yet";
+
         if (!SecurityUtils.mayAccessProject(project)) {
             throw new AccessDeniedException("You do not have permission to access this page.");
         }
@@ -60,6 +64,8 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
 
     @Override
     public String getPageTitle() {
+        assert project != null : "Method should not have been called yet";
+
         return subPageTitle + " - " + project.getName() + " - " + Application.PAGE_TITLE;
     }
 }

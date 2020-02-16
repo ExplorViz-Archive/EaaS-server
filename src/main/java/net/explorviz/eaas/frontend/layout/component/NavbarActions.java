@@ -19,9 +19,9 @@ public class NavbarActions extends HorizontalLayout {
         add(homepage);
 
         if (SecurityUtils.isUserLoggedIn()) {
-            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGOUT_URL, VaadinIcon.SIGN_OUT, "Logout"));
+            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGOUT_URL, VaadinIcon.SIGN_OUT.create(), "Logout"));
         } else {
-            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGIN_URL, VaadinIcon.SIGN_IN, "Login"));
+            add(IconAnchor.createFromIcon(SecurityConfiguration.LOGIN_URL, VaadinIcon.SIGN_IN.create(), "Login"));
         }
     }
 }

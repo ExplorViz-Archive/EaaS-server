@@ -1,7 +1,6 @@
 package net.explorviz.eaas.frontend.view;
 
 import com.vaadin.flow.component.Tag;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
@@ -17,7 +16,6 @@ import java.util.Collections;
 @Tag("sa-login-view")
 @Route(LoginView.ROUTE)
 @PageTitle("Login - " + Application.PAGE_TITLE)
-@CssImport("./style/login-view.css")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 1010867826588360870L;
 
@@ -27,6 +25,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private final LoginForm login = new LoginForm();
 
     public LoginView() {
+        addClassName("centered-view");
+
         add(new ExplorVizBanner(true));
 
         login.setAction(ROUTE);

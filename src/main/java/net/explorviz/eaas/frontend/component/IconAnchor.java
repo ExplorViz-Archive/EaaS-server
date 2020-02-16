@@ -3,7 +3,7 @@ package net.explorviz.eaas.frontend.component;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.icon.IconFactory;
+import com.vaadin.flow.component.icon.Icon;
 
 import static com.vaadin.flow.dom.Element.createText;
 
@@ -22,8 +22,8 @@ public class IconAnchor extends Anchor {
     /**
      * Create an IconAnchor displaying the given VaadinIcon next to the text.
      */
-    public static IconAnchor createFromIcon(String href, IconFactory icon, String text) {
-        return new IconAnchor(href, icon.create(), text);
+    public static IconAnchor createFromIcon(String href, Icon icon, String text) {
+        return new IconAnchor(href, icon, text);
     }
 
     /**

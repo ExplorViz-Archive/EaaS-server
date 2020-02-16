@@ -19,7 +19,6 @@ import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
 
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
@@ -57,10 +56,8 @@ public class NewProjectView extends VerticalLayout {
     }
 
     private void doCreateProject() {
-        Optional<User> user = SecurityUtils.getCurrentUser();
-        if (user.isEmpty()) {
-            throw new IllegalStateException("Tried to create project from unauthenticated context");
-        }
+        User user = SecurityUtils.getCurrentUser().orElseThrow(() ->
+            new IllegalStateException("Tried to create project from unauthenticated context"));
 
         String name = StringUtils.trimWhitespace(projectName.getValue());
 
@@ -77,7 +74,7 @@ public class NewProjectView extends VerticalLayout {
             projectName.setInvalid(false);
             projectName.setErrorMessage(null);
 
-            Project project = projectRepo.save(new Project(name, user.get()));
+            Project project = projectRepo.save(new Project(name, user));
             projectName.clear();
 
             // TODO: Remove dummy secret generation during development

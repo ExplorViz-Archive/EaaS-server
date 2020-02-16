@@ -16,7 +16,7 @@ public class RecentlyUpdatedProjectListEntry extends AbstractListEntry {
 
     public RecentlyUpdatedProjectListEntry(RecentlyUpdatedResult recentlyUpdatedResult) {
         Project project = recentlyUpdatedResult.getProject();
-        add(new RichLinkHeader(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE, project.getName()));
+        add(new RichLinkHeader(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE.create(), project.getName()));
 
         Build build = recentlyUpdatedResult.getBuild();
         if (build != null) {

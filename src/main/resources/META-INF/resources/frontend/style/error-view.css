@@ -1,0 +1,9 @@
+sa-error-view iron-icon {
+    width: 128px;
+    height: 128px;
+    margin: 1em;
+}
+
+sa-error-view p {
+    font-size: large;
+}

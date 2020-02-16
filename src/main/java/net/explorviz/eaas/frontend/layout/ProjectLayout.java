@@ -14,7 +14,10 @@ import net.explorviz.eaas.model.repository.ProjectRepository;
 
 import java.util.Optional;
 
-public class ProjectLayout extends AbstractLayout {
+/**
+ * Layout used for all project-specific views, with sidebar menu entries for that project.
+ */
+public class ProjectLayout extends NavigationLayout {
     private static final long serialVersionUID = 8689866379276497334L;
 
     private final ProjectRepository projectRepository;
@@ -27,33 +30,40 @@ public class ProjectLayout extends AbstractLayout {
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        project = parseProjectParameter(event.getLocation())
-                      .orElseThrow(() -> new NotFoundException("Project not found"));
+        Optional<Project> optionalProject = parseProjectParameter(event.getLocation());
+
+        if (optionalProject.isEmpty()) {
+            event.rerouteToError(NotFoundException.class, "Project not found");
+            return;
+        }
+
+        project = optionalProject.get();
 
         super.beforeEnter(event);
     }
 
     @Override
-    protected void build() {
-        addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A, MainView.class));
+    protected void buildNavigation() {
+        addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A.create(), MainView.class));
 
-        assert project.getId() != null;
+        assert project.getId() != null : "Project fetched from database has no ID";
 
         startSection(project.getName());
         addNavigationTab(
-            NavigationTab.createWithParameter("Builds", VaadinIcon.LIST, BuildsView.class, project.getId()));
+            NavigationTab.createWithParameter("Builds", VaadinIcon.LIST.create(), BuildsView.class, project.getId()));
         addNavigationTab(
-            NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY, SecretsView.class, project.getId()));
+            NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY.create(), SecretsView.class, project.getId()));
         addNavigationTab(
-            NavigationTab.createWithParameter("Settings", VaadinIcon.COG, SettingsView.class, project.getId()));
+            NavigationTab.createWithParameter("Settings", VaadinIcon.COG.create(), SettingsView.class,
+                project.getId()));
     }
 
     private Optional<Project> parseProjectParameter(Location location) {
         try {
             return location.getSubLocation()
-                       .map(Location::getFirstSegment)
-                       .map(Long::parseLong)
-                       .flatMap(projectRepository::findById);
+                .map(Location::getFirstSegment)
+                .map(Long::parseLong)
+                .flatMap(projectRepository::findById);
         } catch (NumberFormatException e) {
             return Optional.empty();
         }

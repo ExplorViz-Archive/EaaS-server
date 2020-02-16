@@ -1,7 +1,7 @@
 package net.explorviz.eaas.frontend.layout.component;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.icon.IconFactory;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.RouterLink;
@@ -16,21 +16,21 @@ public class NavigationTab extends Tab {
     @Getter
     private final Class<? extends Component> navigationTarget;
 
-    protected NavigationTab(RouterLink routerLink, String label, IconFactory icon,
+    protected NavigationTab(RouterLink routerLink, String label, Icon icon,
                             Class<? extends Component> navigationTarget) {
         this.navigationTarget = navigationTarget;
 
         addClassName("navigation-tab");
 
-        routerLink.add(icon.create());
+        routerLink.add(icon);
         routerLink.getElement().appendChild(createText(label));
         add(routerLink);
     }
 
     /**
-     * @see #createWithParameter(String, IconFactory, Class, Object)
+     * @see #createWithParameter(String, Icon, Class, Object)
      */
-    public static NavigationTab create(@NonNull String label, @NonNull IconFactory icon,
+    public static NavigationTab create(@NonNull String label, @NonNull Icon icon,
                                        @NonNull Class<? extends Component> navigationTarget) {
         RouterLink link = new RouterLink();
         link.setRoute(navigationTarget);
@@ -46,7 +46,7 @@ public class NavigationTab extends Tab {
      * @param parameter        Parameter for the view, which needs to be a {@link HasUrlParameter}
      */
     public static <T, C extends Component & HasUrlParameter<T>>
-        NavigationTab createWithParameter(@NonNull String label, @NonNull IconFactory icon,
+        NavigationTab createWithParameter(@NonNull String label, @NonNull Icon icon,
                                           @NonNull Class<? extends C> navigationTarget, @NonNull T parameter) {
         RouterLink link = new RouterLink();
         link.setRoute(navigationTarget, parameter);

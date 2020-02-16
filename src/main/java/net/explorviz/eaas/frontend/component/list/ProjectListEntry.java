@@ -13,7 +13,7 @@ public class ProjectListEntry extends AbstractListEntry {
     private static final long serialVersionUID = 8271392331540142853L;
 
     public ProjectListEntry(Project project) {
-        add(new RichLinkHeader(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE, project.getName()));
+        add(new RichLinkHeader(BuildsView.class, project.getId(), VaadinIcon.ARCHIVE.create(), project.getName()));
 
         getElement().appendChild(createParagraph("Created " + project.getCreatedDate().format(
             DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)

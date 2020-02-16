@@ -1,7 +1,7 @@
 package net.explorviz.eaas.frontend.component.list;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.icon.IconFactory;
+import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.RouterLink;
 
@@ -14,11 +14,11 @@ public class RichLinkHeader extends RouterLink {
     private static final long serialVersionUID = -4492818211213423908L;
 
     public <T, C extends Component & HasUrlParameter<T>> RichLinkHeader(Class<? extends C> navigationTarget,
-                                                                        T parameter, IconFactory icon, String name) {
+                                                                        T parameter, Icon icon, String name) {
         addClassName("simple-list-header");
 
         setRoute(navigationTarget, parameter);
-        add(icon.create());
+        add(icon);
         getElement().appendChild(createHeading4(name));
     }
 }

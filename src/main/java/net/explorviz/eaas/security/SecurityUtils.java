@@ -121,7 +121,7 @@ public final class SecurityUtils {
      * Access may be forbidden if the project is hidden ({@link Project#isHidden()} and the principal of the current
      * security context is not the owner ({@link Project#getOwner()}) of the project.
      */
-    public static boolean mayAccessProject(Project project) {
+    public static boolean mayAccessProject(@NonNull Project project) {
         if (!project.isHidden()) {
             return true;
         }
