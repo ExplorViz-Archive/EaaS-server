@@ -23,7 +23,7 @@ import java.util.Scanner;
 @Getter
 public class ExplorVizInstance {
     private static final String COMPOSE_FILE_PREFIX = "docker-compose/explorviz-";
-    private static final String COMPOSE_FILE_SUFFIX = ".yml.tpl";
+    private static final String COMPOSE_FILE_SUFFIX = ".yml";
 
     @ToString.Exclude
     @Getter(AccessLevel.PACKAGE)
