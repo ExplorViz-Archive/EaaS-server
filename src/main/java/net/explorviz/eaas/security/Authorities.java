@@ -25,30 +25,35 @@ public final class Authorities {
      */
 
     /**
-     * Grants the permission to create new projects.
+     * Grants the permission to create new projects. The user who created it owns the project.
      */
     public static final GrantedAuthority CREATE_PROJECT_AUTHORITY = create("CREATE_PROJECT");
 
     /**
-     * Grants the permission to see the project in listing and read them, which includes listing builds, even if it is
+     * Grants the permission to see the project in listings and read them, which includes listing builds, even if it is
      * hidden. Projects that aren't hidden are always visible, including listing their builds.
      */
     public static final GrantedAuthority READ_PROJECT_AUTHORITY = create("READ_PROJECT");
 
     /**
-     * Grants the permission to run builds. Needs {@link #READ_PROJECT_AUTHORITY} as well.
+     * Grants the permission to run and stop builds in ExplorViz. Needs {@link #READ_PROJECT_AUTHORITY} as well.
      */
     public static final GrantedAuthority RUN_BUILD_AUTHORITY = create("RUN_BUILD");
 
     /**
-     * Grants the permission to manage projects, which includes deleting builds, reading and adding API keys. Also needs
-     * {@link #READ_PROJECT_AUTHORITY}.
+     * Grants the permission to delete builds. Needs {@link #READ_PROJECT_AUTHORITY} as well.
+     */
+    public static final GrantedAuthority DELETE_BUILD_AUTHORITY = create("DELETE_BUILD");
+
+    /**
+     * Grants the permission to manage projects, which includes changing project settings, reading and adding API keys
+     * and deleting the project. Also needs {@link #READ_PROJECT_AUTHORITY}.
      */
     public static final GrantedAuthority MANAGE_PROJECT_AUTHORITY = create("MANAGE_PROJECT");
 
     /**
-     * Grants the permission to manage ExplorViz instances, i.e. viewing the active instances, starting test instances
-     * and killing running instances.
+     * Grants the permission to globally manage ExplorViz instances, i.e. viewing the active instances, starting test
+     * instances and killing running instances.
      */
     public static final GrantedAuthority MANAGE_INSTANCES_AUTHORITY = create("MANAGE_INSTANCES");
 

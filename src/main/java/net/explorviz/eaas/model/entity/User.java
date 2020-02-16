@@ -60,7 +60,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(6);
+        Collection<GrantedAuthority> authorities = new HashSet<>(7);
 
         if (createProjectsAllowed) {
             authorities.add(Authorities.CREATE_PROJECT_AUTHORITY);
@@ -68,6 +68,7 @@ public class User extends BaseEntity implements UserDetails {
 
         authorities.add(Authorities.READ_PROJECT_AUTHORITY);
         authorities.add(Authorities.RUN_BUILD_AUTHORITY);
+        authorities.add(Authorities.DELETE_BUILD_AUTHORITY);
         authorities.add(Authorities.MANAGE_PROJECT_AUTHORITY);
 
         if (manageInstancesAllowed) {

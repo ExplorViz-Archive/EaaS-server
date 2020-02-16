@@ -18,7 +18,7 @@ import java.util.function.Consumer;
  * <p>
  * If there already is a running instance use {@link InstanceControls} instead.
  */
-public class RunBuildControls extends HorizontalLayout {
+public class BuildControls extends HorizontalLayout {
     private static final long serialVersionUID = 7138976677696332911L;
 
     private final Build build;
@@ -28,8 +28,8 @@ public class RunBuildControls extends HorizontalLayout {
     private final Select<String> versionSelection;
     private final Button runButton;
 
-    public RunBuildControls(Build build, ExplorVizManager manager,
-                            Consumer<? super ExplorVizInstance> runCallback) {
+    public BuildControls(Build build, ExplorVizManager manager,
+                         Consumer<? super ExplorVizInstance> runCallback) {
         this.build = build;
         this.manager = manager;
         this.runCallback = runCallback;
@@ -47,6 +47,8 @@ public class RunBuildControls extends HorizontalLayout {
         runButton.setIcon(VaadinIcon.CHEVRON_RIGHT_SMALL.create());
         runButton.setDisableOnClick(true);
         add(runButton);
+
+        // TODO: Delete button if DELETE_BUILD authority
     }
 
     private void runBuild() {

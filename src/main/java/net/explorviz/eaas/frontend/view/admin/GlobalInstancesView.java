@@ -6,7 +6,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
-import net.explorviz.eaas.frontend.component.RunBuildControls;
+import net.explorviz.eaas.frontend.component.BuildControls;
 import net.explorviz.eaas.frontend.component.list.ExplorVizListEntry;
 import net.explorviz.eaas.frontend.component.list.SimpleList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
@@ -29,7 +29,7 @@ public class GlobalInstancesView extends DynamicView {
 
     private final ExplorVizManager manager;
 
-    private final RunBuildControls controls;
+    private final BuildControls controls;
     private final Button stopAllButton;
 
     private SimpleList<ExplorVizInstance> instanceList;
@@ -37,7 +37,7 @@ public class GlobalInstancesView extends DynamicView {
     public GlobalInstancesView(ExplorVizManager manager) {
         this.manager = manager;
 
-        controls = new RunBuildControls(new DummyBuild(), manager, this::onStartInstance);
+        controls = new BuildControls(new DummyBuild(), manager, this::onStartInstance);
 
         stopAllButton = new Button("Stop all instances");
         stopAllButton.addClickListener(click -> this.stopAllInstances());

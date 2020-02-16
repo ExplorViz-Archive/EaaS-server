@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 /**
  * A horizontal bar with controls for a running ExplorVizInstance.
  * <p>
- * If there is no instance for a build yet use {@link RunBuildControls} instead.
+ * If there is no instance for a build yet use {@link BuildControls} instead.
  */
 public class InstanceControls extends HorizontalLayout {
     private static final long serialVersionUID = 7716806751192597483L;

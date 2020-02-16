@@ -4,8 +4,10 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import net.explorviz.eaas.frontend.component.InstanceControls;
-import net.explorviz.eaas.frontend.component.RunBuildControls;
+import net.explorviz.eaas.frontend.component.BuildControls;
 import net.explorviz.eaas.model.entity.Build;
+import net.explorviz.eaas.security.Authorities;
+import net.explorviz.eaas.security.SecurityUtils;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 
@@ -59,10 +61,12 @@ public class BuildListEntry extends AbstractListEntry {
             createParagraph("Image ID: " + build.getDockerImage())
         );
 
-        if (instance.isPresent()) {
-            add(new InstanceControls(instance.get(), manager, ignored -> this.rebuild()));
-        } else {
-            add(new RunBuildControls(build, manager, ignored -> this.rebuild()));
+        if (SecurityUtils.hasAuthority(Authorities.RUN_BUILD_AUTHORITY)) {
+            if (instance.isPresent()) {
+                add(new InstanceControls(instance.get(), manager, ignored -> this.rebuild()));
+            } else {
+                add(new BuildControls(build, manager, ignored -> this.rebuild()));
+            }
         }
     }
 }
