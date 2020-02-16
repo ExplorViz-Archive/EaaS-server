@@ -17,11 +17,12 @@ import java.util.Collections;
 @Tag("sa-login-view")
 @Route(LoginView.ROUTE)
 @PageTitle("Login - " + Application.PAGE_TITLE)
-@CssImport("./style/login.css")
+@CssImport("./style/login-view.css")
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 1010867826588360870L;
 
     public static final String ROUTE = "login";
+    public static final String ERROR_PARAMETER = "error";
 
     private final LoginForm login = new LoginForm();
 
@@ -40,7 +41,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         }
 
         if (!event.getLocation().getQueryParameters().getParameters()
-            .getOrDefault("error", Collections.emptyList()).isEmpty()) {
+            .getOrDefault(ERROR_PARAMETER, Collections.emptyList()).isEmpty()) {
             login.setError(true);
         }
     }

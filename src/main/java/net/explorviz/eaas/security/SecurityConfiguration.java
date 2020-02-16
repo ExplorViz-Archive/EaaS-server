@@ -23,11 +23,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     /**
      * Allow requests to the API, it uses secrets for authentications, not spring security
      */
-    private static final String[] API_PATTERNS = { "/api/v1/**" };
+    private static final String[] API_PATHS = { "/api/v1/**" };
     /**
      * Whitelist pages that *might be* public, we're doing fine-grained auth in Views on BeforeEnterEvent
      */
-    private static final String[] POTENTIALLY_PUBLIC_PATTERNS = { "/", "/explore", "/explore/", "/builds/**" };
+    private static final String[] POTENTIALLY_PUBLIC_VIEWS = { "/", "/explore", "/explore/", "/builds/**" };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,8 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // Allow all flow internal requests
             .requestMatchers(SecurityUtils::isVaadinInternalRequest).permitAll()
-            .antMatchers(API_PATTERNS).permitAll()
-            .antMatchers(HttpMethod.GET, POTENTIALLY_PUBLIC_PATTERNS).permitAll()
+            .antMatchers(API_PATHS).permitAll()
+            .antMatchers(HttpMethod.HEAD, POTENTIALLY_PUBLIC_VIEWS).permitAll()
+            .antMatchers(HttpMethod.GET, POTENTIALLY_PUBLIC_VIEWS).permitAll()
             /*
              * All other paths are not known to ever be publicly accessible without login. We wouldn't *need* to
              * prevent access here, because we also have to verify permission in the Views anyway, but better be safe
@@ -56,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated()
             // Configure the login page
             .and().formLogin().loginPage(LOGIN_URL).permitAll()
-            .loginProcessingUrl(LOGIN_URL).failureUrl(LOGIN_URL + "?error")
+            .loginProcessingUrl(LOGIN_URL).failureUrl(LOGIN_URL + "?" + LoginView.ERROR_PARAMETER)
             // Configure logout
             .and().logout().logoutUrl(LOGOUT_URL).logoutSuccessUrl(HOME_URL);
     }
