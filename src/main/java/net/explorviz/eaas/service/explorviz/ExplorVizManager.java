@@ -50,11 +50,11 @@ public final class ExplorVizManager {
     private volatile int nextInstance;
 
     public ExplorVizManager(DockerComposeAdapter dockerCompose,
-                            @Value("${eaas.explorviz.maxInstances:5}") int maxInstances,
-                            @Value("${eaas.explorviz.frontendPortOffset:8800}") int frontendPortOffset,
-                            @Value("${eaas.explorviz.accessUrlTemplate:http://localhost:%FRONTEND_PORT%}")
+                            @Value("${eaas.explorviz.maxInstances}") int maxInstances,
+                            @Value("${eaas.explorviz.frontendPortOffset}") int frontendPortOffset,
+                            @Value("${eaas.explorviz.accessUrlTemplate}")
                                 String accessUrlTemplate,
-                            @Value("${eaas.explorviz.defaultVersion:1.5.0}") String defaultVersion) {
+                            @Value("${eaas.explorviz.defaultVersion}") String defaultVersion) {
         Validate.inclusiveBetween(1, Integer.MAX_VALUE, maxInstances);
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
         Validate.inclusiveBetween(1, PORT_MAX, maxInstances);

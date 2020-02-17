@@ -26,7 +26,7 @@ public class MainView extends DynamicView {
     private final int projectsPerPage;
 
     public MainView(ProjectRepository projectRepo,
-                    @Value("${eaas.paging.home.projects:5}") int projectsPerPage) {
+                    @Value("${eaas.paging.home.projects}") int projectsPerPage) {
         Validate.inclusiveBetween(1, Integer.MAX_VALUE, projectsPerPage, "projects must be at least 1");
 
         this.projectRepo = projectRepo;

@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 
 @Configuration
 public class DockerService {
-    @Value("${eaas.docker.useDummyImplementation:false}")
+    @Value("${eaas.docker.useDummyImplementation}")
     private boolean useDummyImplementation;
 
     @Bean
@@ -19,7 +19,7 @@ public class DockerService {
     @Bean
     @Lazy
     public DockerComposeAdapter standardDockerComposeAdapter(
-        @Value("${eaas.dockerCompose.timeout:300000}") long operationTimeout) throws AdapterException {
+        @Value("${eaas.dockerCompose.timeout}") long operationTimeout) throws AdapterException {
         return useDummyImplementation ?
             new DockerComposeDummyImplementation() : new DockerComposeToolImplementation(operationTimeout);
     }

@@ -17,7 +17,7 @@ public class AuthenticationContext {
      */
     @Bean
     @Lazy
-    public PasswordEncoder standardPasswordEncoder(@Value("${eaas.security.bcryptStrength:12}") int bcryptStrength) {
+    public PasswordEncoder standardPasswordEncoder(@Value("${eaas.security.bcryptStrength}") int bcryptStrength) {
         return new BCryptPasswordEncoder(bcryptStrength);
     }
 

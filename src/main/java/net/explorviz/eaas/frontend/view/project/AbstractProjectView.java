@@ -4,7 +4,6 @@ import com.vaadin.flow.router.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.explorviz.eaas.Application;
-import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;

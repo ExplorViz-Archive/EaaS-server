@@ -24,8 +24,8 @@ public class KeyGenerator {
      * @param passwordLength How long (in characters) generated passwords should be. Must be positive and non-zero.
      * @param apiKeyBytes    How many bytes generated API keys should have. Must be positive and non-zero.
      */
-    public KeyGenerator(@Value("${eaas.security.defaultPasswordLength:16}") int passwordLength,
-                        @Value("${eaas.security.apiKeyBytes:16}") int apiKeyBytes) {
+    public KeyGenerator(@Value("${eaas.security.defaultPasswordLength}") int passwordLength,
+                        @Value("${eaas.security.apiKeyBytes}") int apiKeyBytes) {
         Validate.isTrue(passwordLength > 0, "passwordLength must be positive: %d", passwordLength);
         Validate.inclusiveBetween(1, Secret.SECRET_MAX_LENGTH / 2, apiKeyBytes);
 
