@@ -22,7 +22,7 @@ import java.util.Collection;
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @PageTitle("Instances - " + Application.PAGE_TITLE)
-@Route(value = "instances", layout = MainLayout.class)
+@Route(value = "manage/instances", layout = MainLayout.class)
 @Secured("MANAGE_INSTANCES")
 public class GlobalInstancesView extends DynamicView {
     private static final long serialVersionUID = 2570920838715737622L;
@@ -48,7 +48,7 @@ public class GlobalInstancesView extends DynamicView {
 
     @Override
     protected void build() {
-        getElement().appendChild(createHeading2("ExplorViz Instances"));
+        getElement().appendChild(createHeading2("Global Instances"));
 
         add(controls);
 

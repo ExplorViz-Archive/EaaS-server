@@ -31,6 +31,9 @@ public class BuildListEntry extends AbstractListEntry {
         this.build = build;
         this.manager = manager;
 
+        // This is to be able to link to a specific build with #build-123
+        setId("build-" + build.getId());
+
         header = RichHeader.create(VaadinIcon.CHEVRON_CIRCLE_RIGHT.create(), build.getName());
 
         build();

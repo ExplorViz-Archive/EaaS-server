@@ -33,8 +33,6 @@ public class BuildsView extends AbstractProjectView {
     public void build() {
         getElement().appendChild(createHeading2("Builds"));
 
-        // TODO: Display currently running builds on top or add a general project page containing live + recent builds
-
         // TODO: Paging
         Page<Build> builds = buildRepo.findByProjectOrderByCreatedDateDesc(getProject(), Pageable.unpaged());
 
