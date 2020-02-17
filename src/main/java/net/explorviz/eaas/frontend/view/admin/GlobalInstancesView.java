@@ -8,7 +8,7 @@ import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.component.BuildControls;
 import net.explorviz.eaas.frontend.component.list.ExplorVizListEntry;
-import net.explorviz.eaas.frontend.component.list.SimpleList;
+import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.entity.Build;
@@ -32,7 +32,7 @@ public class GlobalInstancesView extends DynamicView {
     private final BuildControls controls;
     private final Button stopAllButton;
 
-    private SimpleList<ExplorVizInstance> instanceList;
+    private RichList<ExplorVizInstance> instanceList;
 
     public GlobalInstancesView(ExplorVizManager manager) {
         this.manager = manager;
@@ -52,7 +52,7 @@ public class GlobalInstancesView extends DynamicView {
 
         add(controls);
 
-        instanceList = new SimpleList<>(instance -> new ExplorVizListEntry(instance, manager, this::onStopInstance));
+        instanceList = new RichList<>(instance -> new ExplorVizListEntry(instance, manager, this::onStopInstance));
         Collection<ExplorVizInstance> instances = manager.getAllInstances();
         instanceList.addEntries(instances);
         add(instanceList);

@@ -11,17 +11,17 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Implements a simple list that can contain unique items of the type {@code T}. A converter {@link Function} is needed
- * to convert the entries of type {@code T} to a {@link AbstractListEntry} that visually represents the entry. Only
- * unique entries can be added. Note that the {@link AbstractListEntry} the converter function creates do not have to be
- * of the same type.
+ * Implements a modern styled list that can contain unique items of the type {@code T}. A converter {@link Function} is
+ * needed to convert the entries of type {@code T} to a {@link AbstractListEntry} that visually represents the entry.
+ * Only unique entries can be added. Note that the {@link AbstractListEntry}s the converter function creates do not have
+ * to be of the same type.
  * <p>
  * No components should be added through the inherited {@link #add(Component...)} methods.
  */
 @Slf4j
-@CssImport("./style/simple-list.css")
+@CssImport("./style/rich-list.css")
 @Tag(Tag.UL)
-public class SimpleList<T> extends VerticalLayout {
+public class RichList<T> extends VerticalLayout {
     private static final long serialVersionUID = 8287505649008791683L;
 
     private final Function<? super T, ? extends AbstractListEntry> converter;
@@ -33,8 +33,8 @@ public class SimpleList<T> extends VerticalLayout {
     /**
      * @param converter Function used to create components that visually represent the added entries
      */
-    public SimpleList(Function<? super T, ? extends AbstractListEntry> converter) {
-        addClassName("simple-list");
+    public RichList(Function<? super T, ? extends AbstractListEntry> converter) {
+        addClassName("rich-list");
 
         this.converter = converter;
     }
@@ -47,7 +47,7 @@ public class SimpleList<T> extends VerticalLayout {
     public void addEntry(T entry) {
         if (entries.containsKey(entry)) {
             // If we allowed this we would lose track of the previous AbstractListEntry
-            log.warn("Tried to add an entry of type '{}' into a SimpleList twice. This is a bug",
+            log.warn("Tried to add an entry of type '{}' into a RichList twice. This is a bug",
                 entry.getClass().getCanonicalName());
             return;
         }

@@ -10,13 +10,13 @@ import org.springframework.lang.NonNull;
 
 import static com.vaadin.flow.dom.Element.createText;
 
-public class NavigationTab extends Tab {
+public final class NavigationTab extends Tab {
     private static final long serialVersionUID = 188662863223269797L;
 
     @Getter
     private final Class<? extends Component> navigationTarget;
 
-    protected NavigationTab(RouterLink routerLink, String label, Icon icon,
+    private NavigationTab(RouterLink routerLink, String label, Icon icon,
                             Class<? extends Component> navigationTarget) {
         this.navigationTarget = navigationTarget;
 

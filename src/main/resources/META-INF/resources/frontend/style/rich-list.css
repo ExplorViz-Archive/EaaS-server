@@ -1,40 +1,45 @@
-.simple-list {
+.rich-list {
     margin-top: 0;
     list-style-type: none;
     padding-left: 0.5em;
     width: initial !important;
 }
 
-.simple-list-entry {
+.rich-list-entry {
     border-left: 4px solid var(--lumo-shade-20pct);
     padding: 0.5em 1em;
     margin-top: 1.5em;
 }
 
-.simple-list-entry p {
+.rich-list-entry p {
     margin-bottom: 0.5em;
 }
 
-.simple-list-entry > h4, .simple-list-header {
+.rich-list-entry pre {
+    display: inline-block;
+    padding: 0.4em 0.8em;
+    margin: 0.2em 0;
+}
+
+.rich-list-header {
     margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.75em;
 }
 
-.simple-list-header {
+.rich-list-header, .rich-list-header > a {
     display: flex;
     align-items: center;
 }
 
-.simple-list-header iron-icon {
+.rich-list-header iron-icon {
     width: 24px;
     height: 24px;
-
-    margin-right: 0.4em;
 }
 
-.simple-list-header h4 {
+.rich-list-header h4 {
     margin-top: 0;
     margin-bottom: 0;
+    margin-left: var(--lumo-space-m);
 }
 
 .controls-bar {

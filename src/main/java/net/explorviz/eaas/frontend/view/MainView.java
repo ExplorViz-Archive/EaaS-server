@@ -4,7 +4,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.component.list.RecentlyUpdatedProjectListEntry;
-import net.explorviz.eaas.frontend.component.list.SimpleList;
+import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.model.repository.RecentlyUpdatedResult;
@@ -43,8 +43,8 @@ public class MainView extends DynamicView {
         if (recentlyUpdated.getTotalElements() == 0) {
             getElement().appendChild(createParagraph("No projects have been created yet."));
         } else {
-            SimpleList<RecentlyUpdatedResult> recentlyUpdatedList =
-                new SimpleList<>(RecentlyUpdatedProjectListEntry::new);
+            RichList<RecentlyUpdatedResult> recentlyUpdatedList =
+                new RichList<>(RecentlyUpdatedProjectListEntry::new);
             recentlyUpdatedList.addEntries(recentlyUpdated);
             add(recentlyUpdatedList);
         }

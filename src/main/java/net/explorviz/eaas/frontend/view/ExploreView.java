@@ -4,7 +4,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.component.list.ProjectListEntry;
-import net.explorviz.eaas.frontend.component.list.SimpleList;
+import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.entity.User;
@@ -44,7 +44,7 @@ public class ExploreView extends DynamicView {
         if (projects.isEmpty()) {
             getElement().appendChild(createParagraph("No projects have been created yet."));
         } else {
-            SimpleList<Project> projectList = new SimpleList<>(ProjectListEntry::new);
+            RichList<Project> projectList = new RichList<>(ProjectListEntry::new);
             projectList.addEntries(projects);
             add(projectList);
         }

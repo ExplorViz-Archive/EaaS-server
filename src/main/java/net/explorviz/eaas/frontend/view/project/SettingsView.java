@@ -20,6 +20,14 @@ public class SettingsView extends AbstractProjectView {
     protected void build() {
         getElement().appendChild(createHeading2("Settings"));
 
-        // TODO: Settings view
+        /*
+         * TODO: Settings view
+         *
+         * - Change name
+         * - Toggle hidden state
+         * - Manage user permissions (see Authorities)
+         */
+
+        // TODO: Delete button (with confirmation)
     }
 }

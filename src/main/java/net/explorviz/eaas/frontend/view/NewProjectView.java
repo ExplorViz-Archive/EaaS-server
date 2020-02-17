@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
-@Slf4j
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
 public class NewProjectView extends VerticalLayout {
@@ -77,9 +76,8 @@ public class NewProjectView extends VerticalLayout {
             Project project = projectRepo.save(new Project(name, user));
             projectName.clear();
 
-            // TODO: Remove dummy secret generation during development
-            Secret secret = secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));
-            log.info("Secret for new project {} is {}", project.getName(), secret.getSecret());
+            // TODO: Remove dummy secret generation after initial development phase
+            secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));
 
             getUI().ifPresent(ui -> ui.navigate(BuildsView.class, project.getId()));
             Notification.show("Created project " + project.getName());

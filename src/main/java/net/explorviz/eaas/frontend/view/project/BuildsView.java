@@ -2,7 +2,7 @@ package net.explorviz.eaas.frontend.view.project;
 
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.component.list.BuildListEntry;
-import net.explorviz.eaas.frontend.component.list.SimpleList;
+import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.BuildRepository;
@@ -46,7 +46,7 @@ public class BuildsView extends AbstractProjectView {
                     createParagraph("Go to the Secrets page and create a secret to start adding builds."));
             }
         } else {
-            SimpleList<Build> buildList = new SimpleList<>(build -> new BuildListEntry(build, explorVizManager));
+            RichList<Build> buildList = new RichList<>(build -> new BuildListEntry(build, explorVizManager));
             buildList.addEntries(builds);
             add(buildList);
         }

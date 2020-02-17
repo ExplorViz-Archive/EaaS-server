@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -47,6 +48,7 @@ public class Secret extends BaseEntity {
     private String secret;
 
     @PastOrPresent
+    @Nullable
     private ZonedDateTime lastUsedDate;
 
     public Secret(@NotEmpty String name, @NotEmpty String secret, @NotNull Project project) {
