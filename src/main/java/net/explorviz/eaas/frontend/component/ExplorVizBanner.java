@@ -21,7 +21,5 @@ public class ExplorVizBanner extends HorizontalLayout {
 
         add(new Image("/icons/icon-192x192.png", "ExplorViz"));
         getElement().appendChild(createHeading2(Application.PAGE_TITLE));
-
-        setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
     }
 }
