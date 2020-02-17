@@ -30,9 +30,9 @@ public class MainLayout extends NavigationLayout {
 
     @Override
     protected void buildNavigation() {
-        addNavigationTab(NavigationTab.create("Home", VaadinIcon.HOME.create(), MainView.class));
-        addNavigationTab(NavigationTab.create("Explore", VaadinIcon.LIST_UL.create(), ExploreView.class));
-        addNavigationTab(NavigationTab.create("New project", VaadinIcon.PLUS.create(), NewProjectView.class));
+        addTab(NavigationTab.create("Home", VaadinIcon.HOME.create(), MainView.class));
+        addTab(NavigationTab.create("Explore", VaadinIcon.LIST_UL.create(), ExploreView.class));
+        addTab(NavigationTab.create("New project", VaadinIcon.PLUS.create(), NewProjectView.class));
 
         Optional<User> user = SecurityUtils.getCurrentUser();
         if (user.isPresent()) {
@@ -40,15 +40,14 @@ public class MainLayout extends NavigationLayout {
             for (Project p : projectRepo.findByOwner(user.get())) {
                 assert p.getId() != null : "Project fetched from database has no ID";
 
-                addNavigationTab(
-                    NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE.create(), BuildsView.class,
-                        p.getId()));
+                addTab(NavigationTab.createWithParameter(p.getName(), VaadinIcon.ARCHIVE.create(), BuildsView.class,
+                    p.getId()));
             }
         }
 
         startSection("Administration");
-        addNavigationTab(NavigationTab.create("Users", VaadinIcon.USER.create(), UsersView.class));
-        addNavigationTab(NavigationTab.create("Instances", VaadinIcon.ROTATE_RIGHT.create(),
+        addTab(NavigationTab.create("Users", VaadinIcon.USER.create(), UsersView.class));
+        addTab(NavigationTab.create("Instances", VaadinIcon.ROTATE_RIGHT.create(),
             GlobalInstancesView.class));
     }
 }

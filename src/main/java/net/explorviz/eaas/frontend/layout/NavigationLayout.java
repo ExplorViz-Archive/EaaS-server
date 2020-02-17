@@ -87,7 +87,7 @@ public abstract class NavigationLayout extends BaseLayout implements BeforeEnter
      * If {@link #startSection(String)} wasn't called since the last {@link #resetTabs()}, a default section without a
      * label will be used.
      */
-    protected void addNavigationTab(NavigationTab tab) {
+    protected void addTab(NavigationTab tab) {
         Class<? extends Component> target = tab.getNavigationTarget();
 
         if (SecurityUtils.mayAccess(target)) {

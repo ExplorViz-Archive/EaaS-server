@@ -7,6 +7,7 @@ import com.vaadin.flow.router.NotFoundException;
 import net.explorviz.eaas.frontend.layout.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
+import net.explorviz.eaas.frontend.view.project.InstancesView;
 import net.explorviz.eaas.frontend.view.project.SecretsView;
 import net.explorviz.eaas.frontend.view.project.SettingsView;
 import net.explorviz.eaas.model.entity.Project;
@@ -44,18 +45,19 @@ public class ProjectLayout extends NavigationLayout {
 
     @Override
     protected void buildNavigation() {
-        addNavigationTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A.create(), MainView.class));
+        addTab(NavigationTab.create("Back", VaadinIcon.BACKSPACE_A.create(), MainView.class));
 
         assert project.getId() != null : "Project fetched from database has no ID";
 
         startSection(project.getName());
-        addNavigationTab(
-            NavigationTab.createWithParameter("Builds", VaadinIcon.LIST.create(), BuildsView.class, project.getId()));
-        addNavigationTab(
-            NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY.create(), SecretsView.class, project.getId()));
-        addNavigationTab(
-            NavigationTab.createWithParameter("Settings", VaadinIcon.COG.create(), SettingsView.class,
-                project.getId()));
+        addTab(NavigationTab.createWithParameter("Builds", VaadinIcon.LIST.create(), BuildsView.class,
+            project.getId()));
+        addTab(NavigationTab.createWithParameter("Instances", VaadinIcon.CHEVRON_CIRCLE_RIGHT.create(),
+            InstancesView.class, project.getId()));
+        addTab(NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY.create(), SecretsView.class,
+            project.getId()));
+        addTab(NavigationTab.createWithParameter("Settings", VaadinIcon.COG.create(), SettingsView.class,
+            project.getId()));
     }
 
     private Optional<Project> parseProjectParameter(Location location) {
