@@ -4,7 +4,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.NotFoundException;
-import net.explorviz.eaas.frontend.layout.component.NavigationTab;
+import net.explorviz.eaas.frontend.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.frontend.view.project.InstancesView;

@@ -1,4 +1,4 @@
-package net.explorviz.eaas.frontend.layout.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;

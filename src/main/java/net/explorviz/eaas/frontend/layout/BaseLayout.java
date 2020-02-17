@@ -4,7 +4,7 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.router.RouterLink;
 import net.explorviz.eaas.frontend.component.ExplorVizBanner;
-import net.explorviz.eaas.frontend.layout.component.NavbarActions;
+import net.explorviz.eaas.frontend.component.NavbarActions;
 import net.explorviz.eaas.frontend.view.MainView;
 
 /**

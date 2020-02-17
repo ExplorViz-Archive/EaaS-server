@@ -8,7 +8,7 @@ import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import lombok.extern.slf4j.Slf4j;
-import net.explorviz.eaas.frontend.layout.component.NavigationTab;
+import net.explorviz.eaas.frontend.component.NavigationTab;
 import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.lang.Nullable;
 

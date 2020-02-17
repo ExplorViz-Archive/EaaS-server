@@ -1,7 +1,7 @@
 package net.explorviz.eaas.frontend.layout;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
-import net.explorviz.eaas.frontend.layout.component.NavigationTab;
+import net.explorviz.eaas.frontend.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.ExploreView;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.NewProjectView;

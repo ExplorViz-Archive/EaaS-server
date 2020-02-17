@@ -1,4 +1,4 @@
-package net.explorviz.eaas.frontend.layout.component;
+package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.icon.Icon;
@@ -10,6 +10,10 @@ import org.springframework.lang.NonNull;
 
 import static com.vaadin.flow.dom.Element.createText;
 
+/**
+ * Navigation entry for the sidebar navigation menu created by
+ * {@link net.explorviz.eaas.frontend.layout.NavigationLayout}.
+ */
 public final class NavigationTab extends Tab {
     private static final long serialVersionUID = 188662863223269797L;
 
@@ -17,7 +21,7 @@ public final class NavigationTab extends Tab {
     private final Class<? extends Component> navigationTarget;
 
     private NavigationTab(RouterLink routerLink, String label, Icon icon,
-                            Class<? extends Component> navigationTarget) {
+                          Class<? extends Component> navigationTarget) {
         this.navigationTarget = navigationTarget;
 
         addClassName("navigation-tab");
