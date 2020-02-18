@@ -6,6 +6,7 @@ import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.service.docker.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.security.access.annotation.Secured;
@@ -22,10 +23,13 @@ public class InstancesView extends AbstractProjectView {
     private static final long serialVersionUID = -2777916910494366724L;
 
     private final ExplorVizManager explorVizManager;
+    private final DockerComposeAdapter dockerCompose;
 
-    public InstancesView(ProjectRepository projectRepo, ExplorVizManager explorVizManager) {
+    public InstancesView(ProjectRepository projectRepo, ExplorVizManager explorVizManager,
+                         DockerComposeAdapter dockerCompose) {
         super(projectRepo, "Instances");
         this.explorVizManager = explorVizManager;
+        this.dockerCompose = dockerCompose;
     }
 
     @Override
@@ -49,7 +53,8 @@ public class InstancesView extends AbstractProjectView {
              * have to find the build on the Builds view again if they want to restart it. Stopped builds are removed
              * when the user leaves and (re)enters the view.
              */
-            RichList<Build> buildList = new RichList<>(build -> new BuildListEntry(build, explorVizManager));
+            RichList<Build> buildList = new RichList<>(build -> new BuildListEntry(build, explorVizManager,
+                dockerCompose));
             buildList.addEntries(runningBuilds);
             add(buildList);
         }

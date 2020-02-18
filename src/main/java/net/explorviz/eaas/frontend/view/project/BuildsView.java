@@ -9,6 +9,7 @@ import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.Authorities;
 import net.explorviz.eaas.security.SecurityUtils;
+import net.explorviz.eaas.service.docker.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +23,14 @@ public class BuildsView extends AbstractProjectView {
 
     private final BuildRepository buildRepo;
     private final ExplorVizManager explorVizManager;
+    private final DockerComposeAdapter dockerCompose;
 
-    public BuildsView(ProjectRepository projectRepo, BuildRepository buildRepo, ExplorVizManager explorVizManager) {
+    public BuildsView(ProjectRepository projectRepo, BuildRepository buildRepo, ExplorVizManager explorVizManager,
+                      DockerComposeAdapter dockerCompose) {
         super(projectRepo, "Builds");
         this.buildRepo = buildRepo;
         this.explorVizManager = explorVizManager;
+        this.dockerCompose = dockerCompose;
     }
 
     @Override
@@ -44,7 +48,8 @@ public class BuildsView extends AbstractProjectView {
                     createParagraph("Go to the Secrets page and create a secret to start adding builds."));
             }
         } else {
-            RichList<Build> buildList = new RichList<>(build -> new BuildListEntry(build, explorVizManager));
+            RichList<Build> buildList = new RichList<>(build -> new BuildListEntry(build, explorVizManager,
+                dockerCompose));
             buildList.addEntries(builds);
             add(buildList);
         }

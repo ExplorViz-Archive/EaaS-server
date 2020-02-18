@@ -1,6 +1,8 @@
 package net.explorviz.eaas.frontend.layout;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.page.Push;
+import com.vaadin.flow.shared.communication.PushMode;
 import net.explorviz.eaas.frontend.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.ExploreView;
 import net.explorviz.eaas.frontend.view.MainView;
@@ -19,6 +21,7 @@ import java.util.Optional;
  * Layout used for all non-project specific views. Links to the home page, lists all projects owned by the principal of
  * the current security context, and adds administration entries if permitted.
  */
+@Push(PushMode.MANUAL)
 public class MainLayout extends NavigationLayout {
     private static final long serialVersionUID = 8689866379276497334L;
 

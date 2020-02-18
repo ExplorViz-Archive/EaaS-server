@@ -1,0 +1,30 @@
+#log-dialog-header {
+    align-items: center;
+    margin-bottom: var(--lumo-space-l);
+}
+
+#log-dialog-header h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* TODO: Fix line breaks */
+
+#log-output {
+    padding: 0;
+    display: block;
+
+    /* Dirty hacks because dialogs can not be styled directly */
+    min-width: 40vw;
+    max-width: 80em;
+    min-height: 50vh;
+}
+
+#log-output pre {
+    /* Make it look like a single area */
+    margin: 0;
+    border-radius: 0;
+
+    width: calc(100% - 1em);
+    padding: 0 0.5em;
+}

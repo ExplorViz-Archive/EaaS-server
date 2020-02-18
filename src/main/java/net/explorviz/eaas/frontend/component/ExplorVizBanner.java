@@ -2,7 +2,6 @@ package net.explorviz.eaas.frontend.component;
 
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import net.explorviz.eaas.Application;
 

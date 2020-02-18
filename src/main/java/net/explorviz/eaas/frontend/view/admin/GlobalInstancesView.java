@@ -12,6 +12,7 @@ import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.entity.Build;
+import net.explorviz.eaas.service.docker.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.security.access.annotation.Secured;
@@ -30,14 +31,16 @@ public class GlobalInstancesView extends DynamicView {
     private final ExplorVizManager manager;
 
     private final BuildControls controls;
+    private final DockerComposeAdapter dockerCompose;
     private final Button stopAllButton;
 
     private RichList<ExplorVizInstance> instanceList;
 
-    public GlobalInstancesView(ExplorVizManager manager) {
+    public GlobalInstancesView(ExplorVizManager manager, DockerComposeAdapter dockerCompose) {
         this.manager = manager;
 
         controls = new BuildControls(new DummyBuild(), manager, this::onStartInstance);
+        this.dockerCompose = dockerCompose;
 
         stopAllButton = new Button("Stop all instances");
         stopAllButton.addClickListener(click -> this.stopAllInstances());
@@ -52,7 +55,8 @@ public class GlobalInstancesView extends DynamicView {
 
         add(controls);
 
-        instanceList = new RichList<>(instance -> new ExplorVizListEntry(instance, manager, this::onStopInstance));
+        instanceList = new RichList<>(instance -> new ExplorVizListEntry(instance, manager, dockerCompose,
+            this::onStopInstance));
         Collection<ExplorVizInstance> instances = manager.getAllInstances();
         instanceList.addEntries(instances);
         add(instanceList);

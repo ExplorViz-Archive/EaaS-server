@@ -3,7 +3,6 @@ package net.explorviz.eaas.frontend.component;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import net.explorviz.eaas.frontend.component.IconAnchor;
 import net.explorviz.eaas.security.SecurityConfiguration;
 import net.explorviz.eaas.security.SecurityUtils;
 

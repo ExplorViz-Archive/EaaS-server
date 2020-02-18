@@ -103,20 +103,19 @@ public final class ExplorVizManager {
         int frontendPort = frontendPortOffset + id;
         String accessUrl = accessUrlTemplate.replace("%FRONTEND_PORT%", Integer.toString(frontendPort));
 
-        ExplorVizInstance instance = new ExplorVizInstance(id, build, version, buildInstanceName(id, build),
+        ExplorVizInstance instance = new ExplorVizInstance(buildInstanceName(id, build), id, build, version,
             frontendPort, accessUrl);
 
         log.info("Starting instance {} (#{}) on port {}", instance.getName(), instance.getId(),
             instance.getFrontendPort());
 
         try {
-            dockerCompose.up(instance.getName(), instance.getComposeDefinition());
+            dockerCompose.up(instance);
         } catch (AdapterException e) {
             log.error("Error starting ExplorViz instance", e);
             throw e;
         }
 
-        instance.setRunning(true);
         instances.put(id, instance);
         instancesByBuildId.put(build.getId(), instance);
         return instance;
@@ -140,13 +139,12 @@ public final class ExplorVizManager {
                 instance.getFrontendPort());
 
             try {
-                dockerCompose.down(instance.getName(), instance.getComposeDefinition());
+                dockerCompose.down(instance);
             } catch (AdapterException e) {
                 log.error("Error stopping ExplorViz instance", e);
                 throw e;
             }
 
-            instance.setRunning(false);
             instances.remove(instance.getId());
             instancesByBuildId.remove(instance.getBuild().getId());
         }

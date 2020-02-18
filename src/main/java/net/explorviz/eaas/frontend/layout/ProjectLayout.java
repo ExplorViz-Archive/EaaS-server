@@ -1,9 +1,11 @@
 package net.explorviz.eaas.frontend.layout;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Location;
 import com.vaadin.flow.router.NotFoundException;
+import com.vaadin.flow.shared.communication.PushMode;
 import net.explorviz.eaas.frontend.component.NavigationTab;
 import net.explorviz.eaas.frontend.view.MainView;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
@@ -18,6 +20,7 @@ import java.util.Optional;
 /**
  * Layout used for all project-specific views, with sidebar menu entries for that project.
  */
+@Push(PushMode.MANUAL)
 public class ProjectLayout extends NavigationLayout {
     private static final long serialVersionUID = 8689866379276497334L;
 

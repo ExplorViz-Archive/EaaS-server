@@ -36,7 +36,8 @@ public final class Authorities {
     public static final GrantedAuthority READ_PROJECT_AUTHORITY = create("READ_PROJECT");
 
     /**
-     * Grants the permission to run and stop builds in ExplorViz. Needs {@link #READ_PROJECT_AUTHORITY} as well.
+     * Grants the permission to run and stop builds in ExplorViz, as well as reading logs from the running instances.
+     * Needs {@link #READ_PROJECT_AUTHORITY} as well.
      */
     public static final GrantedAuthority RUN_BUILD_AUTHORITY = create("RUN_BUILD");
 
