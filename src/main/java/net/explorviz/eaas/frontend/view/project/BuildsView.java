@@ -9,7 +9,7 @@ import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.Authorities;
 import net.explorviz.eaas.security.SecurityUtils;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,5 +1,6 @@
-package net.explorviz.eaas.service.docker;
+package net.explorviz.eaas.service.docker.compose;
 
+import net.explorviz.eaas.service.docker.AdapterException;
 import net.explorviz.eaas.service.process.BackgroundProcess;
 import net.explorviz.eaas.service.process.ProcessListener;
 import org.springframework.lang.NonNull;

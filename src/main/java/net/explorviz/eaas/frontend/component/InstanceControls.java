@@ -10,7 +10,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.BeforeLeaveEvent;
 import com.vaadin.flow.router.BeforeLeaveObserver;
 import net.explorviz.eaas.service.docker.AdapterException;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import net.explorviz.eaas.service.process.BackgroundProcess;

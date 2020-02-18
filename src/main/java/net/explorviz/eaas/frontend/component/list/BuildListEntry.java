@@ -6,7 +6,7 @@ import net.explorviz.eaas.frontend.component.BuildControls;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.security.Authorities;
 import net.explorviz.eaas.security.SecurityUtils;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 

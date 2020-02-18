@@ -3,7 +3,7 @@ package net.explorviz.eaas.service.explorviz;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.service.docker.AdapterException;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.model.entity.Build;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,5 +1,8 @@
 package net.explorviz.eaas.service.docker;
 
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeDummyImplementation;
+import net.explorviz.eaas.service.docker.compose.DockerComposeToolImplementation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

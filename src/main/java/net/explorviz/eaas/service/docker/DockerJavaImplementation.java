@@ -24,12 +24,12 @@ import java.io.InputStream;
  * application.
  */
 @Slf4j
-class DockerJavaImplementation implements DockerAdapter {
+public class DockerJavaImplementation implements DockerAdapter {
     private final DockerClient docker;
 
     // TODO: We're not getting checked exceptions from docker-java. We should actually throw AdapterExceptions.
 
-    DockerJavaImplementation() throws AdapterException {
+    public DockerJavaImplementation() throws AdapterException {
         // Settings are read from environment variables (see docker/docker-compose.yml)
         DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
         docker = DockerClientBuilder.getInstance(builder.build()).build();

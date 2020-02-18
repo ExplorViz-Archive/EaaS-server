@@ -1,6 +1,7 @@
-package net.explorviz.eaas.service.docker;
+package net.explorviz.eaas.service.docker.compose;
 
 import lombok.extern.slf4j.Slf4j;
+import net.explorviz.eaas.service.docker.AdapterException;
 import net.explorviz.eaas.service.process.BackgroundProcess;
 import org.apache.commons.lang.Validate;
 import org.springframework.lang.NonNull;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * ourselves. The user should pass these environment variables to our process when starting.
  */
 @Slf4j
-class DockerComposeToolImplementation implements DockerComposeAdapter {
+public class DockerComposeToolImplementation implements DockerComposeAdapter {
     private static final String DOCKER_COMPOSE_COMMAND = "docker-compose";
     private static final int NORMAL_EXIT_CODE = 0;
     private static final int INITIAL_BUFFER_SIZE = 4096;
@@ -33,7 +34,7 @@ class DockerComposeToolImplementation implements DockerComposeAdapter {
     /**
      * @param operationTimeout Timeout in milliseconds for docker-compose calls.
      */
-    DockerComposeToolImplementation(long operationTimeout) throws AdapterException {
+    public DockerComposeToolImplementation(long operationTimeout) throws AdapterException {
         this.operationTimeout = operationTimeout;
 
         log.info(DOCKER_COMPOSE_COMMAND + " version:\n{}", runCommand(null, List.of("version")));

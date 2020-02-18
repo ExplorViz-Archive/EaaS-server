@@ -2,7 +2,7 @@ package net.explorviz.eaas.frontend.component.list;
 
 import com.vaadin.flow.component.icon.VaadinIcon;
 import net.explorviz.eaas.frontend.component.InstanceControls;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 

@@ -4,7 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import net.explorviz.eaas.model.entity.Build;
-import net.explorviz.eaas.service.docker.DockerComposeDefinition;
+import net.explorviz.eaas.service.docker.compose.DockerComposeDefinition;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import org.springframework.lang.NonNull;
 
 /**
@@ -21,7 +22,7 @@ public class ExplorVizInstance extends DockerComposeDefinition {
     /**
      * This is the service you want to reads logs of when showing logs for a currently running build.
      *
-     * @see net.explorviz.eaas.service.docker.DockerComposeAdapter#logs(DockerComposeDefinition, String...)
+     * @see DockerComposeAdapter#logs(DockerComposeDefinition, String...)
      */
     public static final String APPLICATION_SERVICE_NAME = "application";
 

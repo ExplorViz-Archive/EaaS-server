@@ -8,7 +8,7 @@ import java.io.InputStream;
  * Implements {@link DockerAdapter} with all no-op methods. Can be used for testing purposes or frontend development
  * without a docker daemon present.
  */
-class DockerDummyImplementation implements DockerAdapter {
+public class DockerDummyImplementation implements DockerAdapter {
     @Override
     public void loadImage(@NonNull InputStream input) {
     }

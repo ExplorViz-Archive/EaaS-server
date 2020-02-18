@@ -1,4 +1,4 @@
-package net.explorviz.eaas.service.docker;
+package net.explorviz.eaas.service.docker.compose;
 
 import lombok.AccessLevel;
 import lombok.Getter;

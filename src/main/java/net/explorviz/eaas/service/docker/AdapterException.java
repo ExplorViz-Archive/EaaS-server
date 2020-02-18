@@ -1,5 +1,7 @@
 package net.explorviz.eaas.service.docker;
 
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
+
 /**
  * Indicates a problem occurred in a {@link DockerAdapter} or {@link DockerComposeAdapter} when trying to perform
  * a requested operation.

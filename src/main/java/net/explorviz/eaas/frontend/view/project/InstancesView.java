@@ -6,7 +6,7 @@ import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.ProjectRepository;
-import net.explorviz.eaas.service.docker.DockerComposeAdapter;
+import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.security.access.annotation.Secured;
