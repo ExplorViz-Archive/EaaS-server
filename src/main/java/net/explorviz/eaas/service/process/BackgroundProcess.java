@@ -67,6 +67,7 @@ public class BackgroundProcess {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(),
                 StandardCharsets.UTF_8))) {
                 String line;
+                // TODO: Improve efficiency by reading up to X lines at once as long as bufferedReader#ready()
                 while ((line = bufferedReader.readLine()) != null) {
                     listener.onStandardOutput(line);
                 }

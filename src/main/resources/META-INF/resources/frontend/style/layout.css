@@ -40,6 +40,10 @@
     margin-top: 0.5em;
 }
 
+.navigation-tab {
+    padding: 0.5rem 0.75rem;
+}
+
 .navigation-tab iron-icon {
     width: 16px;
     height: 16px;

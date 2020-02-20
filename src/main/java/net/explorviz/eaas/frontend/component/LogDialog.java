@@ -1,6 +1,5 @@
 package net.explorviz.eaas.frontend.component;
 
-import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -20,8 +19,8 @@ import static com.vaadin.flow.dom.ElementFactory.createPreformatted;
 /**
  * Implements {@link ProcessListener} to show the output of a {@link BackgroundProcess} to the client in real-time.
  * <p>
- * Views using this need to be annotated with {@link com.vaadin.flow.component.page.Push} or updates won't work in
- * real-time.
+ * Views using this need to use an {@link com.vaadin.flow.component.applayout.AppLayout} annotated with {@link
+ * com.vaadin.flow.component.page.Push} or updates won't work in real-time.
  */
 @Slf4j
 @CssImport("./style/log-dialog.css")
@@ -69,10 +68,17 @@ public class LogDialog extends Dialog implements ProcessListener {
 
     private void appendLine(String line) {
         if (!stopped) {
+            /*
+             * Try to do cleanup if the user closed the tab (i.e. we didn't receive a BeforeLeaveEvent).
+             * If we fail to kill the BackgroundProcess
+             */
+            if (ui.isClosing()) {
+                closeCallback.accept(this);
+            }
+
             ui.access(() -> {
-                // TODO: This needs to be solved more efficiently, also limit history
                 output.getElement().appendChild(createPreformatted(line));
-                // TODO: Auto-scroll
+                // TODO: Auto-scroll and limit history
                 ui.push();
             });
         }

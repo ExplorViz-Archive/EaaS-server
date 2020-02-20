@@ -10,7 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
-@PageTitle("Users - " + Application.PAGE_TITLE)
+@PageTitle("Manage Users - " + Application.PAGE_TITLE)
 @Route(value = "manage/users", layout = MainLayout.class)
 @Secured("MANAGE_USERS")
 public class UsersView extends DynamicView {

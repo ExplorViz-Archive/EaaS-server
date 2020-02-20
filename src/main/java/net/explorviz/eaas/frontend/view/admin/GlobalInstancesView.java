@@ -22,7 +22,7 @@ import java.util.Collection;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
-@PageTitle("Instances - " + Application.PAGE_TITLE)
+@PageTitle("Manage Instances - " + Application.PAGE_TITLE)
 @Route(value = "manage/instances", layout = MainLayout.class)
 @Secured("MANAGE_INSTANCES")
 public class GlobalInstancesView extends DynamicView {

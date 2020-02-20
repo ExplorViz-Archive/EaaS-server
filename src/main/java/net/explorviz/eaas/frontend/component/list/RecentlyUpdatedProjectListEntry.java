@@ -23,7 +23,7 @@ public class RecentlyUpdatedProjectListEntry extends AbstractListEntry {
         Build build = recentlyUpdatedResult.getBuild();
         if (build != null) {
             getElement().appendChild(
-                createParagraph("#" + build.getId() + " " + build.getName()),
+                createParagraph(build.getName()),
                 createParagraph("Added " + build.getCreatedDate().format(
                     DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
                 ))

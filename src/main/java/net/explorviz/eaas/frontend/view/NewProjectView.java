@@ -5,7 +5,9 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.model.entity.Project;
@@ -24,6 +26,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
+@PageTitle("Login - " + Application.PAGE_TITLE)
 public class NewProjectView extends VerticalLayout {
     private static final long serialVersionUID = 177039564703101073L;
 
