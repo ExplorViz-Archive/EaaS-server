@@ -1,9 +1,9 @@
 #log-dialog-header {
     align-items: center;
-    margin-bottom: var(--lumo-space-l);
+    margin-bottom: var(--lumo-space-m);
 }
 
-#log-dialog-header h2 {
+#log-dialog-header h3 {
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -13,18 +13,28 @@
 #log-output {
     padding: 0;
     display: block;
+    box-sizing: border-box;
 
-    /* Dirty hacks because dialogs can not be styled directly */
-    min-width: 40vw;
-    max-width: 80em;
-    min-height: 50vh;
+    /* Dirty hack for dialog sizing because dialogs can not be styled directly */
+    min-width: calc(50vw - 2 * var(--lumo-space-l));
+    max-width: calc(85vw - 2 * var(--lumo-space-l));
+    min-height: calc(50vh - 5 * var(--lumo-space-l));
+    max-height: calc(90vh - 5 * var(--lumo-space-l));
+
+    /* Scrollbar for actual text */
+    overflow-y: scroll;
 }
 
 #log-output pre {
     /* Make it look like a single area */
     margin: 0;
     border-radius: 0;
+    /* TODO: Fix additional empty lines when copying the log */
 
-    width: calc(100% - 1em);
     padding: 0 0.5em;
+    line-height: 1.5;
+
+    /* Break long lines */
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }

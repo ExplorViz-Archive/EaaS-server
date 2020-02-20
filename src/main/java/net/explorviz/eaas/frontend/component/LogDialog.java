@@ -13,7 +13,7 @@ import net.explorviz.eaas.service.process.ProcessListener;
 
 import java.util.function.Consumer;
 
-import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+import static com.vaadin.flow.dom.ElementFactory.createHeading3;
 import static com.vaadin.flow.dom.ElementFactory.createPreformatted;
 
 /**
@@ -51,7 +51,7 @@ public class LogDialog extends Dialog implements ProcessListener {
         HorizontalLayout header = new HorizontalLayout();
         header.setId("log-dialog-header");
         header.add(closeButton);
-        header.getElement().appendChild(createHeading2("Output of '" + dialogTitle + "'"));
+        header.getElement().appendChild(createHeading3("Output of " + dialogTitle));
         add(header);
 
         output = new VerticalLayout();
@@ -70,7 +70,8 @@ public class LogDialog extends Dialog implements ProcessListener {
         if (!stopped) {
             /*
              * Try to do cleanup if the user closed the tab (i.e. we didn't receive a BeforeLeaveEvent).
-             * If we fail to kill the BackgroundProcess
+             * If we fail to kill the BackgroundProcess it's not that big of a deal, the process will die in any
+             * case when the build instance is stopped.
              */
             if (ui.isClosing()) {
                 closeCallback.accept(this);
