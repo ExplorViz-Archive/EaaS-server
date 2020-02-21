@@ -19,6 +19,10 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 public class BackgroundProcess {
+    private static final int INITIAL_BUFFER_SIZE = 512;
+    private static final int MAX_LINES = 256;
+    private static final int MAX_BYTES = 64 * 1024;
+
     @Getter
     private Process process;
 
@@ -65,11 +69,20 @@ public class BackgroundProcess {
         @Override
         public void run() {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream(),
-                StandardCharsets.UTF_8))) {
+                    StandardCharsets.UTF_8), MAX_BYTES)) {
+                StringBuilder text = new StringBuilder(INITIAL_BUFFER_SIZE);
                 String line;
-                // TODO: Improve efficiency by reading up to X lines at once as long as bufferedReader#ready()
                 while ((line = bufferedReader.readLine()) != null) {
-                    listener.onStandardOutput(line);
+                    text.append(line);
+
+                    for (int count = 1; bufferedReader.ready() && count < MAX_LINES && text.length() < MAX_BYTES &&
+                            (line = bufferedReader.readLine()) != null; count++) {
+                        text.append("\n");
+                        text.append(line);
+                    }
+
+                    listener.onStandardOutput(text.toString());
+                    text.setLength(0);
                 }
 
                 listener.onDied(process.waitFor());

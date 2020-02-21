@@ -13,7 +13,8 @@ public interface ProcessListener {
     }
 
     /**
-     * Called for each line the process writes to its standard output.
+     * Called when standard output happens. May contain multiple lines separated with a single newline character. No
+     * trailing newline.
      */
-    void onStandardOutput(String line);
+    void onStandardOutput(String text);
 }

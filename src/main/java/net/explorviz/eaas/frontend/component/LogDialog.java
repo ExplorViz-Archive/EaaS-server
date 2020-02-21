@@ -66,7 +66,7 @@ public class LogDialog extends Dialog implements ProcessListener {
         closeCallback.accept(this);
     }
 
-    private void appendLine(String line) {
+    private void appendText(String text) {
         if (!stopped) {
             /*
              * Try to do cleanup if the user closed the tab (i.e. we didn't receive a BeforeLeaveEvent).
@@ -78,7 +78,7 @@ public class LogDialog extends Dialog implements ProcessListener {
             }
 
             ui.access(() -> {
-                output.getElement().appendChild(createPreformatted(line));
+                output.getElement().appendChild(createPreformatted(text));
                 // TODO: Auto-scroll and limit history
                 ui.push();
             });
@@ -87,11 +87,11 @@ public class LogDialog extends Dialog implements ProcessListener {
 
     @Override
     public void onDied(int exitCode) {
-        appendLine("\nEnd of output");
+        appendText("\nEnd of output");
     }
 
     @Override
-    public void onStandardOutput(String line) {
-        appendLine(line);
+    public void onStandardOutput(String text) {
+        appendText(text);
     }
 }
