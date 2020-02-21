@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Entity
 @Table(indexes = {
-    @Index(columnList = "project_id,name"),
+    @Index(columnList = "project_id,name", unique = true),
     @Index(columnList = "dockerImage", unique = true)
 })
 public class Build extends BaseEntity {

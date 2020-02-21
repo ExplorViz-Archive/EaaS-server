@@ -27,7 +27,7 @@ public class User extends BaseEntity implements UserDetails {
     public static final int USERNAME_MAX_LENGTH = 64;
 
     @NotEmpty
-    @Column(unique = true, nullable = false, length = USERNAME_MAX_LENGTH)
+    @Column(unique = true, nullable = false)
     @Size(min = USERNAME_MIN_LENGTH, max = USERNAME_MAX_LENGTH)
     private String username;
 

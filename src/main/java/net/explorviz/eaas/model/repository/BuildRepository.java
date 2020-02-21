@@ -11,5 +11,9 @@ import java.util.Optional;
 public interface BuildRepository extends PagingAndSortingRepository<Build, Long> {
     Optional<Build> findByProjectAndId(Project project, Long id);
 
+    boolean existsByProjectAndNameIgnoreCase(Project project, String name);
+
     Page<Build> findByProjectOrderByCreatedDateDesc(Project project, Pageable pageable);
+
+    boolean existsByDockerImageIgnoreCase(String dockerImage);
 }

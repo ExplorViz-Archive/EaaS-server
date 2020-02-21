@@ -1,13 +1,13 @@
 package net.explorviz.eaas.api;
 
 import lombok.extern.slf4j.Slf4j;
-import net.explorviz.eaas.service.docker.AdapterException;
-import net.explorviz.eaas.service.docker.DockerAdapter;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.APIAuthenticator;
+import net.explorviz.eaas.service.docker.AdapterException;
+import net.explorviz.eaas.service.docker.DockerAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +84,8 @@ public class ProjectsController {
     }
 
     /**
-     * To simplify the build upload script this method doesn't use JSON but form data for input and outputs the
-     * created build ID as plain text.
+     * To simplify the build upload script this method doesn't use JSON but form data for input and outputs the created
+     * build ID as plain text.
      */
     @RequestMapping(path = "/{project}/builds", method = RequestMethod.POST, produces = "text/plain")
     public String postProjectBuild(@RequestHeader(value = SECRET_HEADER, required = false) String secret,
@@ -98,10 +98,18 @@ public class ProjectsController {
 
         if (name.length() < Build.NAME_MIN_LENGTH || name.length() > Build.NAME_MAX_LENGTH) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Build name must be between " +
-                Build.NAME_MIN_LENGTH + " and " + Build.NAME_MAX_LENGTH + " characters long!");
+                Build.NAME_MIN_LENGTH + " and " + Build.NAME_MAX_LENGTH + " characters long");
         }
 
-        // TODO: Check if name and imageID are unique
+        if (buildRepository.existsByDockerImageIgnoreCase(imageID)) {
+            // Warning: This might leak knowledge about existing imageIDs across projects
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "ImageID " + imageID + " already belongs to " +
+                "another build");
+        }
+
+        if (buildRepository.existsByProjectAndNameIgnoreCase(project, name)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Name is already used");
+        }
 
         log.info("Receiving new build for project #{} ('{}') with name '{}'", projectId, project.getName(), name);
         log.debug("Image has size {} B, original filename '{}'", image.getSize(), image.getOriginalFilename());

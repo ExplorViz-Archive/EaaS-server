@@ -60,6 +60,8 @@ public class NewProjectView extends VerticalLayout {
         User user = SecurityUtils.getCurrentUser().orElseThrow(() ->
             new IllegalStateException("Tried to create project from unauthenticated context"));
 
+        // TODO: Use Binder with proper validator
+
         String name = StringUtils.trimWhitespace(projectName.getValue());
 
         if (!StringUtils.hasText(name)) {
