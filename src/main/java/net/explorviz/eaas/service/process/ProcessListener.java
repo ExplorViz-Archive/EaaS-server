@@ -6,7 +6,7 @@ package net.explorviz.eaas.service.process;
 @FunctionalInterface
 public interface ProcessListener {
     /**
-     * Called with the exit code of the process when it dies and is not killed through {@link BackgroundProcess#kill()}}
+     * Called with the exit code of the process when it dies and is not killed through {@link BackgroundProcess#close()}
      * or any other means.
      */
     default void onDied(int exitCode) {

@@ -29,7 +29,7 @@ public class DockerComposeDummyImplementation implements DockerComposeAdapter {
 
     private static final class DummyBackgroundProcess extends BackgroundProcess {
         @Override
-        public void kill() {
+        public void close() {
         }
 
         @Override

@@ -77,7 +77,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
 
     private void openLogs(UI ui) {
         try {
-            logProcess = dockerCompose.logsFollow(instance/*, ExplorVizInstance.APPLICATION_SERVICE_NAME*/);
+            logProcess = dockerCompose.logsFollow(instance, ExplorVizInstance.APPLICATION_SERVICE_NAME);
             LogDialog dialog = new LogDialog(instance.getBuild().getName(), ui, ignored -> stopLogs());
             logProcess.startListening(dialog);
             dialog.open();
@@ -88,7 +88,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
 
     private void stopLogs() {
         if (logProcess != null) {
-            logProcess.kill();
+            logProcess.close();
             logProcess = null;
         }
 

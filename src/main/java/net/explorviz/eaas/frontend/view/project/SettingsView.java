@@ -40,7 +40,7 @@ public class SettingsView extends AbstractProjectView {
 
         Button deleteButton = new Button("Delete project");
         deleteButton.setIcon(VaadinIcon.EXCLAMATION_CIRCLE.create());
-        deleteButton.addClickListener(this::doRequestDeletion);
+        deleteButton.addClickListener(click -> this.doRequestDeletion());
         add(deleteButton);
     }
 
@@ -50,7 +50,7 @@ public class SettingsView extends AbstractProjectView {
         Notification.show("Settings saved");
     }
 
-    private void doRequestDeletion(ClickEvent<Button> click) {
+    private void doRequestDeletion() {
         // TODO: Deny deletion if there are running instances
 
         new ConfirmDialog<>(getProject(),

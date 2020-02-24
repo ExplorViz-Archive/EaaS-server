@@ -112,7 +112,7 @@ public class DockerComposeToolImplementation implements DockerComposeAdapter {
         try {
             if (!process.getProcess().waitFor(operationTimeout, TimeUnit.MILLISECONDS)) {
                 log.error("docker-compose operation timed out, forcibly terminating process...");
-                process.kill();
+                process.close();
                 throw new AdapterException("Operation timed out");
             }
         } catch (InterruptedException e) {
