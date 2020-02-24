@@ -15,7 +15,7 @@ import org.springframework.security.access.AccessDeniedException;
 import java.util.Optional;
 
 /**
- * Common base class for all views specific to a project. Routes are expected to have a the project ID as trailing
+ * Common base class for all views specific to a project. Routes are expected to have the project ID as trailing
  * parameter and should use the {@link net.explorviz.eaas.frontend.layout.ProjectLayout}.
  * <p>
  * Components need to be added in the {@link #build()} method only, as the project is only available after {@link

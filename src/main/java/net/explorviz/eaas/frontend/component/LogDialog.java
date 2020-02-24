@@ -23,7 +23,7 @@ import static com.vaadin.flow.dom.ElementFactory.createPreformatted;
  * com.vaadin.flow.component.page.Push} or updates won't work in real-time.
  */
 @Slf4j
-@CssImport("./style/log-dialog.css")
+@CssImport("./style/dialog.css")
 public class LogDialog extends Dialog implements ProcessListener {
     private static final long serialVersionUID = -7229177487266728104L;
 
@@ -41,7 +41,6 @@ public class LogDialog extends Dialog implements ProcessListener {
         this.ui = ui;
         this.closeCallback = closeCallback;
 
-        setId("log-dialog");
         addDialogCloseActionListener(ignored -> this.onDialogCloseAction());
 
         Button closeButton = new Button();
@@ -49,7 +48,7 @@ public class LogDialog extends Dialog implements ProcessListener {
         closeButton.addClickListener(ignored -> onDialogCloseAction());
 
         HorizontalLayout header = new HorizontalLayout();
-        header.setId("log-dialog-header");
+        header.setId("dialog-header");
         header.add(closeButton);
         header.getElement().appendChild(createHeading3("Output of " + dialogTitle));
         add(header);
@@ -67,6 +66,11 @@ public class LogDialog extends Dialog implements ProcessListener {
     }
 
     private void appendText(String text) {
+        /*
+         * TODO: There is a possible throughput improvement by merging BackgroundProcess#ProcessObserver into this
+         *  class so we can keep reading from the standard output blockingly until the previous #access() went through.
+         *  Then we could also control the amount of lines displayed in the log more easily.
+         */
         if (!stopped) {
             /*
              * Try to do cleanup if the user closed the tab (i.e. we didn't receive a BeforeLeaveEvent).

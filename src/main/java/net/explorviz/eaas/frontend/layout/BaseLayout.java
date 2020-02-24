@@ -14,8 +14,6 @@ import net.explorviz.eaas.frontend.view.MainView;
 public class BaseLayout extends AppLayout {
     private static final long serialVersionUID = 6416207502947013549L;
 
-    private final RouterLink homeBanner;
-
     public BaseLayout() {
         this(true);
     }
@@ -25,10 +23,6 @@ public class BaseLayout extends AppLayout {
      *                    navigation sidebar.
      */
     protected BaseLayout(boolean closeDrawer) {
-        homeBanner = new RouterLink();
-        homeBanner.setRoute(MainView.class);
-        homeBanner.add(new ExplorVizBanner(false));
-
         if (closeDrawer) {
             setDrawerOpened(false);
         }
@@ -41,6 +35,9 @@ public class BaseLayout extends AppLayout {
      * items in a specific place.
      */
     public void buildNavbar() {
+        RouterLink homeBanner = new RouterLink();
+        homeBanner.setRoute(MainView.class);
+        homeBanner.add(new ExplorVizBanner(false));
         addToNavbar(homeBanner);
         addToNavbar(new NavbarActions());
     }

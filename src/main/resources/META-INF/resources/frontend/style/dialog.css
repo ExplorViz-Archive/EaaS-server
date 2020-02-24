@@ -1,9 +1,9 @@
-#log-dialog-header {
+#dialog-header {
     align-items: center;
     margin-bottom: var(--lumo-space-m);
 }
 
-#log-dialog-header h3 {
+#dialog-header h3 {
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -35,4 +35,14 @@
     /* Break long lines */
     white-space: pre-wrap;
     word-wrap: break-word;
+}
+
+.confirm-dialog-text {
+    max-width: 40em;
+}
+
+.confirm-dialog-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
