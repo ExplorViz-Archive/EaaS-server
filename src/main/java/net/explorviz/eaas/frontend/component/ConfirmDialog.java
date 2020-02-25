@@ -11,16 +11,17 @@ import java.util.function.Consumer;
 import static com.vaadin.flow.dom.ElementFactory.createHeading3;
 
 /**
- * Shows a confirmation request to the user. If he confirms {@code acknowledgeCallback} will be called with the given
- * {@code subject} of type {@code <T>}. The subject has no other meaning.
+ * Shows a confirmation request to the user. If they confirm, {@code acknowledgeCallback} will be called with the given
+ * {@code subject} of type {@code <T>}. The subject has no other purpose.
  */
 public class ConfirmDialog<T> extends Dialog {
     private static final long serialVersionUID = 6269645457369540098L;
 
-    public ConfirmDialog(T subject, String message, Consumer<? super T> acknowledgeCallback) {
+    public ConfirmDialog(T subject, String title, String message, Consumer<? super T> acknowledgeCallback) {
         HorizontalLayout header = new HorizontalLayout();
         header.setId("dialog-header");
-        header.getElement().appendChild(createHeading3("Confirmation"));
+        header.add(VaadinIcon.WARNING.create());
+        header.getElement().appendChild(createHeading3(title));
         add(header);
 
         Paragraph text = new Paragraph(message);

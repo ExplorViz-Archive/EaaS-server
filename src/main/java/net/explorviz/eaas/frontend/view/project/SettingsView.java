@@ -34,26 +34,26 @@ public class SettingsView extends AbstractProjectView {
         // TODO: Change name
 
         Checkbox hiddenCheckbox = new Checkbox("Hide Project");
-        hiddenCheckbox.setEnabled(getProject().isHidden());
+        hiddenCheckbox.setValue(getProject().isHidden());
         hiddenCheckbox.addClickListener(this::doSetHidden);
         add(hiddenCheckbox);
 
         Button deleteButton = new Button("Delete project");
-        deleteButton.setIcon(VaadinIcon.EXCLAMATION_CIRCLE.create());
+        deleteButton.setIcon(VaadinIcon.FOLDER_REMOVE.create());
         deleteButton.addClickListener(click -> this.doRequestDeletion());
         add(deleteButton);
     }
 
     private void doSetHidden(ClickEvent<Checkbox> click) {
-        getProject().setHidden(click.getSource().isEnabled());
-        projectRepo.save(getProject());
+        getProject().setHidden(click.getSource().getValue());
+        this.project = projectRepo.save(getProject());
         Notification.show("Settings saved");
     }
 
     private void doRequestDeletion() {
         // TODO: Deny deletion if there are running instances
 
-        new ConfirmDialog<>(getProject(),
+        new ConfirmDialog<>(getProject(), "Really delete project?",
                 "Are you sure you want to delete Project '" + getProject().getName() +
                         "'? This action can not be undone. Build images saved in the docker daemon will not be " +
                         "deleted by this action.", this::doDeleteProject).open();

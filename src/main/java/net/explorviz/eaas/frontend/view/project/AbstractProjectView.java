@@ -32,7 +32,7 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
 
     @Getter(AccessLevel.PROTECTED)
     @Nullable
-    private Project project;
+    protected Project project;
 
     protected AbstractProjectView(ProjectRepository projectRepo, @NonNull String subPageTitle) {
         this.projectRepo = projectRepo;
