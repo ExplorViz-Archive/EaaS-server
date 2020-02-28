@@ -62,6 +62,6 @@ public class SettingsView extends AbstractProjectView {
     private void doDeleteProject(Project project) {
         projectRepo.delete(project);
         getUI().ifPresent(ui -> ui.navigate(MainView.class));
-        Notification.show("Project deleted");
+        Notification.show("Deleted project " + project.getName());
     }
 }

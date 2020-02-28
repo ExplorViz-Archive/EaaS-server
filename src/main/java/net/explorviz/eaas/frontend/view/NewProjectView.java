@@ -26,7 +26,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
-@PageTitle("Login - " + Application.PAGE_TITLE)
+@PageTitle("New Project - " + Application.PAGE_TITLE)
 public class NewProjectView extends VerticalLayout {
     private static final long serialVersionUID = 177039564703101073L;
 
@@ -43,14 +43,14 @@ public class NewProjectView extends VerticalLayout {
         this.secretRepo = secretRepo;
         this.keyGenerator = keyGenerator;
 
-        getElement().appendChild(createHeading2("New project"));
+        getElement().appendChild(createHeading2("New Project"));
 
         projectName = new TextField();
         projectName.setMinLength(Project.NAME_MIN_LENGTH);
         projectName.setMaxLength(Project.NAME_MAX_LENGTH);
         projectName.setPlaceholder("Project name");
 
-        Button createProject = new Button("Create new project");
+        Button createProject = new Button("Create");
         createProject.addClickListener(click -> this.doCreateProject());
 
         add(new HorizontalLayout(projectName, createProject));
