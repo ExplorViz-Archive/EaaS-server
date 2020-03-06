@@ -1,9 +1,7 @@
 version: '3'
 services:
   eaas:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+    image: eaas-server:latest
     restart: always
     ports:
       - 8080:8080
