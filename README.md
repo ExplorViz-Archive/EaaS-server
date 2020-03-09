@@ -1,6 +1,16 @@
 # ExplorViz as a Service
 
-Visualize your build artifacts with ExplorViz whenever you need.
+Collect your build artifacts to visualize them in ExplorViz whenever you need.
+
+## What is this?
+
+> [ExplorViz](https://www.explorviz.net/) is an open source research monitoring and visualization approach, which uses dynamic analysis techniques to provide a live trace visualization of large software landscapes.
+
+[ExplorViz as a Service](https://github.com/Marco01809/EaaS-server) (EaaS) allows you to collect build artifacts and run them in ExplorViz instances on-demand.
+
+When submitting builds to EaaS, they need to be wrapped inside a docker image that runs both the application and, if necessary, some load to create more interesting visualizations.
+
+Take a look at [EaaS-base-image](https://github.com/Marco01809/EaaS-base-image) which helps you create such images and [EaaS-action](https://github.com/Marco01809/EaaS-action) which will submit these images to an EaaS instance. See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application) for a full example making use of this software.
 
 ## Build as docker image (recommended)
 
@@ -9,13 +19,13 @@ When building the docker image for EaaS, the entire build is done within a conta
 Simply run the following command to create the image ready for production use:
 
 ```
-$ docker build -t eaas-server:latest -f docker/Dockerfile .
+$ docker build -t explorviz/eaas-server:latest -f docker/Dockerfile .
 ```
 
 Because the entire build runs inside the container, dependencies might have to be downloaded on every run. This can be very time consuming during development. To prevent this, another Dockerfile is included that uses the experimental cache mount feature to permanently store downloaded dependencies. To use this file your docker daemon needs to run in experimental mode, then build the image like this:
 
 ```
-$ DOCKER_BUILDKIT=1 docker build -t eaas-server:latest -f docker/experimental.Dockerfile .
+$ DOCKER_BUILDKIT=1 docker build -t explorviz/eaas-server:latest -f docker/experimental.Dockerfile .
 ```
 
 ### Running the docker image
@@ -29,10 +39,12 @@ $ docker-compose -f docker/docker-compose.yml up -d
 If you prefer to use `docker` directly, use something like
 
 ```
-$ docker run -d -v /var/opt/eaas/ -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 eaas-server:latest
+$ docker run -d -v /var/opt/eaas/ -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 explorviz/eaas-server:latest
 ```
 
 You can find additional options by reading the docker-compose file.
+
+Then, open `http://localhost:8080` (or the address wherever this server is running) in your browser. Default administrator credentials are `admin`:`password`.
 
 ## Build as executable jar
 
