@@ -74,7 +74,7 @@ public final class ExplorVizManager {
         this.instancesByBuildId = new ConcurrentHashMap<>(maxInstances);
     }
 
-    // TODO: Support multiple instances of the same build - requires changes in frontend as well
+    // TODO: Support multiple instances of the same build? - requires changes in frontend as well
 
     /**
      * @throws AdapterException Exceptions of this kind are also logged before they are re-thrown.

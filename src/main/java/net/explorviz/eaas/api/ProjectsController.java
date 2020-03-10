@@ -102,7 +102,7 @@ public class ProjectsController {
         }
 
         if (buildRepository.existsByDockerImageIgnoreCase(imageID)) {
-            // Warning: This might leak knowledge about existing imageIDs across projects
+            // TODO: This might leak knowledge about existing imageIDs across projects
             throw new ResponseStatusException(HttpStatus.CONFLICT, "ImageID " + imageID + " already belongs to " +
                 "another build");
         }
