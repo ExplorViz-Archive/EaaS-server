@@ -1,6 +1,6 @@
 # ExplorViz as a Service
 
-Collect your build artifacts to visualize them in ExplorViz whenever you need.
+Collect build artifacts of your Java application to visualize them in ExplorViz whenever you need.
 
 ## What is this?
 
@@ -8,9 +8,19 @@ Collect your build artifacts to visualize them in ExplorViz whenever you need.
 
 [ExplorViz as a Service](https://github.com/Marco01809/EaaS-server) (EaaS) allows you to collect build artifacts and run them in ExplorViz instances on-demand.
 
-When submitting builds to EaaS, they need to be wrapped inside a docker image that runs both the application and, if necessary, some load to create more interesting visualizations.
+When submitting builds to EaaS, they need to be wrapped inside a docker image that runs both the application and, if necessary, some load to create more interesting visualizations. The application needs to be run with the Kieker monitoring tool to obtain records and send them to ExplorViz. The build image will be run together with ExplorViz inside a docker-compose stack, i.e. they run on the same network. The endpoint to submit Kieker records to is `analysis-service` on port `10133` (SingleSocketTcpWriter).
+If you use the [EaaS-base-image](https://github.com/Marco01809/EaaS-base-image) for your build images, then you do not need to worry about configuring Kieker yourself.
+The server provides a simple HTTP API to submit builds to; a shell script to build and upload images can be found in `submission/submit-eaas.sh`. You can copy this file into your repository or keep it somewhere on your CI server to run it during a build.
 
-Take a look at [EaaS-base-image](https://github.com/Marco01809/EaaS-base-image) which helps you create such images and [EaaS-action](https://github.com/Marco01809/EaaS-action) which will submit these images to an EaaS instance. See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application) for a full example making use of this software.
+See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application) for a full example making use of this software.
+
+## Requirements
+
+The EaaS server must be able to create and run docker containers. By default it is expected that the server can access `/var/run/docker.sock`. This socket is also mounted inside the container when EaaS itself runs in Docker (as recommended). However, you can configure another Docker API endpoint through environment variables. Currently there is no support to make use of Docker Swarm or multiple Docker daemons.
+
+You will need a fairly powerful machine. EaaS allows you to run multiple visualizations at the same time. We recommended 1.5 cores and 2GB RAM per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
+
+When running the server behind a reverse proxy (e.g. to do SSL termination) and you are getting `The requested URL returned error: 413` from the submission script in your builds, then your reverse proxy is limiting the request body size. Docker images can get fairly large, setting this limit to `1024M` should suffice for most applications. Check the documentation of your reverse proxy.
 
 ## Build as docker image (recommended)
 
@@ -68,7 +78,9 @@ To create a production build, add `-P production`. The runnable jar file is crea
 
 During development, you might want to do incremental builds instead of clean builds every time; in this case specify the `package` goal: `./mvnw package` (this overrides the default goal of `clean verify`).
 
-`Spring Boot DevTools` is included to support LiveReload integration with your IDE. Please check the documentation of your IDE on how to make use of this. Also check out the *Internal options* section at the bottom of `src/main/resources/application.properties` for a number of options that can help you when developing.
+You can also run the server directly without packaging by running `./mvnw spring-boot:run`. *Spring Boot DevTools* is included to support LiveReload so changes will apply automatically while the server is running. Please check the documentation of your IDE on how to make use of this.
+
+Also check out the *Internal options* section at the bottom of `src/main/resources/application.properties` for a number of options that can help you when developing. `eaas.docker.useDummyImplementation=true` will allow you to run the server without needing access to a docker daemon.
 
 ### Troubleshooting
 
