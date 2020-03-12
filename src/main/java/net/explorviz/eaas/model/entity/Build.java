@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(indexes = {
     @Index(columnList = "project_id,name", unique = true),
-    @Index(columnList = "dockerImage", unique = true)
+    @Index(columnList = "project_id,dockerImage", unique = true)
 })
 public class Build extends BaseEntity {
     private static final long serialVersionUID = 8960003619026674513L;
@@ -39,7 +39,7 @@ public class Build extends BaseEntity {
     private Project project;
 
     @NotEmpty
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String dockerImage;
 
     public Build(@NotEmpty String name, @NotNull Project project, @NotEmpty String dockerImage) {
