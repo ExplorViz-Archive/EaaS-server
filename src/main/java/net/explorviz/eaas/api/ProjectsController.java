@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 import static net.explorviz.eaas.security.APIAuthenticator.SECRET_HEADER;
 
@@ -101,18 +102,25 @@ public class ProjectsController {
                 Build.NAME_MIN_LENGTH + " and " + Build.NAME_MAX_LENGTH + " characters long");
         }
 
-        if (buildRepository.existsByDockerImageIgnoreCase(imageID)) {
-            // TODO: This might leak knowledge about existing imageIDs across projects
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "ImageID " + imageID + " already belongs to " +
-                "another build");
+        log.info("Receiving new build for project #{} ('{}') with name '{}', image ID '{}' ({} Bytes)",
+            projectId, project.getName(), name, imageID, image.getSize());
+
+        // Note: This means builds where the artifact didn't change don't get their own entry in EaaS
+        Optional<Build> existing = buildRepository.findByProjectAndDockerImageIgnoreCase(project, imageID);
+        if (existing.isPresent()) {
+            Long existingID = existing.get().getId();
+            log.info("This imageID already exists, not adding a new Build and returning existing build ID {}",
+                existingID);
+            return existingID.toString();
         }
 
+        /*
+         * We do this AFTER checking for duplicate imageID, so re-runs of the same build will not trigger errors, as
+         * long as the produced image is the same.
+         */
         if (buildRepository.existsByProjectAndNameIgnoreCase(project, name)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Name is already used");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Name is already used and image is not the same");
         }
-
-        log.info("Receiving new build for project #{} ('{}') with name '{}'", projectId, project.getName(), name);
-        log.debug("Image has size {} B, original filename '{}'", image.getSize(), image.getOriginalFilename());
 
         try (InputStream stream = image.getInputStream()) {
             dockerAdapter.loadImage(stream);
