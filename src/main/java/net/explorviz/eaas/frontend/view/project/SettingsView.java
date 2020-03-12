@@ -14,6 +14,7 @@ import net.explorviz.eaas.model.repository.ProjectRepository;
 import org.springframework.security.access.annotation.Secured;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
 @Route(value = "settings", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
@@ -29,7 +30,8 @@ public class SettingsView extends AbstractProjectView {
 
     @Override
     protected void build() {
-        getElement().appendChild(createHeading2("Settings"));
+        getElement().appendChild(createHeading2("Settings"),
+            createParagraph("The ID of this project is: " + getProject().getId()));
 
         // TODO: Change name
 
