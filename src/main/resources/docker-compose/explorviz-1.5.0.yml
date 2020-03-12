@@ -198,6 +198,8 @@ services:
 # EaaS: Add the application we want to test
   application:
     image: %APPLICATION_IMAGE%
+    depends_on:
+      - analysis-service
 
 # EaaS: No persistent volumes
 #volumes:
