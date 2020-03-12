@@ -43,7 +43,7 @@ public class DockerJavaImplementation implements DockerAdapter {
 
     @Override
     public void loadImage(@NonNull InputStream input) {
-        log.info("Loading new image");
+        log.info("Loading image");
 
         try (LoadImageCmd cmd = docker.loadImageCmd(input)) {
             cmd.exec();
