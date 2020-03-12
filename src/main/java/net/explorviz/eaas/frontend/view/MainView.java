@@ -35,7 +35,7 @@ public class MainView extends DynamicView {
 
     @Override
     protected void build() {
-        getElement().appendChild(createHeading2("Recently updated projects"));
+        getElement().appendChild(createHeading2("Recently uploaded builds"));
 
         Page<Build> mostRecentBuilds = buildRepo.findMostRecentBuilds(false,
             SecurityUtils.getCurrentUser().orElse(null), PageRequest.of(0, entriesPerPage));

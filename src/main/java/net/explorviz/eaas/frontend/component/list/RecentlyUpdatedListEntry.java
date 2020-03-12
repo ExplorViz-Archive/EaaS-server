@@ -13,12 +13,10 @@ public class RecentlyUpdatedListEntry extends AbstractListEntry {
     private static final long serialVersionUID = 3590351523668425287L;
 
     public RecentlyUpdatedListEntry(Build build) {
-        RichHeader header = RichHeader.createWithLink(BuildsView.class,
-            build.getProject().getId(), VaadinIcon.CHEVRON_CIRCLE_RIGHT.create(), build.getProject().getName());
-        header.getIcon().setVisible(false);
-        add(header);
+        add(RichHeader.createWithLink(BuildsView.class, build.getProject().getId(),
+            VaadinIcon.CHEVRON_CIRCLE_RIGHT.create(), build.getProject().getName()));
         getElement().appendChild(createParagraph(build.getName()),
-            createParagraph("Uploaded " + build.getCreatedDate().format(
+            createParagraph("Added " + build.getCreatedDate().format(
                 DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG))));
     }
 }

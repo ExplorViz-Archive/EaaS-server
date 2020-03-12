@@ -26,7 +26,6 @@ public interface BuildRepository extends PagingAndSortingRepository<Build, Long>
         "LEFT JOIN b.project p " +
         "WHERE p.hidden = ?1 " +
         "OR (?2 IS NOT NULL AND p.owner = ?2) " +
-        //"GROUP BY p " +
         "ORDER BY b.createdDate DESC")
     Page<Build> findMostRecentBuilds(boolean hidden, @Nullable User owner, Pageable pageable);
 }
