@@ -30,6 +30,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
     private final DockerComposeAdapter dockerCompose;
     private final Consumer<? super ExplorVizInstance> stopCallback;
     private final Button logButton;
+    private final Button fullLogButton;
 
     private BackgroundProcess logProcess;
 
@@ -56,12 +57,20 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
         stopButton.setDisableOnClick(true);
         add(stopButton);
 
-        logButton = new Button("Logs");
+        logButton = new Button("Application Logs");
         logButton.addClickListener(click -> this.openLogs(click.getSource().getUI().orElseThrow(
-            () -> new IllegalStateException("Button was clicked by a ghost"))));
+            () -> new IllegalStateException("Button was clicked by a ghost")),
+            ExplorVizInstance.APPLICATION_SERVICE_NAME));
         logButton.setIcon(VaadinIcon.CLIPBOARD_TEXT.create());
         logButton.setDisableOnClick(true);
         add(logButton);
+
+        fullLogButton = new Button("ExplorViz Logs");
+        fullLogButton.addClickListener(click -> this.openLogs(click.getSource().getUI().orElseThrow(
+            () -> new IllegalStateException("Button was clicked by a ghost"))));
+        fullLogButton.setIcon(VaadinIcon.CLIPBOARD_TEXT.create());
+        fullLogButton.setDisableOnClick(true);
+        add(fullLogButton);
     }
 
     @Override
@@ -75,9 +84,12 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
         stopLogs();
     }
 
-    private void openLogs(UI ui) {
+    private void openLogs(UI ui, String... serviceNames) {
+        logButton.setEnabled(true);
+        fullLogButton.setEnabled(true);
+
         try {
-            logProcess = dockerCompose.logsFollow(instance, ExplorVizInstance.APPLICATION_SERVICE_NAME);
+            logProcess = dockerCompose.logsFollow(instance, serviceNames);
             LogDialog dialog = new LogDialog(instance.getBuild().getName(), ui, ignored -> stopLogs());
             logProcess.startListening(dialog);
             dialog.open();
@@ -93,6 +105,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
         }
 
         logButton.setEnabled(true);
+        fullLogButton.setEnabled(true);
     }
 
     private void doStopInstance() {
