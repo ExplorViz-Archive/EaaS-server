@@ -7,6 +7,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
@@ -27,6 +28,7 @@ import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 @Route(value = "newproject", layout = MainLayout.class)
 @Secured("CREATE_PROJECT")
 @PageTitle("New Project - " + Application.PAGE_TITLE)
+@Slf4j
 public class NewProjectView extends VerticalLayout {
     private static final long serialVersionUID = 177039564703101073L;
 
@@ -79,6 +81,7 @@ public class NewProjectView extends VerticalLayout {
 
             Project project = projectRepo.save(new Project(name, user));
             projectName.clear();
+            log.info("User {} created new project #{} ('{}')", user.getUsername(), project.getId(), project.getName());
 
             // TODO: Remove dummy secret generation after initial development phase
             secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));

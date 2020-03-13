@@ -6,6 +6,7 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
+import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.frontend.component.ConfirmDialog;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.frontend.view.MainView;
@@ -18,6 +19,7 @@ import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
 @Route(value = "settings", layout = ProjectLayout.class)
 @Secured("MANAGE_PROJECT")
+@Slf4j
 public class SettingsView extends AbstractProjectView {
     private static final long serialVersionUID = -6650300496191931405L;
 
@@ -46,7 +48,7 @@ public class SettingsView extends AbstractProjectView {
         add(deleteButton);
     }
 
-    private void doSetHidden(ClickEvent<Checkbox> click) {
+    private void doSetHidden(ClickEvent<? extends Checkbox> click) {
         getProject().setHidden(click.getSource().getValue());
         this.project = projectRepo.save(getProject());
         Notification.show("Settings saved");
@@ -62,6 +64,7 @@ public class SettingsView extends AbstractProjectView {
     }
 
     private void doDeleteProject(Project project) {
+        log.info("Deleting project #{} ('{}')", project.getId(), project.getName());
         projectRepo.delete(project);
         getUI().ifPresent(ui -> ui.navigate(MainView.class));
         Notification.show("Deleted project " + project.getName());
