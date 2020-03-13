@@ -49,7 +49,7 @@ $ docker-compose -f docker/docker-compose.yml up -d
 If you prefer to use `docker` directly, use something like
 
 ```
-$ docker run -d -v /var/opt/eaas/ -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 explorviz/eaas-server:latest
+$ docker run -d -v eaas-database:/var/opt/eaas/ -v /var/run/docker.sock:/var/run/docker.sock -p 8080:8080 explorviz/eaas-server:latest
 ```
 
 You can find additional options by reading the docker-compose file.

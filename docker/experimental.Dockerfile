@@ -56,7 +56,4 @@ EXPOSE 8080
 VOLUME /var/opt/eaas/
 
 WORKDIR /opt/eaas/
-
-ENTRYPOINT ["/entrypoint.sh"]
-# TODO: Add -spring.config.location= and generate production-mode configuration from environment variables
-CMD ["java", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]
+ENTRYPOINT ["/entrypoint.sh", "java", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]

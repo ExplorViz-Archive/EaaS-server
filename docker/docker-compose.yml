@@ -2,15 +2,24 @@ version: '3'
 services:
   eaas:
     image: eaas-server:latest
+    command:
+      # For more options see src/main/resources/application.properties
+      - "--eaas.explorviz.accessUrlTemplate=http://localhost:%FRONTEND_PORT%"
+      - "--eaas.explorviz.maxInstances=5"
+      - "--eaas.explorviz.frontendPortOffset=8800"
     restart: always
     ports:
       - 8080:8080
     volumes:
-      - /var/opt/eaas/
+      - eaas-database:/var/opt/eaas
+      # If you configured another Docker daemon below you can remove this line
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      # Configure the Docker API endpoint to use for storing builds and running ExplorViz instances
       # See https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
       DOCKER_HOST: "unix:///var/run/docker.sock"
       #DOCKER_API_VERSION:
       #DOCKER_TLS:
       #DOCKER_TLS_VERIFY:
+volumes:
+  eaas-database:
