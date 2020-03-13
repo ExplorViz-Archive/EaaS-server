@@ -4,6 +4,8 @@ import net.explorviz.eaas.service.process.BackgroundProcess;
 import net.explorviz.eaas.service.process.ProcessListener;
 import org.springframework.lang.NonNull;
 
+import java.time.ZonedDateTime;
+
 /**
  * Implements {@link DockerComposeAdapter} with all no-op methods. Can be used for testing purposes or frontend
  * development without a docker daemon present.
@@ -11,10 +13,13 @@ import org.springframework.lang.NonNull;
 public class DockerComposeDummyImplementation implements DockerComposeAdapter {
     @Override
     public void up(@NonNull DockerComposeDefinition service) {
+        service.setRunning(true);
+        service.setStartedTime(ZonedDateTime.now());
     }
 
     @Override
     public void down(@NonNull DockerComposeDefinition service) {
+        service.setRunning(false);
     }
 
     @Override
