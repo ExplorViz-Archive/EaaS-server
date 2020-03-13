@@ -10,6 +10,7 @@
 # - Only publish the ports we need, in order to avoid any conflicts on the host
 # - Remove all volumes because we don't want persistent data
 # - Add placeholder variables
+# - Add eaas.instance.name=%INSTANCE_NAME% label so traefik autodiscovery doesn't mix up instances
 
 version: "3.3"
 services:
@@ -31,6 +32,7 @@ services:
       - "traefik.enable=true"
       - "traefik.port=8082"
       - "traefik.http.routers.user-service.rule=PathPrefix(`/v1/tokens`) || PathPrefix(`/v1/users`) || PathPrefix(`/v1/roles`) || PathPrefix(`/v1/userbatch`)"
+      - "eaas.instance.name=%INSTANCE_NAME%"
 
   settings-service:
     image: explorviz/explorviz-backend-settings-service:dev
@@ -47,12 +49,11 @@ services:
       - "traefik.enable=true"
       - "traefik.port=8087"
       - "traefik.http.routers.settings-service.rule=PathPrefix(`/v1/settings`) || PathPrefix(`/v1/preferences`)"
+      - "eaas.instance.name=%INSTANCE_NAME%"
 
   landscape-service:
     image: explorviz/explorviz-backend-landscape-service:dev
 # EaaS: Changed from ports to expose
-#    ports:
-#      - "10135:10135"
     expose:
       - "10135"
     depends_on:
@@ -76,6 +77,7 @@ services:
       - "traefik.port=8081"
       - "traefik.http.routers.broadcast-service.rule=PathPrefix(`/v1/landscapes/broadcast`)"
       - "traefik.http.routers.broadcast-service.priority=200"
+      - "eaas.instance.name=%INSTANCE_NAME%"
 
   history-service:
     image: explorviz/explorviz-backend-history-service:dev
@@ -93,36 +95,21 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.history-service.rule=PathPrefix(`/v1/landscapes`) || PathPrefix(`/v1/timestamps`) "
       - "traefik.port=8086"
+      - "eaas.instance.name=%INSTANCE_NAME%"
 
   analysis-service:
     image: explorviz/explorviz-backend-analysis-service:dev
 # EaaS: Changed from ports to expose
-#    ports:
-#      - "10133:10133"
     expose:
       - "10133"
-
-# EaaS: Remove discovery-service
-#  discovery-service:
-#    image: explorviz/explorviz-backend-discovery-service:dev
-#    ports:
-#      - "8083:8083"
-#    depends_on:
-#      - traefik
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.port=8083"
-#      - "traefik.http.routers.discovery-service.rule=PathPrefix(`/v1/agents`)"
 
   frontend:
     image: explorviz/explorviz-frontend:dev
     ports:
       - "%FRONTEND_PORT%:80"
     environment:
-      - API_ROOT=http://traefik:8080
-      - FRONTEND_IP=%ACCESS_URL%
-      # Change localhost to your host ip adress, if you want to connect
-      # from remote devices
+      - "API_ROOT=http://traefik:8080"
+      - "FRONTEND_IP=%ACCESS_URL%"
     depends_on:
 # EaaS: Remove discovery-service
 #      - discovery-service
@@ -135,16 +122,16 @@ services:
   ### Software Stack ###
 
   traefik:
-    image: "traefik:v2.1"
+# EaaS: Update to latest Traefik
+    image: "traefik:v2.2"
     command:
       - "--entrypoints.web.address=:8080"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.constraints=Label(`eaas.instance.name`, `%INSTANCE_NAME%`)"
 # EaaS: Changed from ports to expose
-#    ports:
-#      - "8080:8080"
     expose:
-       - "8080"
+      - "8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
@@ -166,44 +153,23 @@ services:
   mongo-user:
     image: mongo
     command: mongod --port 27017
-# EaaS: No persistent volumes
-#    volumes:
-#      - explorviz-user-mongo-data:/data/db
-#      - explorviz-user-mongo-configdb:/data/configdb
     expose:
       - "27017"
 
   mongo-history:
     image: mongo
     command: mongod --port 27018
-# EaaS: No persistent volumes
-#    volumes:
-#      - explorviz-landscape-mongo-data:/data/db
-#      - explorviz-landscape-mongo-configdb:/data/configdb
     expose:
       - "27018"
 
   mongo-settings:
     image: mongo
     command: mongod --port 27019
-# EaaS: No persistent volumes
-#    volumes:
-#      - explorviz-settings-mongo-data:/data/db
-#      - explorviz-settings-mongo-configdb:/data/configdb
     expose:
       - "27019"
 
 # EaaS: Add the application we want to test
   application:
-    image: %APPLICATION_IMAGE%
+    image: "%APPLICATION_IMAGE%"
     depends_on:
       - analysis-service
-
-# EaaS: No persistent volumes
-#volumes:
-#  explorviz-user-mongo-data:
-#  explorviz-user-mongo-configdb:
-#  explorviz-landscape-mongo-data:
-#  explorviz-landscape-mongo-configdb:
-#  explorviz-settings-mongo-data:
-#  explorviz-settings-mongo-configdb:
