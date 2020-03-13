@@ -21,6 +21,7 @@ import javax.persistence.PrePersist;
 import java.util.Collection;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
+import static com.vaadin.flow.dom.ElementFactory.createParagraph;
 
 @PageTitle("Manage Instances - " + Application.PAGE_TITLE)
 @Route(value = "manage/instances", layout = MainLayout.class)
@@ -52,6 +53,9 @@ public class GlobalInstancesView extends DynamicView {
     @Override
     protected void build() {
         getElement().appendChild(createHeading2("Global Instances"));
+
+        getElement().appendChild(createParagraph("Here you can start an instance of ExplorViz with a dummy " +
+            "application image for testing purposes."));
 
         add(controls);
 

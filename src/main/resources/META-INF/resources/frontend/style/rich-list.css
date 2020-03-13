@@ -24,6 +24,11 @@
 .rich-list-header {
     margin-top: 0.5em;
     margin-bottom: 0.75em;
+    margin-left: var(--lumo-space-m);
+}
+
+.rich-list-header a {
+    margin-left: 0;
 }
 
 .rich-list-header, .rich-list-header > a {
@@ -34,12 +39,14 @@
 .rich-list-header iron-icon {
     width: 24px;
     height: 24px;
+    margin-left: 0;
+    margin-right: var(--lumo-space-m);
 }
 
 .rich-list-header h4 {
     margin-top: 0;
     margin-bottom: 0;
-    margin-left: var(--lumo-space-m);
+    margin-left: 0;
 }
 
 .controls-bar {
