@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Background thread to observe a {@link Process} in the background and informing a {@link ProcessListener} about all
+ * standard output and the exit code. The {@link #run()} returns after the process dies or the thread is interrupted.
+ */
 @Slf4j
 class ProcessObserver implements Runnable {
     private static final int INITIAL_BUFFER_SIZE = 512;
@@ -30,6 +34,7 @@ class ProcessObserver implements Runnable {
             while ((line = bufferedReader.readLine()) != null) {
                 text.append(line);
 
+                // Read several lines at once if they're already buffered, as long as we stay within size limits
                 for (int count = 1; bufferedReader.ready() && count < MAX_LINES && text.length() < MAX_BYTES &&
                     (line = bufferedReader.readLine()) != null; count++) {
                     text.append("\n");
@@ -44,6 +49,7 @@ class ProcessObserver implements Runnable {
         } catch (IOException e) {
             log.warn("Error reading background process output", e);
         } catch (InterruptedException ignored) {
+            // We were asked to stop (most likely by BackgroundProcess#stop()
         }
     }
 }

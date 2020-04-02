@@ -29,7 +29,7 @@ public class BackgroundProcess implements Closeable {
     /**
      * Set the listener to pass standard output to.
      */
-    public void startListening(@NonNull ProcessListener listener) {
+    public synchronized void startListening(@NonNull ProcessListener listener) {
         if (executor != null) {
             throw new IllegalStateException("Already started listening to this process");
         }
