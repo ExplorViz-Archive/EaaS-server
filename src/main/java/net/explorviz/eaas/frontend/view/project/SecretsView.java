@@ -80,6 +80,9 @@ public class SecretsView extends AbstractProjectView {
         if (!StringUtils.hasText(name)) {
             secretName.setInvalid(true);
             secretName.setErrorMessage("Secret name may not be empty");
+        } else if (name.length() < Secret.NAME_MIN_LENGTH || name.length() > Secret.NAME_MAX_LENGTH) {
+            secretName.setInvalid(true);
+            secretName.setErrorMessage("Secret name does not follow allowed pattern");
         } else if (secretRepo.existsByProjectAndNameIgnoreCase(getProject(), name)) {
             secretName.setInvalid(true);
             secretName.setErrorMessage("A secret with this name already exists!");

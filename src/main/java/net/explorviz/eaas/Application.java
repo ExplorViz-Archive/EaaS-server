@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
 @Slf4j
 public class Application implements CommandLineRunner {
+    // TODO: Replace with spring.application.name from configuration
     public static final String PAGE_TITLE = "ExplorViz as a Service";
 
     private static final String DEFAULT_USERNAME = "admin";

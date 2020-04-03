@@ -24,9 +24,9 @@ import java.util.List;
 public class Project extends BaseEntity {
     private static final long serialVersionUID = -1864944572450590914L;
 
-    public static final String NAME_PATTERN = "[a-zA-Z0-9-_]+";
     public static final int NAME_MIN_LENGTH = 1;
     public static final int NAME_MAX_LENGTH = 32;
+    public static final String NAME_PATTERN = "[a-zA-Z0-9-_]{" + NAME_MIN_LENGTH + "," + NAME_MAX_LENGTH + "}";
 
     @CreatedBy
     @ManyToOne(optional = false)

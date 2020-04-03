@@ -26,7 +26,11 @@ public class UserService implements UserDetailsService, UserDetailsPasswordServi
 
     @Override
     public UserDetails updatePassword(UserDetails userDetails, String newPassword) {
-        User user = (User) loadUserByUsername(userDetails.getUsername());
+        if (!(userDetails instanceof User)) {
+            throw new IllegalStateException("Cannot change password of UserDetails that isn't a User");
+        }
+
+        User user = (User) userDetails;
         user.setPassword(newPassword);
         return userRepository.save(user);
     }
@@ -34,6 +38,6 @@ public class UserService implements UserDetailsService, UserDetailsPasswordServi
     @Override
     public UserDetails loadUserByUsername(String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Unknown username"));
+            .orElseThrow(() -> new UsernameNotFoundException("Unknown username"));
     }
 }

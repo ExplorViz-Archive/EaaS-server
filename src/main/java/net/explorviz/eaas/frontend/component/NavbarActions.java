@@ -3,6 +3,8 @@ package net.explorviz.eaas.frontend.component;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import net.explorviz.eaas.frontend.view.ChangePasswordView;
+import net.explorviz.eaas.security.Authorities;
 import net.explorviz.eaas.security.SecurityConfiguration;
 import net.explorviz.eaas.security.SecurityUtils;
 
@@ -17,9 +19,12 @@ public class NavbarActions extends HorizontalLayout {
         homepage.setTarget("_blank");
         add(homepage);
 
-        // TODO: Change password functionality
-
         if (SecurityUtils.isUserLoggedIn()) {
+            if (SecurityUtils.hasAuthority(Authorities.CHANGE_PASSWORD_AUTHORITY)) {
+                add(IconAnchor.createFromIcon("/" + ChangePasswordView.ROUTE, VaadinIcon.PASSWORD.create(), "Change " +
+                    "password"));
+            }
+
             add(IconAnchor.createFromIcon(SecurityConfiguration.LOGOUT_URL, VaadinIcon.SIGN_OUT.create(), "Logout"));
         } else {
             add(IconAnchor.createFromIcon(SecurityConfiguration.LOGIN_URL, VaadinIcon.SIGN_IN.create(), "Login"));

@@ -24,9 +24,10 @@ import java.util.List;
 public class User extends BaseEntity implements UserDetails {
     private static final long serialVersionUID = -2609179636815086264L;
 
-    public static final String USERNAME_PATTERN = "[a-zA-Z0-9-_]+";
-    public static final int USERNAME_MIN_LENGTH = 2;
+    public static final int USERNAME_MIN_LENGTH = 1;
     public static final int USERNAME_MAX_LENGTH = 64;
+    public static final String USERNAME_PATTERN =
+        "[a-zA-Z0-9-_]{" + USERNAME_MIN_LENGTH + "," + USERNAME_MAX_LENGTH + "}";
 
     @NotEmpty
     @Column(unique = true, nullable = false)
@@ -70,8 +71,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new HashSet<>(8);
+        Collection<GrantedAuthority> authorities = new HashSet<>(9);
 
+        authorities.add(Authorities.CHANGE_PASSWORD_AUTHORITY);
         authorities.add(Authorities.RUN_BUILD_AUTHORITY);
         authorities.add(Authorities.READ_OWNED_PROJECTS_AUTHORITY);
         authorities.add(Authorities.MANAGE_OWNED_PROJECTS_AUTHORITY);

@@ -21,7 +21,7 @@ import java.time.ZonedDateTime;
 public class Secret extends BaseEntity {
     private static final long serialVersionUID = -5164775067113669305L;
 
-    public static final int NAME_MIN_LENGTH = 2;
+    public static final int NAME_MIN_LENGTH = 1;
     public static final int NAME_MAX_LENGTH = 64;
 
     public static final int SECRET_MIN_LENGTH = 1;

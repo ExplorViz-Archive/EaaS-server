@@ -44,7 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // Saves unauthorized access attempts, so the user is redirected after login
         HttpSessionRequestCache cache = new HttpSessionRequestCache();
         // Avoid saving internal vaadin requests
-        cache.setRequestMatcher(request -> !isVaadinInternalRequest(request));
+        cache.setRequestMatcher(request -> !isVaadinInternalRequest(request)
+            && !request.getRequestURI().startsWith(LOGIN_URL)
+            && !request.getRequestURI().startsWith(LOGOUT_URL));
         http.requestCache().requestCache(cache);
 
         // Restrict access to our application

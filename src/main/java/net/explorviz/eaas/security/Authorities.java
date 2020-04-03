@@ -25,6 +25,11 @@ public final class Authorities {
      */
 
     /**
+     * Grants the permission to change your own password.
+     */
+    public static final GrantedAuthority CHANGE_PASSWORD_AUTHORITY = create("CHANGE_PASSWORD");
+
+    /**
      * Grants the permission to create new projects. The user who creates a project becomes the owner of it.
      */
     public static final GrantedAuthority CREATE_PROJECT_AUTHORITY = create("CREATE_PROJECT");
