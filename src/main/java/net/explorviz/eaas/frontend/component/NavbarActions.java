@@ -17,6 +17,8 @@ public class NavbarActions extends HorizontalLayout {
         homepage.setTarget("_blank");
         add(homepage);
 
+        // TODO: Change password functionality
+
         if (SecurityUtils.isUserLoggedIn()) {
             add(IconAnchor.createFromIcon(SecurityConfiguration.LOGOUT_URL, VaadinIcon.SIGN_OUT.create(), "Logout"));
         } else {

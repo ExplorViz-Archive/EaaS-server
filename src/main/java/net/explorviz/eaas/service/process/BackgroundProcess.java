@@ -35,7 +35,7 @@ public class BackgroundProcess implements Closeable {
         }
 
         executor = Executors.newSingleThreadExecutor();
-        executor.submit(new ProcessObserver(process, listener));
+        executor.execute(new ProcessObserver(process, listener));
     }
 
     /**
@@ -43,7 +43,7 @@ public class BackgroundProcess implements Closeable {
      * ProcessListener#onDied(int)} might not be called.
      */
     @Override
-    public void close() {
+    public synchronized void close() {
         if (executor != null) {
             executor.shutdownNow();
         }

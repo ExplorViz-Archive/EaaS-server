@@ -1,5 +1,6 @@
 package net.explorviz.eaas.frontend.view.project;
 
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.component.list.BuildListEntry;
 import net.explorviz.eaas.frontend.component.list.RichList;
@@ -7,12 +8,12 @@ import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.BuildRepository;
 import net.explorviz.eaas.model.repository.ProjectRepository;
-import net.explorviz.eaas.security.Authorities;
 import net.explorviz.eaas.security.SecurityUtils;
 import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 import static com.vaadin.flow.dom.ElementFactory.createParagraph;
@@ -34,6 +35,18 @@ public class BuildsView extends AbstractProjectView {
     }
 
     @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        assert getProject() != null;
+
+        // Builds view is public even without any authorizations unless project is configured as hidden
+        if (getProject().isHidden() && !SecurityUtils.hasReadAccess(getProject())) {
+            throw new AccessDeniedException("You do not have permission to access this page.");
+        }
+
+        super.beforeEnter(event);
+    }
+
+    @Override
     public void build() {
         getElement().appendChild(createHeading2("Builds"));
 
@@ -43,7 +56,7 @@ public class BuildsView extends AbstractProjectView {
         if (builds.isEmpty()) {
             getElement().appendChild(createParagraph("No builds have been added yet."));
 
-            if (SecurityUtils.hasAuthority(Authorities.MANAGE_PROJECT_AUTHORITY)) {
+            if (SecurityUtils.hasManageAccess(getProject())) {
                 getElement().appendChild(
                     createParagraph("Go to the Secrets page and create a secret to start adding builds."));
             }

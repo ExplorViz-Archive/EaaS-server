@@ -12,11 +12,8 @@ import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.frontend.view.project.BuildsView;
 import net.explorviz.eaas.model.entity.Project;
-import net.explorviz.eaas.model.entity.Secret;
 import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
-import net.explorviz.eaas.model.repository.SecretRepository;
-import net.explorviz.eaas.security.KeyGenerator;
 import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.StringUtils;
@@ -35,57 +32,51 @@ public class NewProjectView extends VerticalLayout {
     private static final Pattern NAME_PATTERN = Pattern.compile(Project.NAME_PATTERN);
 
     private final ProjectRepository projectRepo;
-    private final SecretRepository secretRepo;
-    private final KeyGenerator keyGenerator;
 
     private final TextField projectName;
 
-    public NewProjectView(ProjectRepository projectRepo, SecretRepository secretRepo, KeyGenerator keyGenerator) {
+    public NewProjectView(ProjectRepository projectRepo) {
         this.projectRepo = projectRepo;
-        this.secretRepo = secretRepo;
-        this.keyGenerator = keyGenerator;
 
         getElement().appendChild(createHeading2("New Project"));
+
+        // TODO: Replace form with Binder
 
         projectName = new TextField();
         projectName.setMinLength(Project.NAME_MIN_LENGTH);
         projectName.setMaxLength(Project.NAME_MAX_LENGTH);
         projectName.setPlaceholder("Project name");
 
-        Button createProject = new Button("Create");
-        createProject.addClickListener(click -> this.doCreateProject());
+        Button create = new Button("Create");
+        create.addClickListener(click -> this.doCreateProject());
 
-        add(new HorizontalLayout(projectName, createProject));
+        add(new HorizontalLayout(projectName, create));
     }
 
     private void doCreateProject() {
         User user = SecurityUtils.getCurrentUser().orElseThrow(() ->
             new IllegalStateException("Tried to create project from unauthenticated context"));
 
-        // TODO: Use Binder with proper validator
-
         String name = StringUtils.trimWhitespace(projectName.getValue());
 
         if (!StringUtils.hasText(name)) {
             projectName.setInvalid(true);
             projectName.setErrorMessage("Project name may not be empty");
-        } else if (projectRepo.findByName(name).isPresent()) {
+        } else if (projectRepo.existsByNameIgnoreCase(name)) {
+            // TODO: This can be used to probe for existing project names even if they're hidden. Cannot be fixed easily
             projectName.setInvalid(true);
             projectName.setErrorMessage("A project with this name already exists!");
         } else if (!NAME_PATTERN.matcher(name).matches()) {
             projectName.setInvalid(true);
-            projectName.setErrorMessage("Project name contains forbidden characters");
+            projectName.setErrorMessage("Project name does not match allowed pattern");
         } else {
             projectName.setInvalid(false);
             projectName.setErrorMessage(null);
 
             Project project = projectRepo.save(new Project(name, user));
             projectName.clear();
-            log.info("User {} created new project #{} ('{}')", user.getUsername(), project.getId(), project.getName());
-
-            // TODO: Remove dummy secret generation after initial development phase
-            secretRepo.save(new Secret("The Secret", keyGenerator.generateAPIKey(), project));
-
+            log.info("User #{} ('{}') owns new project #{} ('{}')", user.getId(), user.getUsername(),
+                project.getId(), project.getName());
             getUI().ifPresent(ui -> ui.navigate(BuildsView.class, project.getId()));
             Notification.show("Created project " + project.getName());
         }

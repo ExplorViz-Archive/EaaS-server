@@ -35,7 +35,8 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (userRepo.count() == 0L) {
-            userRepo.save(new User(DEFAULT_USERNAME, passwordEncoder.encode(DEFAULT_PASSWORD), true, true, true));
+            userRepo.save(new User(DEFAULT_USERNAME, passwordEncoder.encode(DEFAULT_PASSWORD), true, true, true, true,
+                true));
 
             log.info("This looks like a fresh installation! Added a user with administrator permissions.\n" +
                     "\n" +

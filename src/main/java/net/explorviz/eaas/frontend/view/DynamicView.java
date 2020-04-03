@@ -12,6 +12,9 @@ import com.vaadin.flow.router.BeforeEvent;
 public abstract class DynamicView extends VerticalLayout implements BeforeEnterObserver {
     private static final long serialVersionUID = 2306625676607673378L;
 
+    /**
+     * Renders the view by calling {@link #rebuild()}. Only call this method when access to the view is granted.
+     */
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         rebuild();

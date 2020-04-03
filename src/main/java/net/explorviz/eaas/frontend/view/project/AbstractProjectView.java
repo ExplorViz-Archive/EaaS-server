@@ -3,14 +3,13 @@ package net.explorviz.eaas.frontend.view.project;
 import com.vaadin.flow.router.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import net.explorviz.eaas.Application;
 import net.explorviz.eaas.frontend.view.DynamicView;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;
-import net.explorviz.eaas.security.SecurityUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.security.access.AccessDeniedException;
 
 import java.util.Optional;
 
@@ -21,8 +20,9 @@ import java.util.Optional;
  * Components need to be added in the {@link #build()} method only, as the project is only available after {@link
  * #setParameter(BeforeEvent, Long)} has been called.
  * <p>
- * Checks if the current security context has the necessary authority to read the project in {@link
- * #beforeEnter(BeforeEnterEvent)}.
+ * Security access checks must be performed individually by child classes, both by using the {@link
+ * org.springframework.security.access.annotation.Secured} annotation and overriding {@link
+ * #beforeEnter(BeforeEnterEvent)} to test for per-project permissions.
  */
 public abstract class AbstractProjectView extends DynamicView implements HasUrlParameter<Long>, HasDynamicTitle {
     private static final long serialVersionUID = 8034796492440190988L;
@@ -31,8 +31,9 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
     private final String subPageTitle;
 
     @Getter(AccessLevel.PROTECTED)
+    @Setter(AccessLevel.PROTECTED)
     @Nullable
-    protected Project project;
+    private Project project;
 
     protected AbstractProjectView(ProjectRepository projectRepo, @NonNull String subPageTitle) {
         this.projectRepo = projectRepo;
@@ -49,17 +50,6 @@ public abstract class AbstractProjectView extends DynamicView implements HasUrlP
         }
 
         project = optProject.get();
-    }
-
-    @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-        assert project != null : "Method should not have been called yet";
-
-        if (!SecurityUtils.mayAccessProject(project)) {
-            throw new AccessDeniedException("You do not have permission to access this page.");
-        }
-
-        super.beforeEnter(event);
     }
 
     @Override

@@ -85,8 +85,8 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
     }
 
     private void openLogs(UI ui, String... serviceNames) {
-        logButton.setEnabled(true);
-        fullLogButton.setEnabled(true);
+        logButton.setEnabled(false);
+        fullLogButton.setEnabled(false);
 
         try {
             logProcess = dockerCompose.logsFollow(instance, serviceNames);

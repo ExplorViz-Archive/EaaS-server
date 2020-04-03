@@ -18,6 +18,7 @@ import org.springframework.security.access.annotation.Secured;
  * Note: You should not add {@link Secured} annotations to error views (i.e. they implement {@link HasErrorParameter}),
  * because then users might be asked to log in only to be presented with another error, which is bad UX.
  *
+ * @see SecurityUtils#mayAccess(Class)
  * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security">Setting
  * up Spring Security for Vaadin applications</a>
  */

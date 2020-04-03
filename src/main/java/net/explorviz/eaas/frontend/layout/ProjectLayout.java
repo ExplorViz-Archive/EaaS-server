@@ -14,6 +14,7 @@ import net.explorviz.eaas.frontend.view.project.SecretsView;
 import net.explorviz.eaas.frontend.view.project.SettingsView;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.security.SecurityUtils;
 
 import java.util.Optional;
 
@@ -57,10 +58,12 @@ public class ProjectLayout extends NavigationLayout {
             project.getId()));
         addTab(NavigationTab.createWithParameter("Instances", VaadinIcon.CHEVRON_CIRCLE_RIGHT.create(),
             InstancesView.class, project.getId()));
-        addTab(NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY.create(), SecretsView.class,
-            project.getId()));
-        addTab(NavigationTab.createWithParameter("Settings", VaadinIcon.COG.create(), SettingsView.class,
-            project.getId()));
+        if (SecurityUtils.hasManageAccess(project)) {
+            addTab(NavigationTab.createWithParameter("Secrets", VaadinIcon.KEY.create(), SecretsView.class,
+                project.getId()));
+            addTab(NavigationTab.createWithParameter("Settings", VaadinIcon.COG.create(), SettingsView.class,
+                project.getId()));
+        }
     }
 
     private Optional<Project> parseProjectParameter(Location location) {

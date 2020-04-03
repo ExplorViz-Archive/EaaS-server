@@ -15,15 +15,15 @@ public class BaseLayout extends AppLayout {
     private static final long serialVersionUID = 6416207502947013549L;
 
     public BaseLayout() {
-        this(true);
+        this(false);
     }
 
     /**
-     * @param closeDrawer Whether the drawer should be closed; this should be {@code true} for layouts without a
-     *                    navigation sidebar.
+     * @param hasSidebar Whether the drawer should be opened; this should be {@code true} for layouts without a
+     *                   navigation sidebar.
      */
-    protected BaseLayout(boolean closeDrawer) {
-        if (closeDrawer) {
+    protected BaseLayout(boolean hasSidebar) {
+        if (!hasSidebar) {
             setDrawerOpened(false);
         }
 

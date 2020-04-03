@@ -26,11 +26,11 @@ public class Project extends BaseEntity {
 
     public static final String NAME_PATTERN = "[a-zA-Z0-9-_]+";
     public static final int NAME_MIN_LENGTH = 1;
-    public static final int NAME_MAX_LENGTH = 64;
+    public static final int NAME_MAX_LENGTH = 32;
 
     @CreatedBy
-    @ManyToOne(optional = false)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn
     @JsonIgnore
     private User owner;
 
@@ -41,7 +41,7 @@ public class Project extends BaseEntity {
     private String name;
 
     /**
-     * Hidden projects are only visible to the owner of the project.
+     * Hidden projects are not visible to the public without any authorities.
      */
     private boolean hidden;
 

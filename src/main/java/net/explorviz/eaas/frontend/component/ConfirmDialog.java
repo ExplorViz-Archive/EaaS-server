@@ -25,7 +25,7 @@ public class ConfirmDialog<T> extends Dialog {
         add(header);
 
         Paragraph text = new Paragraph(message);
-        text.addClassName("confirm-dialog-text");
+        text.addClassName("dialog-text");
         add(text);
 
         Button confirmButton = new Button("Confirm", VaadinIcon.CHECK.create());
@@ -35,7 +35,7 @@ public class ConfirmDialog<T> extends Dialog {
             close();
         });
         HorizontalLayout buttonBar = new HorizontalLayout();
-        buttonBar.addClassName("confirm-dialog-buttons");
+        buttonBar.addClassName("dialog-buttons");
         buttonBar.add(confirmButton);
         buttonBar.add(new Button("Abort", VaadinIcon.CLOSE.create(), click -> close()));
         add(buttonBar);

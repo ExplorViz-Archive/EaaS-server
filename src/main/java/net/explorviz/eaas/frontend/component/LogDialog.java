@@ -69,7 +69,7 @@ public class LogDialog extends Dialog implements ProcessListener {
         /*
          * TODO: There is a possible throughput improvement by merging BackgroundProcess#ProcessObserver into this
          *  class so we can keep reading from the standard output blockingly until the previous #access() went through.
-         *  Then we could also control the amount of lines displayed in the log more easily.
+         *  Then we could also control the total amount of lines displayed in the log more easily.
          */
         if (!stopped) {
             /*
@@ -79,6 +79,7 @@ public class LogDialog extends Dialog implements ProcessListener {
              */
             if (ui.isClosing()) {
                 closeCallback.accept(this);
+                return;
             }
 
             ui.access(() -> {

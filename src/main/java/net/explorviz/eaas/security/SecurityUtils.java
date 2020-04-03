@@ -1,7 +1,5 @@
 package net.explorviz.eaas.security;
 
-import com.vaadin.flow.server.ServletHelper;
-import com.vaadin.flow.shared.ApplicationConstants;
 import net.explorviz.eaas.model.entity.Project;
 import net.explorviz.eaas.model.entity.User;
 import org.apache.commons.lang3.Validate;
@@ -14,32 +12,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.servlet.ServletRequest;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
- * Static helper methods for dealing with authentication.
+ * Static helper methods for dealing with authentication. The current security context is fetched from the {@link
+ * SecurityContextHolder}, which is usually a thread-local, i.e. it is specific to the current web request.
  */
 public final class SecurityUtils {
     /**
-     * Utility class.
+     * Utility class cannot be initialized.
      */
     private SecurityUtils() {
-    }
-
-    /**
-     * Tests if the request is an internal Vaadin request by checking if the request contains Vaadins' request type
-     * parameter and its value is any of the known request type.
-     *
-     * @param request {@link ServletRequest}
-     * @return true if is an internal Vaadin request
-     */
-    public static boolean isVaadinInternalRequest(@NonNull ServletRequest request) {
-        final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
-        return parameterValue != null
-            && Stream.of(ServletHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
     }
 
     /**
@@ -72,8 +56,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * Tests if there is an authenticated security context, that it is not an implicit anonymous one and the principal
-     * is a {@link User} from our database.
+     * Tests if there is a user logged in. This required that the current security context is authenticated, that the
+     * authentication is not an implicit anonymous one and the principal is a {@link User} from our database.
      */
     public static boolean isUserLoggedIn() {
         return getCurrentAuthentication().map(auth ->
@@ -91,7 +75,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * Tests if the current security context has the given authority.
+     * Tests if the current security context has the given authority. For performance reasons, prefer the {@link
+     * #hasAuthority(GrantedAuthority)} method over this one if you can.
      */
     public static boolean hasAuthority(@NonNull String authority) {
         Validate.notBlank(authority, "authority may not be empty");
@@ -103,7 +88,7 @@ public final class SecurityUtils {
 
     /**
      * Tests if the current security context may access the given view at all. Access may be denied if a {@link Secured}
-     * annotation is present on the view and the current security context does not have the necessary authority.
+     * annotation is present on the view and the current security context does not have any of the necessary authority.
      * <p>
      * Even if the user may generally enter a view, the specific implementation can have additional authority checks
      * before allowing the user to enter, e.g. based on the parameter. Therefore this method can not be used to
@@ -115,17 +100,33 @@ public final class SecurityUtils {
     }
 
     /**
-     * Tests if the current security context may access the given project at all, i.e. if this method returns {@code
-     * false} the client must be presented with an access denied error page or asked to log in if they aren't already.
+     * Tests if the current security context may read from the given project, i.e. if this method returns {@code false}
+     * the client must be presented with an access denied error page or asked to log in if they aren't already.
      * <p>
-     * Access may be forbidden if the project is hidden ({@link Project#isHidden()} and the principal of the current
-     * security context is not the owner ({@link Project#getOwner()}) of the project.
+     * Access is forbidden if the principal of the current security context does not hold any READ authorities that
+     * apply for the given project.
      */
-    public static boolean mayAccessProject(@NonNull Project project) {
-        if (!project.isHidden()) {
+    public static boolean hasReadAccess(@NonNull Project project) {
+        if (hasAuthority(Authorities.READ_ALL_PROJECTS_AUTHORITY)) {
             return true;
         }
 
-        return getCurrentUser().map(user -> user.getId().equals(project.getOwner().getId())).orElse(false);
+        return hasAuthority(Authorities.READ_OWNED_PROJECTS_AUTHORITY)
+            && getCurrentUser().map(user -> user.getId().equals(project.getOwner().getId())).orElse(false);
+    }
+
+    /**
+     * Tests if the current security context may manage the given project, i.e. change settings or delete it.
+     * <p>
+     * Access is forbidden if the principal of the current security context does not hold any MANAGE authorities that
+     * apply for the given project.
+     */
+    public static boolean hasManageAccess(@NonNull Project project) {
+        if (hasAuthority(Authorities.MANAGE_ALL_PROJECTS_AUTHORITY)) {
+            return true;
+        }
+
+        return hasAuthority(Authorities.MANAGE_OWNED_PROJECTS_AUTHORITY)
+            && getCurrentUser().map(user -> user.getId().equals(project.getOwner().getId())).orElse(false);
     }
 }

@@ -12,4 +12,6 @@ public interface SecretRepository extends PagingAndSortingRepository<Secret, Lon
     Optional<Secret> findByProjectAndSecret(Project project, String secret);
 
     Page<Secret> findByProject(Project project, Pageable unpaged);
+
+    boolean existsByProjectAndNameIgnoreCase(Project project, String name);
 }

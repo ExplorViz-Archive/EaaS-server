@@ -1,14 +1,17 @@
 package net.explorviz.eaas.frontend.view.project;
 
+import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.Route;
 import net.explorviz.eaas.frontend.component.list.BuildListEntry;
 import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.ProjectLayout;
 import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.model.repository.ProjectRepository;
+import net.explorviz.eaas.security.SecurityUtils;
 import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
 import net.explorviz.eaas.service.explorviz.ExplorVizInstance;
 import net.explorviz.eaas.service.explorviz.ExplorVizManager;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 
 import java.util.Collection;
@@ -30,6 +33,18 @@ public class InstancesView extends AbstractProjectView {
         super(projectRepo, "Instances");
         this.explorVizManager = explorVizManager;
         this.dockerCompose = dockerCompose;
+    }
+
+    @Override
+    public void beforeEnter(BeforeEnterEvent event) {
+        assert getProject() != null;
+
+        // Instances view only requires RUN_BUILD authority unless project is configured as hidden
+        if (getProject().isHidden() && !SecurityUtils.hasReadAccess(getProject())) {
+            throw new AccessDeniedException("You do not have permission to access this page.");
+        }
+
+        super.beforeEnter(event);
     }
 
     @Override

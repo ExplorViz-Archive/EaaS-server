@@ -15,52 +15,58 @@ public final class Authorities {
     /*
      * TODO: Authorities should be managable per-project.
      *
-     * Right now everyone can read !hidden projects but only the owner of a project can run builds and manage the
-     * project. This is because the [READ_PROJECT, RUN_BUILD, MANAGE_PROJECT] authorities do not have a project attached
-     * to them yet and only generally allow this action. There are additional checks in the views so users are limited
-     * to interacting with their own projects only.
+     * Instead of allowing RUN_BUILD for all readable projects, and only having the coarse *_OWNED_PROJECTS and
+     * *_ALL_PROJECTS authorities, user permissions should be configurable per-project. This means we would have
+     * authorities [READ, RUN_BUILD, DELETE_BUILD, MANAGE_SECRETS, MANAGE_COLLABORATORS, DELETE_RPOJECT] each with
+     * the project attached to them they are for.
      *
-     * Implementing this would require a complex UI for user management within the project settings, a user list and
-     * maybe even profiles. Therefore, it is out of scope for now.
+     * Implementing this would require a database table for authorities, a complex UI for user management within the
+     * project settings, a user list and maybe even profiles. Therefore, it is out of scope for now.
      */
 
     /**
-     * Grants the permission to create new projects. The user who created it owns the project.
+     * Grants the permission to create new projects. The user who creates a project becomes the owner of it.
      */
     public static final GrantedAuthority CREATE_PROJECT_AUTHORITY = create("CREATE_PROJECT");
 
     /**
-     * Grants the permission to see the project in listings and read them, which includes listing builds, even if it is
-     * hidden. Projects that aren't hidden are always visible, including listing their builds.
-     */
-    public static final GrantedAuthority READ_PROJECT_AUTHORITY = create("READ_PROJECT");
-
-    /**
      * Grants the permission to run and stop builds in ExplorViz, as well as reading logs from the running instances.
-     * Needs {@link #READ_PROJECT_AUTHORITY} as well.
+     * Also shows the per-project instances page. Requires read access to the project, i.e. by being !hidden or if one
+     * of the READ authorities applies.
      */
     public static final GrantedAuthority RUN_BUILD_AUTHORITY = create("RUN_BUILD");
 
     /**
-     * Grants the permission to delete builds. Needs {@link #READ_PROJECT_AUTHORITY} as well.
+     * Grants access to owned projects, which includes seeing them in listings and listing their builds, even if they
+     * are hidden.
      */
-    public static final GrantedAuthority DELETE_BUILD_AUTHORITY = create("DELETE_BUILD");
+    public static final GrantedAuthority READ_OWNED_PROJECTS_AUTHORITY = create("READ_OWNED_PROJECTS");
 
     /**
-     * Grants the permission to manage projects, which includes changing project settings, reading and adding API keys
-     * and deleting the project. Also needs {@link #READ_PROJECT_AUTHORITY}.
+     * Grants access to all projects, even if they are hidden, no matter who owns them.
      */
-    public static final GrantedAuthority MANAGE_PROJECT_AUTHORITY = create("MANAGE_PROJECT");
+    public static final GrantedAuthority READ_ALL_PROJECTS_AUTHORITY = create("READ_ALL_PROJECTS");
 
     /**
-     * Grants the permission to globally manage ExplorViz instances, i.e. viewing the active instances, starting test
+     * Grants the permission to manage projects owned by yourself, which includes changing project settings, reading and
+     * adding API keys and deleting the project.
+     */
+    public static final GrantedAuthority MANAGE_OWNED_PROJECTS_AUTHORITY = create("MANAGE_OWNED_PROJECTS");
+
+    /**
+     * Grants the permission to manage all projects, no matter who owns them.
+     */
+    public static final GrantedAuthority MANAGE_ALL_PROJECTS_AUTHORITY = create("MANAGE_ALL_PROJECTS");
+
+    /**
+     * Grants the permission to globally manage ExplorViz instances, i.e. viewing all active instances, starting test
      * instances and killing running instances.
      */
     public static final GrantedAuthority MANAGE_INSTANCES_AUTHORITY = create("MANAGE_INSTANCES");
 
     /**
-     * Grants the permission to manage all users, including creating new users, deleting users and changing their
-     * properties (admin flag, password, username).
+     * Grants the permission to globally manage users, including creating new users, deleting users and changing their
+     * permissions.
      */
     public static final GrantedAuthority MANAGE_USERS_AUTHORITY = create("MANAGE_USERS");
 

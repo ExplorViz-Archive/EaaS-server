@@ -23,4 +23,6 @@ public interface ProjectRepository extends PagingAndSortingRepository<Project, L
     Collection<Project> findByHiddenOrOwner(boolean hidden, User owner);
 
     Page<Project> findByHiddenOrOwner(boolean hidden, User owner, Pageable pageable);
+
+    boolean existsByNameIgnoreCase(String name);
 }

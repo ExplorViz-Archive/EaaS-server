@@ -59,9 +59,10 @@ public class GlobalInstancesView extends DynamicView {
 
         add(controls);
 
+        Collection<ExplorVizInstance> instances = manager.getAllInstances();
+
         instanceList = new RichList<>(instance -> new ExplorVizListEntry(instance, manager, dockerCompose,
             this::onStopInstance));
-        Collection<ExplorVizInstance> instances = manager.getAllInstances();
         instanceList.addEntries(instances);
         add(instanceList);
 

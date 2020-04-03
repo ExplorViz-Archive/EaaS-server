@@ -57,6 +57,8 @@ public class BuildListEntry extends AbstractListEntry {
             createParagraph("Image ID: " + build.getDockerImage())
         );
 
+        // TODO: Delete button if DELETE_BUILD authority and explicit access
+
         if (SecurityUtils.hasAuthority(Authorities.RUN_BUILD_AUTHORITY)) {
             Optional<ExplorVizInstance> instance = manager.getInstance(build);
             header.getIcon().setVisible(instance.isPresent());

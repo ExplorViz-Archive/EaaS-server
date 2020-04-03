@@ -47,8 +47,6 @@ public class BuildControls extends HorizontalLayout {
         runButton.setIcon(VaadinIcon.CHEVRON_RIGHT_SMALL.create());
         runButton.setDisableOnClick(true);
         add(runButton);
-
-        // TODO: Delete button if DELETE_BUILD authority
     }
 
     private void runBuild() {

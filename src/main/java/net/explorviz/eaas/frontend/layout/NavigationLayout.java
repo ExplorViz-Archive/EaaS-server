@@ -39,7 +39,7 @@ public abstract class NavigationLayout extends BaseLayout implements BeforeEnter
     private Tabs currentSection;
 
     protected NavigationLayout() {
-        super(false);
+        super(true);
         navigation.setId("navigation-panel");
         addToDrawer(navigation);
     }

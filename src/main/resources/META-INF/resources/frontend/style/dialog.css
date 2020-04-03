@@ -37,11 +37,11 @@
     word-wrap: break-word;
 }
 
-.confirm-dialog-text {
+.dialog-text {
     max-width: 40em;
 }
 
-.confirm-dialog-buttons {
+.dialog-buttons {
     display: flex;
     align-items: center;
     justify-content: center;

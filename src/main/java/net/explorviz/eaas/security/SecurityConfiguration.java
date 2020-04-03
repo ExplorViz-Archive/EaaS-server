@@ -1,13 +1,19 @@
 package net.explorviz.eaas.security;
 
+import com.vaadin.flow.server.ServletHelper;
+import com.vaadin.flow.shared.ApplicationConstants;
 import net.explorviz.eaas.frontend.view.LoginView;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+
+import javax.servlet.ServletRequest;
+import java.util.stream.Stream;
 
 /**
  * @see <a href="https://vaadin.com/tutorials/securing-your-app-with-spring-security/setting-up-spring-security">Setting
@@ -38,13 +44,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // Saves unauthorized access attempts, so the user is redirected after login
         HttpSessionRequestCache cache = new HttpSessionRequestCache();
         // Avoid saving internal vaadin requests
-        cache.setRequestMatcher(request -> !SecurityUtils.isVaadinInternalRequest(request));
+        cache.setRequestMatcher(request -> !isVaadinInternalRequest(request));
         http.requestCache().requestCache(cache);
 
         // Restrict access to our application
         http.authorizeRequests()
             // Allow all flow internal requests
-            .requestMatchers(SecurityUtils::isVaadinInternalRequest).permitAll()
+            .requestMatchers(SecurityConfiguration::isVaadinInternalRequest).permitAll()
             .antMatchers(API_PATHS).permitAll()
             .antMatchers(HttpMethod.HEAD, POTENTIALLY_PUBLIC_VIEWS).permitAll()
             .antMatchers(HttpMethod.GET, POTENTIALLY_PUBLIC_VIEWS).permitAll()
@@ -95,5 +101,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
             // (production mode) static resources
             "/frontend-es5/**", "/frontend-es6/**");
+    }
+
+    /**
+     * Tests if the request is an internal Vaadin request by checking if the request contains Vaadins' request type
+     * parameter and its value is any of the known request type.
+     *
+     * @param request {@link ServletRequest}
+     * @return true if is an internal Vaadin request
+     */
+    private static boolean isVaadinInternalRequest(@NonNull ServletRequest request) {
+        final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
+        return parameterValue != null
+            && Stream.of(ServletHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
     }
 }
