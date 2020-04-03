@@ -51,7 +51,7 @@ public class User extends BaseEntity implements UserDetails {
 
     private boolean enabled;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "owner")
     @JsonIgnore
     private List<Project> ownedProjects;
 

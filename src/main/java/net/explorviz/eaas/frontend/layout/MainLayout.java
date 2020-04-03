@@ -49,8 +49,7 @@ public class MainLayout extends NavigationLayout {
         }
 
         startSection("Administration");
+        addTab(NavigationTab.create("Instances", VaadinIcon.ROTATE_RIGHT.create(), GlobalInstancesView.class));
         addTab(NavigationTab.create("Users", VaadinIcon.USERS.create(), UsersView.class));
-        addTab(NavigationTab.create("Instances", VaadinIcon.ROTATE_RIGHT.create(),
-            GlobalInstancesView.class));
     }
 }

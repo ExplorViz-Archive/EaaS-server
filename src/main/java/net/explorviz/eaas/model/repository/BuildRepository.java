@@ -20,8 +20,7 @@ public interface BuildRepository extends PagingAndSortingRepository<Build, Long>
 
     Optional<Build> findByProjectAndDockerImageIgnoreCase(Project project, String dockerImage);
 
-    boolean existsByDockerImageIgnoreCase(String dockerImage);
-
+    // TODO: This assumes users have the READ_OWNED_PROJECTS authority and does not consider READ_ALL_PROJECTS
     @Query("SELECT b FROM Build b " +
         "LEFT JOIN b.project p " +
         "WHERE p.hidden = ?1 " +

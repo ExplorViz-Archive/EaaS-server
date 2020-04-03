@@ -7,12 +7,12 @@ import net.explorviz.eaas.frontend.component.list.ProjectListEntry;
 import net.explorviz.eaas.frontend.component.list.RichList;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.model.entity.Project;
-import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.model.repository.ProjectRepository;
 import net.explorviz.eaas.security.SecurityUtils;
+import org.springframework.data.domain.Pageable;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.vaadin.flow.dom.ElementFactory.createHeading2;
 import static com.vaadin.flow.dom.ElementFactory.createParagraph;
@@ -33,13 +33,10 @@ public class ExploreView extends DynamicView {
         getElement().appendChild(createHeading2("All projects"));
 
         // TODO: Paging
-        Optional<User> user = SecurityUtils.getCurrentUser();
-        Collection<Project> projects;
-        if (user.isPresent()) {
-            projects = projectRepo.findByHiddenOrOwner(false, user.get());
-        } else {
-            projects = projectRepo.findByHidden(false);
-        }
+        List<Project> projects =
+            projectRepo.findAll(Pageable.unpaged()).stream()
+                .filter(SecurityUtils::hasReadAccess)
+                .collect(Collectors.toList());
 
         if (projects.isEmpty()) {
             getElement().appendChild(createParagraph("No projects have been created yet."));

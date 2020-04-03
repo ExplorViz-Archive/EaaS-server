@@ -6,7 +6,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.frontend.component.ConfirmDialog;
 import net.explorviz.eaas.frontend.component.InformationDialog;
@@ -66,7 +65,7 @@ public class UserListEntry extends AbstractListEntry {
         readAllProjectsCheckbox.addValueChangeListener(this::onReadAllProjectsChanged);
 
         Checkbox manageAllProjectsCheckbox = new Checkbox("Can manage all projects");
-        manageAllProjectsCheckbox.setValue(user.isReadAllProjectsAllowed());
+        manageAllProjectsCheckbox.setValue(user.isManageAllProjectsAllowed());
         manageAllProjectsCheckbox.addValueChangeListener(this::onManageAllProjectsChanged);
 
         Checkbox manageInstancesCheckbox = new Checkbox("Can manage global instances");
@@ -78,8 +77,8 @@ public class UserListEntry extends AbstractListEntry {
         manageUsersCheckbox.setEnabled(!isOurself);
         manageUsersCheckbox.addValueChangeListener(this::onManageUsersChanged);
 
-        add(new VerticalLayout(createProjectsCheckbox, readAllProjectsCheckbox, manageAllProjectsCheckbox),
-            new VerticalLayout(manageInstancesCheckbox, manageUsersCheckbox));
+        add(new HorizontalLayout(createProjectsCheckbox, readAllProjectsCheckbox, manageAllProjectsCheckbox),
+            new HorizontalLayout(manageInstancesCheckbox, manageUsersCheckbox));
 
         Checkbox enabledCheckbox = new Checkbox("Enabled");
         enabledCheckbox.setValue(user.isEnabled());
@@ -137,7 +136,7 @@ public class UserListEntry extends AbstractListEntry {
     private void doRequestDeletion() {
         new ConfirmDialog<>(user, "Really delete user?",
             "Are you sure you want to delete User '" + user.getUsername() +
-                "'? This action can not be undone. Projects owned by this user will NOT be deleted.",
+                "'? This action can not be undone. Projects owned by this user will be deleted.",
             this::doDeleteUser).open();
     }
 

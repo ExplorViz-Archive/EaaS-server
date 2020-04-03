@@ -29,8 +29,8 @@ public class Project extends BaseEntity {
     public static final int NAME_MAX_LENGTH = 32;
 
     @CreatedBy
-    @ManyToOne
-    @JoinColumn
+    @ManyToOne(optional = false)
+    @JoinColumn(nullable = false)
     @JsonIgnore
     private User owner;
 

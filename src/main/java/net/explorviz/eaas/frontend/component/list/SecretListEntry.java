@@ -3,7 +3,6 @@ package net.explorviz.eaas.frontend.component.list;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.Element;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.model.entity.Secret;
@@ -14,8 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.function.Consumer;
 
-import static com.vaadin.flow.dom.ElementFactory.createParagraph;
-import static com.vaadin.flow.dom.ElementFactory.createPreformatted;
+import static com.vaadin.flow.dom.ElementFactory.*;
 
 @Slf4j
 public class SecretListEntry extends AbstractListEntry {
@@ -48,13 +46,13 @@ public class SecretListEntry extends AbstractListEntry {
                 DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG)
             )),
             lastUseElement,
-            createPreformatted(secret.getSecret())
+            createPreformatted(secret.getSecret()),
+            createBr()
         );
 
         Button deleteButton = new Button("Delete", click -> this.onDelete());
         deleteButton.setIcon(VaadinIcon.TRASH.create());
-        // VerticalLayout is to enforce newline after previous Preformatted element
-        add(new VerticalLayout(deleteButton));
+        add(deleteButton);
     }
 
     private void onDelete() {
