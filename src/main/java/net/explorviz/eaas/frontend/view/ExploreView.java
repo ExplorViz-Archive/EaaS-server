@@ -35,7 +35,7 @@ public class ExploreView extends DynamicView {
         // TODO: Paging
         List<Project> projects =
             projectRepo.findAll(Pageable.unpaged()).stream()
-                .filter(SecurityUtils::hasReadAccess)
+                .filter(project -> !project.isHidden() || SecurityUtils.hasReadAccess(project))
                 .collect(Collectors.toList());
 
         if (projects.isEmpty()) {
