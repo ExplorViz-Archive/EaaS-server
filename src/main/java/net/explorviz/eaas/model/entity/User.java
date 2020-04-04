@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -67,6 +68,7 @@ public class User extends BaseEntity implements UserDetails {
         this.manageInstancesAllowed = manageInstancesAllowed;
         this.manageUsersAllowed = manageUsersAllowed;
         this.enabled = true;
+        this.ownedProjects = new ArrayList<>(0);
     }
 
     @Override
