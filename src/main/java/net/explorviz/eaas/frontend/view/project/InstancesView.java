@@ -54,7 +54,7 @@ public class InstancesView extends AbstractProjectView {
         Collection<Build> runningBuilds =
             explorVizManager.getAllInstances().stream()
                 .map(ExplorVizInstance::getBuild)
-                .filter(build -> build.getProject().getId().equals(getProject().getId()))
+                .filter(build -> build.getProject() != null && getProject().getId().equals(build.getProject().getId()))
                 .collect(Collectors.toList());
 
         if (runningBuilds.isEmpty()) {
