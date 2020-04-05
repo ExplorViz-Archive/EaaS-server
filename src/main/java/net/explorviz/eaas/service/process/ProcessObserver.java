@@ -14,8 +14,8 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 class ProcessObserver implements Runnable {
     private static final int INITIAL_BUFFER_SIZE = 512;
-    private static final int MAX_LINES = 256;
-    private static final int MAX_BYTES = 64 * 1024;
+    private static final int MAX_LINES = 128;
+    private static final int MAX_BYTES = 32 * 1024;
 
     private final Process process;
     private final ProcessListener listener;

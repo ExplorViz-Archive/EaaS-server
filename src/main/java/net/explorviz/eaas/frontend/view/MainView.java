@@ -27,7 +27,8 @@ public class MainView extends DynamicView {
 
     public MainView(BuildRepository buildRepo,
                     @Value("${eaas.paging.home.entries}") int entriesPerPage) {
-        Validate.inclusiveBetween(1, Integer.MAX_VALUE, entriesPerPage, "entries must be at least 1");
+        Validate.inclusiveBetween(1, Integer.MAX_VALUE, entriesPerPage, "Option eaas.paging.home.entries must be at " +
+            "least 1");
 
         this.buildRepo = buildRepo;
         this.entriesPerPage = entriesPerPage;
@@ -42,6 +43,10 @@ public class MainView extends DynamicView {
 
         if (mostRecentBuilds.getTotalElements() == 0) {
             getElement().appendChild(createParagraph("No builds have been uploaded yet."));
+
+            if (!SecurityUtils.isUserLoggedIn()) {
+                getElement().appendChild(createParagraph("Log in to create a project and start adding builds."));
+            }
         } else {
             RichList<Build> recentBuildList = new RichList<>(RecentlyUpdatedListEntry::new);
             recentBuildList.addEntries(mostRecentBuilds);

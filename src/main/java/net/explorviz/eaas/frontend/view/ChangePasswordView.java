@@ -2,14 +2,13 @@ package net.explorviz.eaas.frontend.view;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.Application;
+import net.explorviz.eaas.frontend.component.InformationDialog;
 import net.explorviz.eaas.frontend.layout.MainLayout;
 import net.explorviz.eaas.model.entity.User;
 import net.explorviz.eaas.security.SecurityUtils;
@@ -68,9 +67,9 @@ public class ChangePasswordView extends VerticalLayout {
         User user = SecurityUtils.getCurrentUser().orElseThrow(() ->
             new IllegalStateException("Tried to change password without authentication"));
 
-        String password = newPassword.getValue();
         boolean fail = false;
 
+        String password = newPassword.getValue();
         if (password.length() < minimumPasswordLength) {
             newPassword.setInvalid(true);
             newPassword.setErrorMessage("Password is too short");
@@ -98,12 +97,12 @@ public class ChangePasswordView extends VerticalLayout {
             oldPassword.setErrorMessage(null);
         }
 
-        if (!fail) {
+        if (fail) {
+            changeButton.setEnabled(true);
+        } else {
             passwordService.updatePassword(user, passwordEncoder.encode(password));
             getUI().ifPresent(ui -> ui.navigate(MainView.class));
-            Notification.show("Password changed");
+            new InformationDialog("Password changed", "You successfully changed your password.").open();
         }
-
-        changeButton.setEnabled(true);
     }
 }

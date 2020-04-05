@@ -68,11 +68,9 @@ public class APIAuthenticator {
 
     /**
      * Sets the {@link Secret#getLastUsedDate() last used date} for the {@link Secret} to the current time.
-     *
-     * @return The modified secret object with the new last used date
      */
-    private Secret useSecret(@NonNull Secret secret) {
+    private void useSecret(@NonNull Secret secret) {
         secret.setLastUsedDate(ZonedDateTime.now());
-        return secretRepository.save(secret);
+        secretRepository.save(secret);
     }
 }

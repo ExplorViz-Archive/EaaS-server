@@ -93,7 +93,9 @@ public class UserListEntry extends AbstractListEntry {
         deleteButton.setEnabled(!isOurself);
         deleteButton.setIcon(VaadinIcon.TRASH.create());
 
-        add(new HorizontalLayout(enabledCheckbox, resetPasswordButton, deleteButton));
+        HorizontalLayout buttonBar = new HorizontalLayout(enabledCheckbox, resetPasswordButton, deleteButton);
+        buttonBar.addClassName("controls-bar");
+        add(buttonBar);
     }
 
     private void save(User user) {

@@ -25,8 +25,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
-import static com.vaadin.flow.dom.ElementFactory.createHeading2;
-import static com.vaadin.flow.dom.ElementFactory.createHeading4;
+import static com.vaadin.flow.dom.ElementFactory.*;
 
 @PageTitle("Manage Users - " + Application.PAGE_TITLE)
 @Route(value = "manage/users", layout = MainLayout.class)
@@ -55,7 +54,9 @@ public class UsersView extends DynamicView {
 
     @Override
     protected void build() {
-        getElement().appendChild(createHeading2("Users"), createHeading4("Create new user"));
+        getElement().appendChild(createHeading2("Users"),
+            createParagraph("Changes to user permissions only apply after the next login."),
+            createHeading4("Create new user"));
 
         // TODO: Replace form with binder
 
@@ -101,7 +102,8 @@ public class UsersView extends DynamicView {
             userList.addEntry(user);
             Notification.show("Created user " + user.getUsername());
             new InformationDialog("User created",
-                "User '" + user.getUsername() + "' has been created. Their password is '" + password + "'.").open();
+                "User '" + user.getUsername() + "' has been created. Their password is '" + password
+                    + "'. They can change it with the Change Password functionality.").open();
         }
     }
 }

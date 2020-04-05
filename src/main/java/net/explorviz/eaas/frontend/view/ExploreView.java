@@ -40,6 +40,10 @@ public class ExploreView extends DynamicView {
 
         if (projects.isEmpty()) {
             getElement().appendChild(createParagraph("No projects have been created yet."));
+
+            if (!SecurityUtils.isUserLoggedIn()) {
+                getElement().appendChild(createParagraph("Log in to create a new project."));
+            }
         } else {
             RichList<Project> projectList = new RichList<>(ProjectListEntry::new);
             projectList.addEntries(projects);

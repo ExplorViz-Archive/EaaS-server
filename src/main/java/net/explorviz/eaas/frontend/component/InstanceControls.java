@@ -29,6 +29,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
     private final ExplorVizManager manager;
     private final DockerComposeAdapter dockerCompose;
     private final Consumer<? super ExplorVizInstance> stopCallback;
+    private final Button stopButton;
     private final Button logButton;
     private final Button fullLogButton;
 
@@ -51,7 +52,7 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
         link.setTarget("_blank");
         add(link);
 
-        Button stopButton = new Button("Stop");
+        stopButton = new Button("Stop");
         stopButton.addClickListener(click -> this.doStopInstance());
         stopButton.setIcon(VaadinIcon.CLOSE_SMALL.create());
         stopButton.setDisableOnClick(true);
@@ -112,11 +113,11 @@ public class InstanceControls extends HorizontalLayout implements BeforeLeaveObs
         try {
             manager.stopInstance(instance);
             Notification.show("Stopped instance " + instance.getName());
+            stopCallback.accept(instance);
         } catch (AdapterException e) {
             Notification.show("Error stopping instance: " + e.getMessage());
-            return;
         }
 
-        stopCallback.accept(instance);
+        stopButton.setEnabled(true);
     }
 }

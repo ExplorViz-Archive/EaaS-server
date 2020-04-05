@@ -57,8 +57,6 @@ public class BuildListEntry extends AbstractListEntry {
             createParagraph("Image ID: " + build.getDockerImage())
         );
 
-        // TODO: Delete button if DELETE_BUILD authority and explicit access
-
         if (SecurityUtils.hasAuthority(Authorities.RUN_BUILD_AUTHORITY)) {
             Optional<ExplorVizInstance> instance = manager.getInstance(build);
             header.getIcon().setVisible(instance.isPresent());
@@ -66,6 +64,7 @@ public class BuildListEntry extends AbstractListEntry {
             if (instance.isPresent()) {
                 add(new InstanceControls(instance.get(), manager, dockerCompose, ignored -> this.rebuild()));
             } else {
+                // TODO: Delete button if DELETE_BUILD authority and explicit access
                 add(new BuildControls(build, manager, ignored -> this.rebuild()));
             }
         }

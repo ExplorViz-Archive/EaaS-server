@@ -54,11 +54,12 @@ public class BuildControls extends HorizontalLayout {
             ExplorVizInstance instance = manager.startInstance(build, versionSelection.getValue());
             Notification.show("Started new instance " + instance.getName());
             runCallback.accept(instance);
-            runButton.setEnabled(true);
         } catch (AdapterException e) {
             Notification.show("Error starting instance: " + e.getMessage());
         } catch (NoMoreSlotsException e) {
             Notification.show(e.getMessage());
         }
+
+        runButton.setEnabled(true);
     }
 }

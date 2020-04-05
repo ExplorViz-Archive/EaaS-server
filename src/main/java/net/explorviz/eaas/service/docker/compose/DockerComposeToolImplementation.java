@@ -3,7 +3,7 @@ package net.explorviz.eaas.service.docker.compose;
 import lombok.extern.slf4j.Slf4j;
 import net.explorviz.eaas.service.docker.AdapterException;
 import net.explorviz.eaas.service.process.BackgroundProcess;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 

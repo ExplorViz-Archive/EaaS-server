@@ -2,9 +2,9 @@ package net.explorviz.eaas.service.explorviz;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.explorviz.eaas.model.entity.Build;
 import net.explorviz.eaas.service.docker.AdapterException;
 import net.explorviz.eaas.service.docker.compose.DockerComposeAdapter;
-import net.explorviz.eaas.model.entity.Build;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -12,7 +12,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -55,14 +58,18 @@ public final class ExplorVizManager {
                             @Value("${eaas.explorviz.accessUrlTemplate}")
                                 String accessUrlTemplate,
                             @Value("${eaas.explorviz.defaultVersion}") String defaultVersion) {
-        Validate.inclusiveBetween(1, Integer.MAX_VALUE, maxInstances);
-        Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
-        Validate.inclusiveBetween(1, PORT_MAX, maxInstances);
-        Validate.notBlank(accessUrlTemplate, "accessUrlTemplate may not be empty");
-        Validate.isTrue(EXPLORVIZ_VERSIONS.contains(defaultVersion), "given defaultVersion is unknown");
+        Validate.inclusiveBetween(1, Integer.MAX_VALUE, maxInstances, "Option eaas.explorviz.maxInstances must be at " +
+            "least 1");
+        Validate.inclusiveBetween(1, PORT_MAX, frontendPortOffset, "Option eaas.explorviz.frontendPortOffset is not a" +
+            " valid port");
+        Validate.inclusiveBetween(1, PORT_MAX, frontendPortOffset + maxInstances, "Option eaas.explorviz" +
+            ".frontendPortOffset plus maxInstances exceed valid ports");
+        Validate.notBlank(accessUrlTemplate, "Option eaas.explorviz.accessUrlTemplate may not be empty");
+        Validate.isTrue(EXPLORVIZ_VERSIONS.contains(defaultVersion), "Option eaas.explorviz.defaultVersion specifies " +
+            "unknown version");
 
         log.info("Given port range {}-{} for ExplorViz instances (max {} instances)", frontendPortOffset,
-            frontendPortOffset + maxInstances, maxInstances);
+            frontendPortOffset + maxInstances - 1, maxInstances);
 
         this.dockerCompose = dockerCompose;
         this.maxInstances = maxInstances;
