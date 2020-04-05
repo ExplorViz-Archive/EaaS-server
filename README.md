@@ -74,7 +74,7 @@ To create a production build, add `-P production`. The runnable jar file is crea
 
 ### Development
 
-During development, you might want to do incremental builds instead of clean builds every time; in this case specify the `verify` goal: `./mvnw verify` (this overrides the default goal of `clean verify`).
+During development, you might want to do incremental builds instead of clean builds every time; in this case specify the `verify` goal: `./mvnw verify` (this overrides the default goal of `clean verify`), or the `package` goal to skip static analyis tools as well.
 
 You can also run the server directly without packaging by running `./mvnw spring-boot:run`. *Spring Boot DevTools* is included to support LiveReload so changes will apply automatically while the server is running. Please check the documentation of your IDE on how to make use of this.
 
@@ -82,21 +82,25 @@ Also check out the *Internal options* section at the bottom of `src/main/resourc
 
 ### Troubleshooting
 
-#### Fatal error compiling: invalid flag: --release
+#### Fatal error compiling: invalid flag: --release (Maven)
 
-If you get the following error message when running Maven:
-
-> [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project explorviz-as-a-service: Fatal error compiling: invalid flag: --release -> [Help 1]
-
-it means that you tried to compile EaaS with a JDK version 8 or older. Make `java` and `javac` in your `PATH` point to a JDK 11. How to do this depends on your operating systems. Alternatively, specify the `JAVA_HOME` environment variable when running maven, like this:
+You tried to compile EaaS with a JDK version 8 or older. Make `java` and `javac` in your `PATH` point to a JDK 11. How to do this depends on your operating systems. Alternatively, specify the `JAVA_HOME` environment variable when running maven (actual paths depend on your operating system, look at `ls /usr/lib/jvm`), like this:
 
 ```
 $ JAVA_HOME=/usr/lib/jvm/java-11-openjdk ./mvnw
 ```
 
-(Actual paths depend on your operating system, look at `ls /usr/lib/jvm`.)
+#### org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectsController' ... java.net.SocketException: No such file or directory
 
-#### The requested URL returned error: 413 from submit-eaas.sh
+The docker socket file `/var/run/docker.sock` (or the endpoint specified in the `DOCKER_HOST` variable, e.g in `docker-compose.yml` if you use that) does not exist. Make sure you have Docker installer on the system you try to run the EaaS server on and that you have permission to access it. If EaaS is running in a docker container itself make sure the socket is passed through to the container correctly.
+
+During development you can use `--eaas.docker.useDummyImplementation=true` to run EaaS without docker.
+
+#### java.io.IOException: Cannot run program "docker-compose": error=2, No such file or directory
+
+You are running from the jar and the `docker-compose` tool is not in your `PATH`. Please edit your operating systems `PATH` variable to include the directory that `docker-compose` is in. Docker Compose is required to run ExplorViz visualizations. During development this can be disabled with the dummy setting above as well.
+
+#### The requested URL returned error: 413 (submit-eaas.sh)
 
 If you run the EaaS-server behind a reverse proxy (e.g. to do TLS termination) then your reverse proxy might limit the maximum request body size. Check the documentation of your reverse proxy on how to modify this limit. A limit of 1024 MB should be sufficient for most applications.
 

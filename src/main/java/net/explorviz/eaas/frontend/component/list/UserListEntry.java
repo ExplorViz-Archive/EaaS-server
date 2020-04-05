@@ -60,7 +60,7 @@ public class UserListEntry extends AbstractListEntry {
         createProjectsCheckbox.setValue(user.isCreateProjectsAllowed());
         createProjectsCheckbox.addValueChangeListener(this::onCreateProjectsChanged);
 
-        Checkbox readAllProjectsCheckbox = new Checkbox("Can read all projects");
+        Checkbox readAllProjectsCheckbox = new Checkbox("Can read hidden projects");
         readAllProjectsCheckbox.setValue(user.isReadAllProjectsAllowed());
         readAllProjectsCheckbox.addValueChangeListener(this::onReadAllProjectsChanged);
 
