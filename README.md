@@ -18,7 +18,7 @@ See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application)
 
 The EaaS server must be able to create and run docker containers. By default it is expected that the server can access `/var/run/docker.sock`. This socket is also mounted inside the container when EaaS itself runs in Docker (as recommended). However, you can configure another Docker API endpoint through environment variables. Currently there is no support to make use of Docker Swarm or multiple Docker daemons.
 
-You will need a fairly powerful machine. EaaS allows you to run multiple visualizations at the same time. We recommend 1.5 cores and 2GB RAM per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
+You will need a fairly powerful machine. We recommend 1 GiB RAM for EaaS itself. EaaS allows you to run multiple visualizations at the same time. We recommend at least 1.5 cores and 2 GiB RAM on the server per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
 
 ## Build as docker image (recommended)
 
