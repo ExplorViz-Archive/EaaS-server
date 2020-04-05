@@ -18,9 +18,7 @@ See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application)
 
 The EaaS server must be able to create and run docker containers. By default it is expected that the server can access `/var/run/docker.sock`. This socket is also mounted inside the container when EaaS itself runs in Docker (as recommended). However, you can configure another Docker API endpoint through environment variables. Currently there is no support to make use of Docker Swarm or multiple Docker daemons.
 
-You will need a fairly powerful machine. EaaS allows you to run multiple visualizations at the same time. We recommended 1.5 cores and 2GB RAM per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
-
-When running the server behind a reverse proxy (e.g. to do SSL termination) and you are getting `The requested URL returned error: 413` from the submission script in your builds, then your reverse proxy is limiting the request body size. Docker images can get fairly large, setting this limit to `1024M` should suffice for most applications. Check the documentation of your reverse proxy.
+You will need a fairly powerful machine. EaaS allows you to run multiple visualizations at the same time. We recommend 1.5 cores and 2GB RAM per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
 
 ## Build as docker image (recommended)
 
@@ -70,13 +68,13 @@ This will download a supported version of the Maven build tool automatically. If
 
 During the build, a supported NodeJS version is also downloaded and used to build the frontend. You can prevent that and use a locally installed version of NodeJS and npm by adding the parameter `-P system-node`. (Use **NodeJS v12.15** or newer)
 
-To create a production build, add `-P production`. The runnable jar file is created as `target/explorviz-as-a-service-<version>.jar` and can be run using `java -Dvaadin.productionMode -jar <path-to-jar>`.
+To create a production build, add `-P production`. The runnable jar file is created as `target/explorviz-as-a-service-<version>.jar` and can be run using `java -Dvaadin.productionMode -jar <path-to-jar>`. Be aware that you need to have a docker daemon running and the user you are running the jar as must have access to `/var/run/docker.sock`, and you also need to have `docker-compose` in your `PATH`, or else the server won't be able to start.
 
 (Note: If you need to specify multiple profiles with `-P`, separate them with a comma like this: `-P system-node,production`.)
 
 ### Development
 
-During development, you might want to do incremental builds instead of clean builds every time; in this case specify the `package` goal: `./mvnw package` (this overrides the default goal of `clean verify`).
+During development, you might want to do incremental builds instead of clean builds every time; in this case specify the `verify` goal: `./mvnw verify` (this overrides the default goal of `clean verify`).
 
 You can also run the server directly without packaging by running `./mvnw spring-boot:run`. *Spring Boot DevTools* is included to support LiveReload so changes will apply automatically while the server is running. Please check the documentation of your IDE on how to make use of this.
 
@@ -84,7 +82,9 @@ Also check out the *Internal options* section at the bottom of `src/main/resourc
 
 ### Troubleshooting
 
-If you get the following error message
+#### Fatal error compiling: invalid flag: --release
+
+If you get the following error message when running Maven:
 
 > [ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project explorviz-as-a-service: Fatal error compiling: invalid flag: --release -> [Help 1]
 
@@ -95,3 +95,16 @@ $ JAVA_HOME=/usr/lib/jvm/java-11-openjdk ./mvnw
 ```
 
 (Actual paths depend on your operating system, look at `ls /usr/lib/jvm`.)
+
+#### The requested URL returned error: 413 from submit-eaas.sh
+
+If you run the EaaS-server behind a reverse proxy (e.g. to do TLS termination) then your reverse proxy might limit the maximum request body size. Check the documentation of your reverse proxy on how to modify this limit. A limit of 1024 MB should be sufficient for most applications.
+
+Additionally, the EaaS-server has a built-in limit of 1024 MB. If your build images are bigger than that, then you should take a look into optimizing your image, as storage requirements can become expensive with images this large. You can raise the limit by adding
+
+```
+- "--spring.servlet.multipart.max-file-size=xxxxMB"
+- "--spring.servlet.multipart.max-request-size=xxxxMB"
+```
+
+to the `command` in your `docker-compose.yml`. Replace `xxxx` with the new limit.
