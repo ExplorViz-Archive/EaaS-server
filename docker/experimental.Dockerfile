@@ -48,7 +48,7 @@ RUN apk --no-cache add \
 
 COPY docker/entrypoint.sh /
 # Adjust this argument for new versions
-ARG JAR_FILE=explorviz-as-a-service-1.0.0.jar
+ARG JAR_FILE=explorviz-as-a-service-1.1-SNAPSHOT.jar
 # TODO: Use unpacked jar for faster startup
 COPY --from=builder --chown=root:root /home/build/eaas/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
 
