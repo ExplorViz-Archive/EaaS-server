@@ -32,7 +32,9 @@ COPY webpack.config.js .
 RUN \
     ./mvnw -B \
     -P system-node,production \
-    package
+    package \
+ && mkdir extract \
+ && (cd extract; jar -xf ../target/explorviz-as-a-service-*.jar)
 
 ###############################################################################
 # Runtime environment
@@ -44,13 +46,12 @@ RUN apk --no-cache add \
  && adduser -D -h /var/opt/eaas eaas
 
 COPY docker/entrypoint.sh /
-# Adjust this argument for new versions
-ARG JAR_FILE=explorviz-as-a-service-1.1-SNAPSHOT.jar
-# TODO: Use unpacked jar for faster startup
-COPY --from=builder --chown=root:root /home/build/eaas/target/${JAR_FILE} /opt/eaas/explorviz-as-a-service.jar
+COPY --from=builder --chown=root:root /home/build/eaas/extract/BOOT-INF/lib /opt/eaas/lib
+COPY --from=builder --chown=root:root /home/build/eaas/extract/META-INF /opt/eaas/META-INF
+COPY --from=builder --chown=root:root /home/build/eaas/extract/BOOT-INF/classes /opt/eaas
 
 EXPOSE 8080
 VOLUME /var/opt/eaas/
 
 WORKDIR /opt/eaas/
-ENTRYPOINT ["/entrypoint.sh", "java", "-noverify", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]
+ENTRYPOINT ["/entrypoint.sh", "java", "-noverify", "-Dvaadin.productionMode", "-cp", ".:lib/*", "net.explorviz.eaas.Application"]
