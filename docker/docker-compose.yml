@@ -1,7 +1,7 @@
 version: '3'
 services:
   eaas:
-    image: eaas-server:latest
+    image: explorviz/eaas-server:latest
     command:
       # For more options see src/main/resources/application.properties
       - "--eaas.explorviz.accessUrlTemplate=http://localhost:%FRONTEND_PORT%"
