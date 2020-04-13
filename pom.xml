@@ -134,6 +134,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
 
@@ -207,11 +208,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
 
-                <!-- Clean build and startup time for Vaadin apps sometimes may exceed
-                     the default Spring Boot's 30sec timeout.  -->
                 <configuration>
+                    <!-- Clean build and startup time for Vaadin apps sometimes may exceed
+                         the default Spring Boot's 30sec timeout.  -->
                     <wait>500</wait>
                     <maxAttempts>240</maxAttempts>
+
+                    <!-- Workaround for unfixed Spring Boot Bug https://github.com/spring-projects/spring-boot/issues/13289 -->
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
