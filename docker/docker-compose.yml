@@ -13,7 +13,7 @@ services:
     volumes:
       - eaas-database:/var/opt/eaas
       # If you configured another Docker daemon below you can remove this line
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       # Configure the Docker API endpoint to use for storing builds and running ExplorViz instances
       # See https://docs.docker.com/engine/reference/commandline/cli/#environment-variables
