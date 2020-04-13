@@ -82,14 +82,6 @@ Also check out the *Internal options* section at the bottom of `src/main/resourc
 
 ### Troubleshooting
 
-#### Fatal error compiling: invalid flag: --release (Maven)
-
-You tried to compile EaaS with a JDK version 8 or older. Make `java` and `javac` in your `PATH` point to a JDK 11. How to do this depends on your operating systems. Alternatively, specify the `JAVA_HOME` environment variable when running maven (actual paths depend on your operating system, look at `ls /usr/lib/jvm`), like this:
-
-```
-$ JAVA_HOME=/usr/lib/jvm/java-11-openjdk ./mvnw
-```
-
 #### org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectsController' ... java.net.SocketException: No such file or directory
 
 The docker socket file `/var/run/docker.sock` (or the endpoint specified in the `DOCKER_HOST` variable, e.g in `docker-compose.yml` if you use that) does not exist. Make sure you have Docker installer on the system you try to run the EaaS server on and that you have permission to access it. If EaaS is running in a docker container itself make sure the socket is passed through to the container correctly.
