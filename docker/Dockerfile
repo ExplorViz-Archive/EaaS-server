@@ -5,7 +5,8 @@ FROM adoptopenjdk/openjdk11:alpine-slim AS builder
 
 RUN apk --no-cache add \
     nodejs npm \
- && adduser -D build \
+ && addgroup -g 1000 build \
+ && adduser -D -u 1000 -G build build \
  && mkdir /home/build/eaas \
  && chown build:build /home/build/eaas
 
@@ -17,7 +18,8 @@ COPY .mvn .mvn
 COPY pom.xml .
 
 # Download dependencies before copying source files for best layer caching
-RUN ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
+RUN \
+    ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
     -P system-node,production \
     dependency:go-offline
 
@@ -27,7 +29,8 @@ COPY package-lock.json .
 COPY webpack.config.js .
 
 # Specifically use goal package here to avoid running static analysis tools
-RUN ./mvnw -B \
+RUN \
+    ./mvnw -B \
     -P system-node,production \
     package
 

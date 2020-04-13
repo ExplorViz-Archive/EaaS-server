@@ -34,7 +34,7 @@ COPY webpack.config.js .
 RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/home/build/eaas/node_modules/ \
     ./mvnw -B \
     -P system-node,production \
-    package -DskipTests
+    package
 
 ###############################################################################
 # Runtime environment
