@@ -53,4 +53,4 @@ EXPOSE 8080
 VOLUME /var/opt/eaas/
 
 WORKDIR /opt/eaas/
-ENTRYPOINT ["/entrypoint.sh", "java", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]
+ENTRYPOINT ["/entrypoint.sh", "java", "-noverify", "-Dvaadin.productionMode", "-jar", "explorviz-as-a-service.jar"]
