@@ -28,8 +28,11 @@
     </licenses>
 
     <properties>
+        <!-- Spring Boot property that sets maven.compiler.{source,target} -->
         <java.version>11</java.version>
-        <maven.compiler.release>11</maven.compiler.release>
+        <!-- TODO: Enable release once https://github.com/AdoptOpenJDK/openjdk-docker/issues/103 is fixed -->
+        <!-- <maven.compiler.release>11</maven.compiler.release> -->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <drivers.dir>${project.basedir}/drivers</drivers.dir>
@@ -153,15 +156,6 @@
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
             <version>${docker-java.version}</version>
-        </dependency>
-
-        <!-- Useless dependencies -->
-        <!-- We do not use javax.annotation directly, but javac warns about them missing -->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

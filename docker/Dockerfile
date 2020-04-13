@@ -1,8 +1,7 @@
 ###############################################################################
 # Build environment
 ###############################################################################
-# Try to switch to alpine-slim once https://github.com/AdoptOpenJDK/openjdk-docker/issues/103 is fixed
-FROM adoptopenjdk/openjdk11:alpine AS builder
+FROM adoptopenjdk/openjdk11:alpine-slim AS builder
 
 RUN apk --no-cache add \
     nodejs npm \
