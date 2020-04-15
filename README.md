@@ -80,7 +80,7 @@ You can also run the server directly without packaging by running `./mvnw spring
 
 Also check out the *Internal options* section at the bottom of `src/main/resources/application.properties` for a number of options that can help you when developing. `eaas.docker.useDummyImplementation=true` will allow you to run the server without needing access to a docker daemon.
 
-### Troubleshooting
+## Troubleshooting
 
 #### org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectsController' ... java.net.SocketException: No such file or directory
 

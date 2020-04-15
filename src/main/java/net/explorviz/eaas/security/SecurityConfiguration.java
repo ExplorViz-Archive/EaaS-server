@@ -30,6 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Allow requests to the API, it uses secrets for authentications, not spring security
      */
     private static final String[] API_PATHS = { "/api/v1/**" };
+
     /**
      * Whitelist pages that *might be* public, we're doing fine-grained auth in Views on BeforeEnterEvent
      */
