@@ -40,11 +40,9 @@
 
         <!-- Actual dependencies -->
         <vaadin.version>14.1.25</vaadin.version>
-        <h2.version>1.4.200</h2.version>
         <docker-java.version>3.2.1</docker-java.version>
 
         <!-- Build tools -->
-        <lombok.version>1.18.12</lombok.version>
         <frontend-plugin.version>1.9.1</frontend-plugin.version>
         <node.version>v12.16.2</node.version>
 
@@ -131,6 +129,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+
+        <!-- Build Tools -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <!-- Version is managed in spring-boot-parent -->
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -138,25 +144,23 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Other dependencies -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
+            <!-- Version is managed in spring-boot-parent -->
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
             <version>${docker-java.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.docker-java</groupId>
+                    <artifactId>docker-java-transport-jersey</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
