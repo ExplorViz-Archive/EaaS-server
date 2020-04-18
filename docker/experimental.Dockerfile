@@ -3,7 +3,7 @@
 ###############################################################################
 # Build environment
 ###############################################################################
-FROM adoptopenjdk/openjdk11:alpine-slim AS builder
+FROM adoptopenjdk/openjdk11-openj9:alpine-slim AS builder
 
 RUN apk --no-cache add \
     nodejs npm \
@@ -25,10 +25,10 @@ RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=ca
     -P system-node,production \
     dependency:go-offline
 
-COPY src src
+COPY webpack.config.js .
 COPY package.json .
 COPY package-lock.json .
-COPY webpack.config.js .
+COPY src src
 
 # Specifically use goal package here to avoid running static analysis tools
 RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/home/build/eaas/node_modules/ \
@@ -41,7 +41,7 @@ RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=ca
 ###############################################################################
 # Runtime environment
 ###############################################################################
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM adoptopenjdk/openjdk11-openj9:alpine-jre
 
 RUN apk --no-cache add \
     su-exec docker-compose \
@@ -56,4 +56,4 @@ EXPOSE 8080
 VOLUME /var/opt/eaas/
 
 WORKDIR /opt/eaas/
-ENTRYPOINT ["/entrypoint.sh", "java", "-noverify", "-Dvaadin.productionMode", "-cp", ".:lib/*", "net.explorviz.eaas.Application"]
+ENTRYPOINT ["/entrypoint.sh"]

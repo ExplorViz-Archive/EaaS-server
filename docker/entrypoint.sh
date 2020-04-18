@@ -1,7 +1,7 @@
 #!/bin/sh
-#shellcheck shell=ash
-set -euo pipefail
+set -eu
 
+APP_USER="eaas"
 DOCKER_SOCKET="/var/run/docker.sock"
 
 # Allow our eaas user to access the docker socket on the host without root
@@ -11,12 +11,13 @@ if [ -e "$DOCKER_SOCKET" ]; then
 
     if getent group "$gid" >/dev/null; then
         gname="$(getent group "$gid" | cut -d: -f1)"
-        echo "[entrypoint] Group id belongs to group $gname. Deleting it" >&2
+        echo "[entrypoint] Deleting group $gname currently using this id" >&2
         delgroup "$gname"
     fi
 
     addgroup -g "$gid" docker
-    addgroup eaas docker
+    addgroup "$APP_USER" docker
 fi
 
-exec su-exec eaas "$@"
+# TODO: Consider using -Xshareclasses:readonly, and generating classes AOT by starting application in docker build
+exec su-exec "$APP_USER" java -noverify -Xtune:virtualized -Dvaadin.productionMode -cp ".:lib/*" "net.explorviz.eaas.Application" "$@"
