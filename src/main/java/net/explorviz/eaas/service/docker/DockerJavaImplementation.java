@@ -7,6 +7,7 @@ import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.springframework.lang.NonNull;
@@ -30,9 +31,11 @@ public class DockerJavaImplementation implements DockerAdapter {
     // TODO: We're not getting checked exceptions from docker-java. We should actually throw AdapterExceptions.
 
     public DockerJavaImplementation() throws AdapterException {
-        // Settings are read from environment variables (see docker/docker-compose.yml)
-        DefaultDockerClientConfig.Builder builder = DefaultDockerClientConfig.createDefaultConfigBuilder();
-        docker = DockerClientBuilder.getInstance(builder.build()).build();
+        // Endpoint settings are read from environment variables (see docker/docker-compose.yml)
+        docker = DockerClientBuilder
+            .getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build())
+            .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
+            .build();
 
         try (InfoCmd cmd = docker.infoCmd()) {
             Info info = cmd.exec();
