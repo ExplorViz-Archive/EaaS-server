@@ -239,6 +239,9 @@
                         <arg>-Xlint:-processing</arg>
                     </compilerArgs>
 
+                    <!-- This is to show all javac errors instead of dying with an AssertionError -->
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
+
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>

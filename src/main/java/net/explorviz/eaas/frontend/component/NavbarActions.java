@@ -11,6 +11,8 @@ import net.explorviz.eaas.security.SecurityUtils;
 public class NavbarActions extends HorizontalLayout {
     private static final long serialVersionUID = 812136038394838713L;
 
+    // TODO: Fix navbar icons overlaying on logo on small width screens
+
     public NavbarActions() {
         setId("navbar-actions");
 
@@ -21,6 +23,7 @@ public class NavbarActions extends HorizontalLayout {
 
         if (SecurityUtils.isUserLoggedIn()) {
             if (SecurityUtils.hasAuthority(Authorities.CHANGE_PASSWORD_AUTHORITY)) {
+                // TODO: Change this to a RouterLink instead of an Anchor
                 add(IconAnchor.createFromIcon("/" + ChangePasswordView.ROUTE, VaadinIcon.PASSWORD.create(), "Change " +
                     "password"));
             }
