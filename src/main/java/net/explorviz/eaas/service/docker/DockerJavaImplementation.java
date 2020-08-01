@@ -6,8 +6,10 @@ import com.github.dockerjava.api.command.LoadImageCmd;
 import com.github.dockerjava.api.command.RemoveImageCmd;
 import com.github.dockerjava.api.model.Info;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.netty.NettyDockerCmdExecFactory;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;
 import org.springframework.lang.NonNull;
@@ -32,10 +34,13 @@ public class DockerJavaImplementation implements DockerAdapter {
 
     public DockerJavaImplementation() throws AdapterException {
         // Endpoint settings are read from environment variables (see docker/docker-compose.yml)
-        docker = DockerClientBuilder
-            .getInstance(DefaultDockerClientConfig.createDefaultConfigBuilder().build())
-            .withDockerCmdExecFactory(new NettyDockerCmdExecFactory())
+        DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
+            .dockerHost(config.getDockerHost())
+            .sslConfig(config.getSSLConfig())
             .build();
+
+        docker = DockerClientImpl.getInstance(config, httpClient);
 
         try (InfoCmd cmd = docker.infoCmd()) {
             Info info = cmd.exec();
