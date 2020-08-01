@@ -64,13 +64,9 @@ Simply run the following command to do a clean build, including running static a
 $ ./mvnw
 ```
 
-This will download a supported version of the Maven build tool automatically. If you have a local Maven installation that you want to use, replace `./mvnw` with `mvn`. (Use **Maven 3.5** or newer)
-
-During the build, a supported NodeJS version is also downloaded and used to build the frontend. You can prevent that and use a locally installed version of NodeJS and npm by adding the parameter `-P system-node`. (Use **NodeJS v12.15** or newer)
+This will download a supported version of the Maven build tool automatically. If you have a local Maven installation that you want to use, replace `./mvnw` with `mvn` (Use **Maven 3.5** or newer). During the build, if not available on your system, a supported NodeJS version is also downloaded and used to build the frontend.
 
 To create a production build, add `-P production`. The runnable jar file is created as `target/explorviz-as-a-service-<version>.jar` and can be run using `java -Dvaadin.productionMode -jar <path-to-jar>`. Be aware that you need to have a docker daemon running and the user you are running the jar as must have access to `/var/run/docker.sock`, and you also need to have `docker-compose` in your `PATH`, or else the server won't be able to start.
-
-(Note: If you need to specify multiple profiles with `-P`, separate them with a comma like this: `-P system-node,production`.)
 
 ### Development
 

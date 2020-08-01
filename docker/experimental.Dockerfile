@@ -22,7 +22,7 @@ COPY pom.xml .
 # Download dependencies before copying source files for best layer caching
 RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/home/build/eaas/node_modules/ \
     ./mvnw -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn \
-    -P system-node,production \
+    -P production \
     dependency:go-offline
 
 COPY webpack.config.js .
@@ -33,7 +33,7 @@ COPY src src
 # Specifically use goal package here to avoid running static analysis tools
 RUN --mount=type=cache,uid=1000,gid=1000,target=/home/build/.m2/ --mount=type=cache,uid=1000,gid=1000,target=/home/build/eaas/node_modules/ \
     ./mvnw -B \
-    -P system-node,production \
+    -P production \
     package \
  && mkdir extract \
  && (cd extract; jar -xf ../target/explorviz-as-a-service-*.jar)

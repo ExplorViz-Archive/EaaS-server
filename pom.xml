@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.6.RELEASE</version>
+        <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -38,21 +38,18 @@
         <drivers.dir>${project.basedir}/drivers</drivers.dir>
         <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
 
-        <!-- Actual dependencies -->
-        <vaadin.version>14.1.25</vaadin.version>
-        <docker-java.version>3.2.1</docker-java.version>
-
-        <!-- Build tools -->
-        <frontend-plugin.version>1.9.1</frontend-plugin.version>
-        <node.version>v12.16.2</node.version>
+        <!-- Dependencies -->
+        <!-- Version of Spring Boot is specified by parent above -->
+        <vaadin.version>14.3.1</vaadin.version>
+        <docker-java.version>3.2.5</docker-java.version>
 
         <!-- Inspection tools -->
         <checkstyle-plugin.version>3.1.1</checkstyle-plugin.version>
-        <checkstyle.version>8.31</checkstyle.version>
+        <checkstyle.version>8.35</checkstyle.version>
         <pmd-plugin.version>3.13.0</pmd-plugin.version>
-        <pmd.version>6.22.0</pmd.version>
-        <spotbugs-plugin.version>4.0.0</spotbugs-plugin.version>
-        <spotbugs.version>4.0.1</spotbugs.version>
+        <pmd.version>6.26.0</pmd.version>
+        <spotbugs-plugin.version>4.0.4</spotbugs-plugin.version>
+        <spotbugs.version>4.1.1</spotbugs.version>
     </properties>
 
     <repositories>
@@ -168,26 +165,6 @@
         <defaultGoal>clean verify</defaultGoal>
 
         <plugins>
-            <!-- Plugin to download and install Node and npm locally -->
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>${frontend-plugin.version}</version>
-
-                <configuration>
-                    <nodeVersion>${node.version}</nodeVersion>
-                </configuration>
-
-                <executions>
-                    <execution>
-                        <id>install-node-and-npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!--
                 Take care of synchronizing java dependencies and imports in
                 package.json and main.js files.
@@ -385,27 +362,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <!-- Do not install node and npm locally, instead use the version installed the system -->
-            <id>system-node</id>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.eirslett</groupId>
-                        <artifactId>frontend-maven-plugin</artifactId>
-
-                        <executions>
-                            <execution>
-                                <id>install-node-and-npm</id>
-                                <phase>none</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
         <profile>
             <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
