@@ -6,13 +6,13 @@ Collect build artifacts of your Java application to visualize them in ExplorViz 
 
 > [ExplorViz](https://www.explorviz.net/) is an open source research monitoring and visualization approach, which uses dynamic analysis techniques to provide a live trace visualization of large software landscapes.
 
-[ExplorViz as a Service](https://github.com/Marco01809/EaaS-server) (EaaS) allows you to collect build artifacts and run them in ExplorViz instances on-demand.
+[ExplorViz as a Service](https://github.com/ExplorViz/EaaS-server) (EaaS) allows you to collect build artifacts and run them in ExplorViz instances on-demand.
 
 When submitting builds to EaaS, they need to be wrapped inside a docker image that runs both the application and, if necessary, some load to create more interesting visualizations. The application needs to be run with the Kieker monitoring tool to obtain records and send them to ExplorViz. The build image will be run together with ExplorViz inside a docker-compose stack, i.e. they run on the same network. The endpoint to submit Kieker records to is `analysis-service` on port `10133` (SingleSocketTcpWriter).
-If you use the [EaaS-base-image](https://github.com/Marco01809/EaaS-base-image) for your build images, then you do not need to worry about configuring Kieker yourself.
+If you use the [EaaS-base-image](https://github.com/ExplorViz/EaaS-base-image) for your build images, then you do not need to worry about configuring Kieker yourself.
 The server provides a simple HTTP API to submit builds to; a shell script to build and upload images can be found in `submission/submit-eaas.sh`. You can copy this file into your repository or keep it somewhere on your CI server to run it during a build.
 
-See [EaaS-demo-application](https://github.com/Marco01809/EaaS-demo-application) for a full example making use of this software.
+See [EaaS-demo-application](https://github.com/ExplorViz/EaaS-demo-application) for a full example making use of this software.
 
 ## Requirements
 
