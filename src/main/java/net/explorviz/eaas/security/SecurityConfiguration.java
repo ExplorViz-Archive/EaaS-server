@@ -1,6 +1,6 @@
 package net.explorviz.eaas.security;
 
-import com.vaadin.flow.server.ServletHelper;
+import com.vaadin.flow.server.HandlerHelper;
 import com.vaadin.flow.shared.ApplicationConstants;
 import net.explorviz.eaas.frontend.view.LoginView;
 import org.springframework.context.annotation.Configuration;
@@ -116,6 +116,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static boolean isVaadinInternalRequest(@NonNull ServletRequest request) {
         final String parameterValue = request.getParameter(ApplicationConstants.REQUEST_TYPE_PARAMETER);
         return parameterValue != null
-            && Stream.of(ServletHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
+            && Stream.of(HandlerHelper.RequestType.values()).anyMatch(r -> r.getIdentifier().equals(parameterValue));
     }
 }
