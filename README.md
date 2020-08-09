@@ -27,7 +27,7 @@ When building the docker image for EaaS, the entire build is done within a conta
 Simply run the following command to create the image ready for production use:
 
 ```
-$ docker build -t explorviz/eaas-server:latest -f docker/Dockerfile .
+$ docker build -t explorviz/eaas-server:latest .
 ```
 
 Because the entire build runs inside the container, dependencies might have to be downloaded on every run. This can be very time consuming during development. To prevent this, another Dockerfile is included that uses the experimental cache mount feature to permanently store downloaded dependencies. To use this file your docker daemon needs to run in experimental mode, then build the image like this:
@@ -38,10 +38,10 @@ $ DOCKER_BUILDKIT=1 docker build -t explorviz/eaas-server:latest -f docker/exper
 
 ### Running the docker image
 
-If you have docker-compose installed you can use the easy-to-configure `docker-compose.yml` in the docker directory. You can configure some options from there. Start the container by running:
+If you have docker-compose installed you can use the easy-to-configure `docker-compose.yml`. You can configure some options from there. Start the container by running:
 
 ```
-$ docker-compose -f docker/docker-compose.yml up -d
+$ docker-compose up -d
 ```
 
 If you prefer to use `docker` directly, use something like
