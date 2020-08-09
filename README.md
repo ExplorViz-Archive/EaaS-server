@@ -18,7 +18,7 @@ See [EaaS-demo-application](https://github.com/ExplorViz/EaaS-demo-application) 
 
 The EaaS server must be able to create and run docker containers. By default it is expected that the server can access `/var/run/docker.sock`. This socket is also mounted inside the container when EaaS itself runs in Docker (as recommended). However, you can configure another Docker API endpoint through environment variables. Currently there is no support to make use of Docker Swarm or multiple Docker daemons.
 
-You will need a fairly powerful machine. We recommend 1 GiB RAM for EaaS itself. EaaS allows you to run multiple visualizations at the same time. We recommend at least 1.5 cores and 2 GiB RAM on the server per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
+You will need a fairly powerful machine. We recommend 512 MiB RAM for EaaS itself. EaaS allows you to run multiple visualizations at the same time. We recommend at least 1.5 cores and 2 GiB RAM on the server per running instance for ExplorViz itself when visualizing small applications. This does not include the resources used by the application in question and might not suffice for visualizing bigger applications.
 
 ## Build as docker image (recommended)
 
@@ -78,9 +78,9 @@ Also check out the *Internal options* section at the bottom of `src/main/resourc
 
 ## Troubleshooting
 
-#### org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectsController' ... java.net.SocketException: No such file or directory
+#### org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectsController' ... java.net.SocketException: No such file or directory / java.io.IOException: native connect() failed : Permission denied
 
-The docker socket file `/var/run/docker.sock` (or the endpoint specified in the `DOCKER_HOST` variable, e.g in `docker-compose.yml` if you use that) does not exist. Make sure you have Docker installer on the system you try to run the EaaS server on and that you have permission to access it. If EaaS is running in a docker container itself make sure the socket is passed through to the container correctly.
+The docker socket file `/var/run/docker.sock` (or the endpoint specified in the `DOCKER_HOST` variable, e.g in `docker-compose.yml` if you use that) does not exist or you have insufficient permission to access it. Make sure you have Docker installer on the system you try to run the EaaS server on and that you have permission to access it. If EaaS is running in a docker container itself make sure the socket is passed through to the container correctly.
 
 During development you can use `--eaas.docker.useDummyImplementation=true` to run EaaS without docker.
 
